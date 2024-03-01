@@ -6,6 +6,68 @@
 #include "pch.h"
 #include "GraphicsMain.h"
 #include <cassert>
+#include "directxmath.h"
+#include "d3dcompiler.h"
+#include <DirectXColors.h>
+
+using namespace DirectX;
+// Demo parameters
+XMMATRIX g_WorldMatrix;
+XMMATRIX g_ViewMatrix;
+XMMATRIX _projectionMatrix;
+
+// Vertex data for a colored cube.
+struct VertexPosColor
+{
+    XMFLOAT3 Position;
+    XMFLOAT3 Color;
+};
+
+VertexPosColor g_Vertices[8] =
+{
+    { XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f) }, // 0
+    { XMFLOAT3(-1.0f,  1.0f, -1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f) }, // 1
+    { XMFLOAT3(1.0f,  1.0f, -1.0f), XMFLOAT3(1.0f, 1.0f, 0.0f) }, // 2
+    { XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT3(1.0f, 0.0f, 0.0f) }, // 3
+    { XMFLOAT3(-1.0f, -1.0f,  1.0f), XMFLOAT3(0.0f, 0.0f, 1.0f) }, // 4
+    { XMFLOAT3(-1.0f,  1.0f,  1.0f), XMFLOAT3(0.0f, 1.0f, 1.0f) }, // 5
+    { XMFLOAT3(1.0f,  1.0f,  1.0f), XMFLOAT3(1.0f, 1.0f, 1.0f) }, // 6
+    { XMFLOAT3(1.0f, -1.0f,  1.0f), XMFLOAT3(1.0f, 0.0f, 1.0f) }  // 7
+};
+
+WORD g_Indicies[36] =
+{
+    0, 1, 2, 0, 2, 3,
+    4, 6, 5, 4, 7, 6,
+    4, 5, 1, 4, 1, 0,
+    3, 2, 6, 3, 6, 7,
+    1, 5, 6, 1, 6, 2,
+    4, 0, 3, 4, 3, 7
+};
+
+// Shader resources
+enum ConstantBuffer
+{
+    CB_Application,
+    CB_Frame,
+    CB_Object,
+    NumConstantBuffers
+};
+
+ID3D11Buffer* _constantBuffers[NumConstantBuffers];
+
+// Safely release a COM object.
+template<typename T>
+inline void SafeRelease(T& ptr)
+{
+    if (ptr != NULL)
+    {
+        ptr->Release();
+        ptr = NULL;
+    }
+}
+
+
 
 GraphicsMain::GraphicsMain(HWND windowHandler)
 {
@@ -78,12 +140,13 @@ void GraphicsMain::Init()
     }
 
     //create render target view
-    ID3D11RenderTargetView* _renderTargetView;
     hr = _device->CreateRenderTargetView(backBuffer, nullptr, &_renderTargetView);
     if (FAILED(hr))
     {
         OutputDebugStringA("Failed to create render target view\n");
     }
+
+    SafeRelease(backBuffer);
 
     //Depht stencil description
     D3D11_TEXTURE2D_DESC depthStencilBufferDesc;
@@ -124,8 +187,7 @@ void GraphicsMain::Init()
     depthStencilStateDesc.DepthFunc = D3D11_COMPARISON_LESS;
     depthStencilStateDesc.StencilEnable = FALSE;
 
-    ID3D11DepthStencilState* depthStencilState;
-    hr = _device->CreateDepthStencilState(&depthStencilStateDesc, &depthStencilState);
+    hr = _device->CreateDepthStencilState(&depthStencilStateDesc, &_depthStencilState);
     if (FAILED(hr))
     {
         OutputDebugStringA("Failed to Create depth stencil state\n");
@@ -146,25 +208,210 @@ void GraphicsMain::Init()
     rasterizerDesc.ScissorEnable = FALSE;
     rasterizerDesc.SlopeScaledDepthBias = 0.0f;
 
-    ID3D11RasterizerState* rasterizerState;
     // Create the rasterizer state object.
-    hr = _device->CreateRasterizerState(&rasterizerDesc, &rasterizerState);
+    hr = _device->CreateRasterizerState(&rasterizerDesc, &_rasterizerState);
     if (FAILED(hr))
     {
         OutputDebugStringA("Failed to create rasterizer state\n");
     }
 
-    D3D11_VIEWPORT viewport = { 0 };
-    viewport.Width = static_cast<float>(clientWidth);
-    viewport.Height = static_cast<float>(clientHeight);
-    viewport.TopLeftX = 0.0f;
-    viewport.TopLeftY = 0.0f;
-    viewport.MinDepth = 0.0f;
-    viewport.MaxDepth = 1.0f;
+    _viewport.Width = static_cast<float>(clientWidth);
+    _viewport.Height = static_cast<float>(clientHeight);
+    _viewport.TopLeftX = 0.0f;
+    _viewport.TopLeftY = 0.0f;
+    _viewport.MinDepth = 0.0f;
+    _viewport.MaxDepth = 1.0f;
 
+    LoadContent();
+}
+
+void GraphicsMain::Update(float deltaTime)
+{
+    XMVECTOR eyePosition = XMVectorSet(0, 0, -10, 1);
+    XMVECTOR focusPoint = XMVectorSet(0, 0, 0, 1);
+    XMVECTOR upDirection = XMVectorSet(0, 1, 0, 0);
+    g_ViewMatrix = XMMatrixLookAtLH(eyePosition, focusPoint, upDirection);
+    _deviceContext->UpdateSubresource(_constantBuffers[CB_Frame], 0, nullptr, &g_ViewMatrix, 0, 0);
+
+
+    static float angle = 0.0f;
+    angle += 90.0f * deltaTime;
+    XMVECTOR rotationAxis = XMVectorSet(0, 1, 1, 0);
+
+    g_WorldMatrix = XMMatrixRotationAxis(rotationAxis, XMConvertToRadians(angle));
+    _deviceContext->UpdateSubresource(_constantBuffers[CB_Object], 0, nullptr, &g_WorldMatrix, 0, 0);
+}
+
+void GraphicsMain::Clear(const FLOAT clearColor[4], FLOAT clearDepth, UINT8 clearStencil)
+{
+    _deviceContext->ClearRenderTargetView(_renderTargetView, clearColor);
+    if(_depthStencilView)
+        _deviceContext->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, clearDepth, clearStencil);
+}
+
+void GraphicsMain::Present(bool vSync)
+{
+    if (vSync)
+    {
+        _swapChain->Present(1, 0);
+    }
+    else
+    {
+        _swapChain->Present(0, 0);
+    }
+}
+
+void GraphicsMain::Renderer()
+{
+    assert(_device);
+    assert(_deviceContext);
+
+    Clear(Colors::CornflowerBlue, 1.0f, 0);
+
+    const UINT vertexStride = sizeof(VertexPosColor);
+    const UINT offset = 0;
+
+    _deviceContext->IASetVertexBuffers(0, 1, &_vertexBuffer, &vertexStride, &offset);
+    _deviceContext->IASetInputLayout(_inputLayout);
+    _deviceContext->IASetIndexBuffer(_indexBuffer, DXGI_FORMAT_R16_UINT, 0);
+    _deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    _deviceContext->VSSetShader(_vertexShader, nullptr, 0);
+    _deviceContext->VSSetConstantBuffers(0, 3, _constantBuffers);
+    _deviceContext->RSSetState(_rasterizerState);
+    _deviceContext->RSSetViewports(1, &_viewport);
+
+    _deviceContext->PSSetShader(_pixelShader, nullptr, 0);
+    _deviceContext->OMSetRenderTargets(1, &_renderTargetView, _depthStencilView);
+    _deviceContext->OMSetDepthStencilState(_depthStencilState, 1);
+    _deviceContext->DrawIndexed(_countof(g_Indicies), 0, 0);
+    Present(false);
 }
 
 
-void GraphicsMain::Run()
+
+bool GraphicsMain::LoadContent()
 {
+    assert(_device);
+
+    //Create and initialize the vertex buffer
+    D3D11_BUFFER_DESC vertexBufferDesc;
+    ZeroMemory(&vertexBufferDesc, sizeof(D3D11_BUFFER_DESC));
+    vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+    vertexBufferDesc.ByteWidth = sizeof(VertexPosColor) * _countof(g_Vertices);
+    vertexBufferDesc.CPUAccessFlags = 0;
+    vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+
+    D3D11_SUBRESOURCE_DATA resourceData;
+    ZeroMemory(&resourceData, sizeof(D3D11_SUBRESOURCE_DATA));
+    resourceData.pSysMem = g_Vertices;
+    HRESULT hr = _device->CreateBuffer(&vertexBufferDesc, &resourceData, &_vertexBuffer);
+    if (FAILED(hr))
+    {
+        return false;
+    }
+
+    // Create and initialize the index buffer.
+    D3D11_BUFFER_DESC indexBufferDesc;
+    ZeroMemory(&indexBufferDesc, sizeof(D3D11_BUFFER_DESC));
+
+    indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+    indexBufferDesc.ByteWidth = sizeof(WORD) * _countof(g_Indicies);
+    indexBufferDesc.CPUAccessFlags = 0;
+    indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+    resourceData.pSysMem = g_Indicies;
+
+    hr = _device->CreateBuffer(&indexBufferDesc, &resourceData, &_indexBuffer);
+    if (FAILED(hr))
+    {
+        return false;
+    }
+
+    // Create the constant buffers for the variables defined in the vertex shader.
+    D3D11_BUFFER_DESC constantBufferDesc;
+    ZeroMemory(&constantBufferDesc, sizeof(D3D11_BUFFER_DESC));
+
+    constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    constantBufferDesc.ByteWidth = sizeof(XMMATRIX);
+    constantBufferDesc.CPUAccessFlags = 0;
+    constantBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+
+    hr = _device->CreateBuffer(&constantBufferDesc, nullptr, &_constantBuffers[CB_Application]);
+    if (FAILED(hr))
+    {
+        return false;
+    }
+    hr = _device->CreateBuffer(&constantBufferDesc, nullptr, &_constantBuffers[CB_Frame]);
+    if (FAILED(hr))
+    {
+        return false;
+    }
+    hr = _device->CreateBuffer(&constantBufferDesc, nullptr, &_constantBuffers[CB_Object]);
+    if (FAILED(hr))
+    {
+        return false;
+    }
+
+    // Load the compiled vertex shader.
+    ID3DBlob* vertexShaderBlob;
+    LPCWSTR compiledVertexShaderObject = L"SimpleVertexShader.cso";
+
+    hr = D3DReadFileToBlob(compiledVertexShaderObject, &vertexShaderBlob);
+    if (FAILED(hr))
+    {
+        return false;
+    }
+
+    hr = _device->CreateVertexShader(vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), nullptr, &_vertexShader);
+    if (FAILED(hr))
+    {
+        return false;
+    }   
+
+    // Create the input layout for the vertex shader.
+    D3D11_INPUT_ELEMENT_DESC vertexLayoutDesc[] =
+    {
+        { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, offsetof(VertexPosColor,Position), D3D11_INPUT_PER_VERTEX_DATA, 0 },
+        { "COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, offsetof(VertexPosColor,Color), D3D11_INPUT_PER_VERTEX_DATA, 0 }
+    };
+
+    hr = _device->CreateInputLayout(vertexLayoutDesc, _countof(vertexLayoutDesc), vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), &_inputLayout);
+    if (FAILED(hr))
+    {
+        return false;
+    }
+
+    SafeRelease(vertexShaderBlob);
+
+    // Load the compiled pixel shader.
+    ID3DBlob* pixelShaderBlob;
+    LPCWSTR compiledPixelShaderObject = L"SimplePixelShader.cso";
+
+    hr = D3DReadFileToBlob(compiledPixelShaderObject, &pixelShaderBlob);
+    if (FAILED(hr))
+    {
+        return false;
+    }
+
+    hr = _device->CreatePixelShader(pixelShaderBlob->GetBufferPointer(), pixelShaderBlob->GetBufferSize(), nullptr, &_pixelShader);
+    if (FAILED(hr))
+    {
+        return false;
+    }
+
+    SafeRelease(pixelShaderBlob);
+
+    // Setup the projection matrix.
+    RECT clientRect;
+    GetClientRect(_windowHandler, &clientRect);
+
+    // Compute the exact client dimensions.
+    // This is required for a correct projection matrix.
+    float clientWidth = static_cast<float>(clientRect.right - clientRect.left);
+    float clientHeight = static_cast<float>(clientRect.bottom - clientRect.top);
+
+    _projectionMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(45.0f), clientWidth / clientHeight, 0.1f, 100.0f);
+
+    _deviceContext->UpdateSubresource(_constantBuffers[CB_Application], 0, nullptr, &_projectionMatrix, 0, 0);
+
+    return true;
 }
