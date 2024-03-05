@@ -140,15 +140,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Include\DrawableObject.h" />
     <ClInclude Include="Include\GraphicsMain.h" />
     <ClInclude Include="Include\Mesh.h" />
     <ClInclude Include="Include\pch.h" />
+    <ClInclude Include="Include\Shader.h" />
     <ClInclude Include="Include\Vector3D.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\DrawableObject.cpp" />
     <ClCompile Include="Source\GraphicsMain.cpp" />
     <ClCompile Include="Source\Mesh.cpp" />
     <ClCompile Include="Source\pch.cpp" />
+    <ClCompile Include="Source\Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Shaders\SimplePixelShader.hlsl">

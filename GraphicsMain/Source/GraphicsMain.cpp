@@ -6,7 +6,6 @@
 #include "pch.h"
 #include "GraphicsMain.h"
 #include "directxmath.h"
-#include "d3dcompiler.h"
 #include <DirectXColors.h>
 
 using namespace DirectX;
@@ -14,6 +13,18 @@ using namespace DirectX;
 XMMATRIX g_WorldMatrix;
 XMMATRIX g_ViewMatrix;
 XMMATRIX _projectionMatrix;
+
+
+// Safely release a COM object.
+template<typename T>
+inline void SafeRelease(T& ptr)
+{
+    if (ptr != NULL)
+    {
+        ptr->Release();
+        ptr = NULL;
+    }
+}
 
 // Vertex data for a colored cube.
 //struct VertexPosColor
@@ -54,18 +65,6 @@ enum ConstantBuffer
 };
 
 ID3D11Buffer* _constantBuffers[NumConstantBuffers];
-
-// Safely release a COM object.
-template<typename T>
-inline void SafeRelease(T& ptr)
-{
-    if (ptr != NULL)
-    {
-        ptr->Release();
-        ptr = NULL;
-    }
-}
-
 
 GraphicsMain* GraphicsMain::_instance = nullptr;
 
@@ -270,28 +269,38 @@ void GraphicsMain::Renderer()
 
     Clear(Colors::CornflowerBlue, 1.0f, 0);
 
-    _deviceContext->IASetInputLayout(_inputLayout);
 
     uint32_t indexCount = 0;
 
-    for (auto& m: meshs)
+    for (auto& d: _drawableObjects)
     {
+        Mesh mesh = d.GetMesh();
+        Shader shader = d.GetShader();
+
+        _deviceContext->IASetInputLayout(shader.GetInputLayout());
+
         const UINT vertexStride = sizeof(Vector3D);
         const UINT offset = 0;    
-        _deviceContext->IASetVertexBuffers(0, 1, &m._vertexBuffer, &vertexStride, &offset);
-        _deviceContext->IASetIndexBuffer(m._indexBuffer, DXGI_FORMAT_R16_UINT, 0);
 
-        indexCount += m._indices.size();
+        ID3D11Buffer* vertexBuffer = mesh.GetVertexBuffer();
+        ID3D11Buffer* indexBuffer = mesh.GetIndexBuffer();
+        
+         
+         _deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &vertexStride, &offset);
+        _deviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R16_UINT, 0);
+
+        indexCount += mesh.GetIndicesSize();
+        _deviceContext->VSSetShader(shader.GetVertexShader(), nullptr, 0);
+        _deviceContext->PSSetShader(shader.GetPixelShader(), nullptr, 0);
+
     }
     
     
     _deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-    _deviceContext->VSSetShader(_vertexShader, nullptr, 0);
     _deviceContext->VSSetConstantBuffers(0, 3, _constantBuffers);
     _deviceContext->RSSetState(_rasterizerState);
     _deviceContext->RSSetViewports(1, &_viewport);
 
-    _deviceContext->PSSetShader(_pixelShader, nullptr, 0);
     _deviceContext->OMSetRenderTargets(1, &_renderTargetView, _depthStencilView);
     _deviceContext->OMSetDepthStencilState(_depthStencilState, 1);
 
@@ -305,8 +314,11 @@ void GraphicsMain::Renderer()
 bool GraphicsMain::LoadContent()
 {
     assert(_device);
+    
+    Mesh mesh = Mesh::MakePrimitiveCube();
+    Shader shader = Shader::MakeSimpleShader();
 
-    meshs = { Mesh::MakePrimitiveCube() };
+    _drawableObjects = { DrawableObject(mesh, shader) };
       
     // Create the constant buffers for the variables defined in the vertex shader.
     D3D11_BUFFER_DESC constantBufferDesc;
@@ -331,55 +343,7 @@ bool GraphicsMain::LoadContent()
     if (FAILED(hr))
     {
         return false;
-    }
-
-    // Load the compiled vertex shader.
-    ID3DBlob* vertexShaderBlob;
-    LPCWSTR compiledVertexShaderObject = L"SimpleVertexShader.cso";
-
-    hr = D3DReadFileToBlob(compiledVertexShaderObject, &vertexShaderBlob);
-    if (FAILED(hr))
-    {
-        return false;
-    }
-
-    hr = _device->CreateVertexShader(vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), nullptr, &_vertexShader);
-    if (FAILED(hr))
-    {
-        return false;
-    }   
-
-    // Create the input layout for the vertex shader.
-    D3D11_INPUT_ELEMENT_DESC vertexLayoutDesc[] =
-    {
-        { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 }
-    };
-
-    hr = _device->CreateInputLayout(vertexLayoutDesc, _countof(vertexLayoutDesc), vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), &_inputLayout);
-    if (FAILED(hr))
-    {
-        return false;
-    }
-
-    SafeRelease(vertexShaderBlob);
-
-    // Load the compiled pixel shader.
-    ID3DBlob* pixelShaderBlob;
-    LPCWSTR compiledPixelShaderObject = L"SimplePixelShader.cso";
-
-    hr = D3DReadFileToBlob(compiledPixelShaderObject, &pixelShaderBlob);
-    if (FAILED(hr))
-    {
-        return false;
-    }
-
-    hr = _device->CreatePixelShader(pixelShaderBlob->GetBufferPointer(), pixelShaderBlob->GetBufferSize(), nullptr, &_pixelShader);
-    if (FAILED(hr))
-    {
-        return false;
-    }
-
-    SafeRelease(pixelShaderBlob);
+    }    
 
     // Setup the projection matrix.
     RECT clientRect;

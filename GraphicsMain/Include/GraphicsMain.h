@@ -5,7 +5,10 @@
 #include "Windows.h"
 #include "d3d11.h"
 #include <cassert>
-#include "Mesh.h"
+#include <vector>
+#include "DrawableObject.h"
+
+
 
 class GraphicsMain
 {
@@ -15,7 +18,6 @@ public:
 		assert(_instance);
 		return _instance->_device; 
 	};
-
 	GraphicsMain(HWND windowHandler);
 	void Init();
 	void Update(float deltaTime);
@@ -24,7 +26,7 @@ public:
 	void Renderer();
 
 private:
-	vector<Mesh> meshs;
+	std::vector<DrawableObject> _drawableObjects;
 	static GraphicsMain* _instance;
 
 	IDXGISwapChain* _swapChain;
@@ -38,12 +40,7 @@ private:
 	ID3D11DepthStencilState* _depthStencilState;
 	D3D11_VIEWPORT _viewport = { 0 };
 	ID3D11RasterizerState* _rasterizerState;
-	// Vertex buffer data
-	ID3D11InputLayout* _inputLayout = nullptr;
 
-	// Shader data
-	ID3D11VertexShader* _vertexShader = nullptr;
-	ID3D11PixelShader* _pixelShader = nullptr;
 
 	bool LoadContent();
 };
