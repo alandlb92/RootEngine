@@ -141,10 +141,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Include\GraphicsMain.h" />
+    <ClInclude Include="Include\Mesh.h" />
     <ClInclude Include="Include\pch.h" />
+    <ClInclude Include="Include\Vector3D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\GraphicsMain.cpp" />
+    <ClCompile Include="Source\Mesh.cpp" />
     <ClCompile Include="Source\pch.cpp" />
   </ItemGroup>
   <ItemGroup>

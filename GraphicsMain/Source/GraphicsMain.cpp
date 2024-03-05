@@ -5,7 +5,6 @@
 
 #include "pch.h"
 #include "GraphicsMain.h"
-#include <cassert>
 #include "directxmath.h"
 #include "d3dcompiler.h"
 #include <DirectXColors.h>
@@ -17,33 +16,33 @@ XMMATRIX g_ViewMatrix;
 XMMATRIX _projectionMatrix;
 
 // Vertex data for a colored cube.
-struct VertexPosColor
-{
-    XMFLOAT3 Position;
-    XMFLOAT3 Color;
-};
-
-VertexPosColor g_Vertices[8] =
-{
-    { XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f) }, // 0
-    { XMFLOAT3(-1.0f,  1.0f, -1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f) }, // 1
-    { XMFLOAT3(1.0f,  1.0f, -1.0f), XMFLOAT3(1.0f, 1.0f, 0.0f) }, // 2
-    { XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT3(1.0f, 0.0f, 0.0f) }, // 3
-    { XMFLOAT3(-1.0f, -1.0f,  1.0f), XMFLOAT3(0.0f, 0.0f, 1.0f) }, // 4
-    { XMFLOAT3(-1.0f,  1.0f,  1.0f), XMFLOAT3(0.0f, 1.0f, 1.0f) }, // 5
-    { XMFLOAT3(1.0f,  1.0f,  1.0f), XMFLOAT3(1.0f, 1.0f, 1.0f) }, // 6
-    { XMFLOAT3(1.0f, -1.0f,  1.0f), XMFLOAT3(1.0f, 0.0f, 1.0f) }  // 7
-};
-
-WORD g_Indicies[36] =
-{
-    0, 1, 2, 0, 2, 3,
-    4, 6, 5, 4, 7, 6,
-    4, 5, 1, 4, 1, 0,
-    3, 2, 6, 3, 6, 7,
-    1, 5, 6, 1, 6, 2,
-    4, 0, 3, 4, 3, 7
-};
+//struct VertexPosColor
+//{
+//    XMFLOAT3 Position;
+//    XMFLOAT3 Color;
+//};
+//
+//VertexPosColor g_Vertices[8] =
+//{
+//    { XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f) }, // 0
+//    { XMFLOAT3(-1.0f,  1.0f, -1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f) }, // 1
+//    { XMFLOAT3(1.0f,  1.0f, -1.0f), XMFLOAT3(1.0f, 1.0f, 0.0f) }, // 2
+//    { XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT3(1.0f, 0.0f, 0.0f) }, // 3
+//    { XMFLOAT3(-1.0f, -1.0f,  1.0f), XMFLOAT3(0.0f, 0.0f, 1.0f) }, // 4
+//    { XMFLOAT3(-1.0f,  1.0f,  1.0f), XMFLOAT3(0.0f, 1.0f, 1.0f) }, // 5
+//    { XMFLOAT3(1.0f,  1.0f,  1.0f), XMFLOAT3(1.0f, 1.0f, 1.0f) }, // 6
+//    { XMFLOAT3(1.0f, -1.0f,  1.0f), XMFLOAT3(1.0f, 0.0f, 1.0f) }  // 7
+//};
+//
+//WORD g_Indicies[36] =
+//{
+//    0, 1, 2, 0, 2, 3,
+//    4, 6, 5, 4, 7, 6,
+//    4, 5, 1, 4, 1, 0,
+//    3, 2, 6, 3, 6, 7,
+//    1, 5, 6, 1, 6, 2,
+//    4, 0, 3, 4, 3, 7
+//};
 
 // Shader resources
 enum ConstantBuffer
@@ -68,6 +67,7 @@ inline void SafeRelease(T& ptr)
 }
 
 
+GraphicsMain* GraphicsMain::_instance = nullptr;
 
 GraphicsMain::GraphicsMain(HWND windowHandler)
 {
@@ -222,6 +222,8 @@ void GraphicsMain::Init()
     _viewport.MinDepth = 0.0f;
     _viewport.MaxDepth = 1.0f;
 
+    _instance = this;
+
     LoadContent();
 }
 
@@ -268,12 +270,21 @@ void GraphicsMain::Renderer()
 
     Clear(Colors::CornflowerBlue, 1.0f, 0);
 
-    const UINT vertexStride = sizeof(VertexPosColor);
-    const UINT offset = 0;
-
-    _deviceContext->IASetVertexBuffers(0, 1, &_vertexBuffer, &vertexStride, &offset);
     _deviceContext->IASetInputLayout(_inputLayout);
-    _deviceContext->IASetIndexBuffer(_indexBuffer, DXGI_FORMAT_R16_UINT, 0);
+
+    uint32_t indexCount = 0;
+
+    for (auto& m: meshs)
+    {
+        const UINT vertexStride = sizeof(Vector3D);
+        const UINT offset = 0;    
+        _deviceContext->IASetVertexBuffers(0, 1, &m._vertexBuffer, &vertexStride, &offset);
+        _deviceContext->IASetIndexBuffer(m._indexBuffer, DXGI_FORMAT_R16_UINT, 0);
+
+        indexCount += m._indices.size();
+    }
+    
+    
     _deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     _deviceContext->VSSetShader(_vertexShader, nullptr, 0);
     _deviceContext->VSSetConstantBuffers(0, 3, _constantBuffers);
@@ -283,7 +294,9 @@ void GraphicsMain::Renderer()
     _deviceContext->PSSetShader(_pixelShader, nullptr, 0);
     _deviceContext->OMSetRenderTargets(1, &_renderTargetView, _depthStencilView);
     _deviceContext->OMSetDepthStencilState(_depthStencilState, 1);
-    _deviceContext->DrawIndexed(_countof(g_Indicies), 0, 0);
+
+    _deviceContext->DrawIndexed(indexCount, 0, 0);
+    
     Present(false);
 }
 
@@ -293,39 +306,8 @@ bool GraphicsMain::LoadContent()
 {
     assert(_device);
 
-    //Create and initialize the vertex buffer
-    D3D11_BUFFER_DESC vertexBufferDesc;
-    ZeroMemory(&vertexBufferDesc, sizeof(D3D11_BUFFER_DESC));
-    vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-    vertexBufferDesc.ByteWidth = sizeof(VertexPosColor) * _countof(g_Vertices);
-    vertexBufferDesc.CPUAccessFlags = 0;
-    vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-
-    D3D11_SUBRESOURCE_DATA resourceData;
-    ZeroMemory(&resourceData, sizeof(D3D11_SUBRESOURCE_DATA));
-    resourceData.pSysMem = g_Vertices;
-    HRESULT hr = _device->CreateBuffer(&vertexBufferDesc, &resourceData, &_vertexBuffer);
-    if (FAILED(hr))
-    {
-        return false;
-    }
-
-    // Create and initialize the index buffer.
-    D3D11_BUFFER_DESC indexBufferDesc;
-    ZeroMemory(&indexBufferDesc, sizeof(D3D11_BUFFER_DESC));
-
-    indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-    indexBufferDesc.ByteWidth = sizeof(WORD) * _countof(g_Indicies);
-    indexBufferDesc.CPUAccessFlags = 0;
-    indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-    resourceData.pSysMem = g_Indicies;
-
-    hr = _device->CreateBuffer(&indexBufferDesc, &resourceData, &_indexBuffer);
-    if (FAILED(hr))
-    {
-        return false;
-    }
-
+    meshs = { Mesh::MakePrimitiveCube() };
+      
     // Create the constant buffers for the variables defined in the vertex shader.
     D3D11_BUFFER_DESC constantBufferDesc;
     ZeroMemory(&constantBufferDesc, sizeof(D3D11_BUFFER_DESC));
@@ -335,7 +317,7 @@ bool GraphicsMain::LoadContent()
     constantBufferDesc.CPUAccessFlags = 0;
     constantBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 
-    hr = _device->CreateBuffer(&constantBufferDesc, nullptr, &_constantBuffers[CB_Application]);
+    HRESULT hr = _device->CreateBuffer(&constantBufferDesc, nullptr, &_constantBuffers[CB_Application]);
     if (FAILED(hr))
     {
         return false;
@@ -370,8 +352,7 @@ bool GraphicsMain::LoadContent()
     // Create the input layout for the vertex shader.
     D3D11_INPUT_ELEMENT_DESC vertexLayoutDesc[] =
     {
-        { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, offsetof(VertexPosColor,Position), D3D11_INPUT_PER_VERTEX_DATA, 0 },
-        { "COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, offsetof(VertexPosColor,Color), D3D11_INPUT_PER_VERTEX_DATA, 0 }
+        { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 }
     };
 
     hr = _device->CreateInputLayout(vertexLayoutDesc, _countof(vertexLayoutDesc), vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), &_inputLayout);
