@@ -1,20 +1,22 @@
 #pragma once
+#include "Vector2D.h"
 
-struct Vector3D
+struct Vector3D  : public Vector2D
 {
-    float X, Y, Z;
+    float Z;
 
-    Vector3D(float f)
+    Vector3D(float f) : Vector2D(f)
     {
-        X = f;
-        Y = f;
         Z = f;
     }
 
-    Vector3D(float x, float y, float z)
+    Vector3D(float x, float y, float z) : Vector2D(x, y)
     {
-        X = x;
-        Y = y;
         Z = z;
+    }
+
+    Vector3D operator* (const float value)
+    {
+        return Vector3D(X * value, Y * value, Z * value);
     }
 };

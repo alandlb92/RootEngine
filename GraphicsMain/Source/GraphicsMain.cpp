@@ -170,8 +170,7 @@ void GraphicsMain::Init()
         OutputDebugStringA("Failed to create depht stencil texture\n");
     }
 
-    ID3D11DepthStencilView* depthStencilView;
-    hr = _device->CreateDepthStencilView(depthStencilBuffer, nullptr, &depthStencilView);
+    hr = _device->CreateDepthStencilView(depthStencilBuffer, nullptr, &_depthStencilView);
     if (FAILED(hr))
     {
         OutputDebugStringA("Failed to create depht stencil view\n");
@@ -236,8 +235,8 @@ void GraphicsMain::Update(float deltaTime)
 
 
     static float angle = 0.0f;
-    angle += 90.0f * deltaTime;
-    XMVECTOR rotationAxis = XMVectorSet(0, 1, 1, 0);
+    angle += 30.0f * deltaTime;
+    XMVECTOR rotationAxis = XMVectorSet(0.5f, .5f, .5f, 0);
 
     g_WorldMatrix = XMMatrixRotationAxis(rotationAxis, XMConvertToRadians(angle));
     _deviceContext->UpdateSubresource(_constantBuffers[CB_Object], 0, nullptr, &g_WorldMatrix, 0, 0);
@@ -280,19 +279,26 @@ void GraphicsMain::Renderer()
         _deviceContext->IASetInputLayout(shader.GetInputLayout());
 
         const UINT vertexStride = sizeof(Vector3D);
+        const UINT uvStride = sizeof(Vector2D);
         const UINT offset = 0;    
 
         ID3D11Buffer* vertexBuffer = mesh.GetVertexBuffer();
-        ID3D11Buffer* indexBuffer = mesh.GetIndexBuffer();
-        
+        ID3D11Buffer* uvBuffer = mesh.GetUvBuffer();
+        ID3D11Buffer* indexBuffer = mesh.GetIndexBuffer();        
          
-         _deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &vertexStride, &offset);
+        _deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &vertexStride, &offset);
+        _deviceContext->IASetVertexBuffers(1, 1, &uvBuffer, &uvStride, &offset);
         _deviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R16_UINT, 0);
+
 
         indexCount += mesh.GetIndicesSize();
         _deviceContext->VSSetShader(shader.GetVertexShader(), nullptr, 0);
         _deviceContext->PSSetShader(shader.GetPixelShader(), nullptr, 0);
 
+        ID3D11ShaderResourceView* textureSRV = shader.GetTexture();
+        ID3D11SamplerState* samplerState = shader.GetSamplerState();
+        _deviceContext->PSSetShaderResources(0, 1, &textureSRV);
+        _deviceContext->PSSetSamplers(0, 1, &samplerState);
     }
     
     
