@@ -7,9 +7,6 @@ Mesh Mesh::MakePrimitiveCube()
 {
     Mesh mesh;
 
-
-
-
     float side = 1.0f / 2.0f;
     std::vector<Vector3D> vertices(14, Vector3D(0));
     vertices[0] = Vector3D(-side, -side, -side);

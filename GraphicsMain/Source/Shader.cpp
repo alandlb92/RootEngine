@@ -136,7 +136,7 @@ void Shader::Load()
 
 void Shader::LoadTexture(const wchar_t* textureRelativePath)
 {
-    ID3D11Device* device = GraphicsMain::GetDevice();
+    ID3D11Device* device =  GraphicsMain::GetDevice();
 
     std::wstring texturePath(GetApplicationFolderPath());
     texturePath.append(textureRelativePath);

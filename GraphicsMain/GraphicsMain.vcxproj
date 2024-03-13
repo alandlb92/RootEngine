@@ -143,6 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Include\Camera.h" />
     <ClInclude Include="Include\DrawableObject.h" />
     <ClInclude Include="Include\GraphicsMain.h" />
     <ClInclude Include="Include\Mesh.h" />
@@ -152,6 +153,7 @@
     <ClInclude Include="Include\Vector3D.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\DrawableObject.cpp" />
     <ClCompile Include="Source\GraphicsMain.cpp" />
     <ClCompile Include="Source\Mesh.cpp" />

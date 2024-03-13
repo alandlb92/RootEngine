@@ -2,8 +2,6 @@
 //
 
 #include "pch.h"
-
-#include "pch.h"
 #include "GraphicsMain.h"
 #include "directxmath.h"
 #include <DirectXColors.h>
@@ -26,45 +24,6 @@ inline void SafeRelease(T& ptr)
     }
 }
 
-// Vertex data for a colored cube.
-//struct VertexPosColor
-//{
-//    XMFLOAT3 Position;
-//    XMFLOAT3 Color;
-//};
-//
-//VertexPosColor g_Vertices[8] =
-//{
-//    { XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f) }, // 0
-//    { XMFLOAT3(-1.0f,  1.0f, -1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f) }, // 1
-//    { XMFLOAT3(1.0f,  1.0f, -1.0f), XMFLOAT3(1.0f, 1.0f, 0.0f) }, // 2
-//    { XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT3(1.0f, 0.0f, 0.0f) }, // 3
-//    { XMFLOAT3(-1.0f, -1.0f,  1.0f), XMFLOAT3(0.0f, 0.0f, 1.0f) }, // 4
-//    { XMFLOAT3(-1.0f,  1.0f,  1.0f), XMFLOAT3(0.0f, 1.0f, 1.0f) }, // 5
-//    { XMFLOAT3(1.0f,  1.0f,  1.0f), XMFLOAT3(1.0f, 1.0f, 1.0f) }, // 6
-//    { XMFLOAT3(1.0f, -1.0f,  1.0f), XMFLOAT3(1.0f, 0.0f, 1.0f) }  // 7
-//};
-//
-//WORD g_Indicies[36] =
-//{
-//    0, 1, 2, 0, 2, 3,
-//    4, 6, 5, 4, 7, 6,
-//    4, 5, 1, 4, 1, 0,
-//    3, 2, 6, 3, 6, 7,
-//    1, 5, 6, 1, 6, 2,
-//    4, 0, 3, 4, 3, 7
-//};
-
-// Shader resources
-enum ConstantBuffer
-{
-    CB_Application,
-    CB_Frame,
-    CB_Object,
-    NumConstantBuffers
-};
-
-ID3D11Buffer* _constantBuffers[NumConstantBuffers];
 
 GraphicsMain* GraphicsMain::_instance = nullptr;
 
@@ -227,19 +186,7 @@ void GraphicsMain::Init()
 
 void GraphicsMain::Update(float deltaTime)
 {
-    XMVECTOR eyePosition = XMVectorSet(0, 0, -10, 1);
-    XMVECTOR focusPoint = XMVectorSet(0, 0, 0, 1);
-    XMVECTOR upDirection = XMVectorSet(0, 1, 0, 0);
-    g_ViewMatrix = XMMatrixLookAtLH(eyePosition, focusPoint, upDirection);
-    _deviceContext->UpdateSubresource(_constantBuffers[CB_Frame], 0, nullptr, &g_ViewMatrix, 0, 0);
-
-
-    static float angle = 0.0f;
-    angle += 30.0f * deltaTime;
-    XMVECTOR rotationAxis = XMVectorSet(0.5f, .5f, .5f, 0);
-
-    g_WorldMatrix = XMMatrixRotationAxis(rotationAxis, XMConvertToRadians(angle));
-    _deviceContext->UpdateSubresource(_constantBuffers[CB_Object], 0, nullptr, &g_WorldMatrix, 0, 0);
+    _camera.Update(deltaTime);
 }
 
 void GraphicsMain::Clear(const FLOAT clearColor[4], FLOAT clearDepth, UINT8 clearStencil)
@@ -325,7 +272,8 @@ bool GraphicsMain::LoadContent()
     Shader shader = Shader::MakeSimpleShader();
 
     _drawableObjects = { DrawableObject(mesh, shader) };
-      
+    _camera = Camera();
+
     // Create the constant buffers for the variables defined in the vertex shader.
     D3D11_BUFFER_DESC constantBufferDesc;
     ZeroMemory(&constantBufferDesc, sizeof(D3D11_BUFFER_DESC));
