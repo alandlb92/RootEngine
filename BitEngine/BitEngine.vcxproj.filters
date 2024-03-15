@@ -40,12 +40,18 @@
     <ClInclude Include="Include\framework.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Include\WindowsApplication.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\BitEngine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\WindowsApplication.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

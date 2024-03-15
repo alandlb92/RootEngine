@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\InputSystem.h" />
     <ClInclude Include="Include\pch.h" />
   </ItemGroup>
   <ItemGroup>
