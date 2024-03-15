@@ -107,7 +107,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(SolutionDir)GraphicsMain\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(SolutionDir)Graphics\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -154,7 +154,7 @@ xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GraphicsMain\GraphicsMain.vcxproj">
+    <ProjectReference Include="..\Graphics\Graphics.vcxproj">
       <Project>{ac40e91a-0268-412a-a9f3-5224b0bbbb34}</Project>
     </ProjectReference>
   </ItemGroup>
