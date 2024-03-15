@@ -83,7 +83,8 @@ LRESULT CALLBACK WindowsApplication::WndProc(HWND hWnd, UINT message, WPARAM wPa
 
     if (_appInstance)
     {
-        _appInstance->_inputSystem->SendOSEvent(message, wParam, lParam);
+        if(_appInstance->_inputSystem)
+            _appInstance->_inputSystem->SendOSEvent(message, wParam, lParam);
 
         switch (message) {
             // Handle other messages

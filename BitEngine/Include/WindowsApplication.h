@@ -4,9 +4,11 @@
 #include <memory>
 #include "InputSystem.h"
 
+
 #define MAX_LOADSTRING 100
 
 class WindowsApplication {
+
 public:
     WindowsApplication(HINSTANCE hInstance);
     ~WindowsApplication();

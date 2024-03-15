@@ -45,8 +45,8 @@ public:
 	void Present(bool vSync);
 	void Renderer();
 
-private:
 	Camera _camera;
+private:
 	std::vector<DrawableObject> _drawableObjects;
 	
 
