@@ -1,9 +1,0 @@
-Package: directxtex
-Version: 2023-09-01
-Depends: directxmath, vcpkg-cmake, vcpkg-cmake-config
-Architecture: x64-windows
-Multi-Arch: same
-Abi: 6f420d8cc8443fcdd76c0081bdd8d45d00c07ed62a17de07b586e79d0b84983d
-Description: DirectXTex texture processing library
-Default-Features: dx11
-Status: install ok half-installed
