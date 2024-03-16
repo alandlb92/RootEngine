@@ -1,6 +1,7 @@
 #include "BitEngine.h"
 #include "timeapi.h"
 #include "InputSystem.h"
+#include "GraphicsMain.h"
 
 const float BitEngine::targetFramerate = 30.0f;
 const float BitEngine::maxTimeStep = 1.0f / targetFramerate;
@@ -29,5 +30,5 @@ void BitEngine::Update()
 	_graphicsMain->Update(deltaTime);
 	_graphicsMain->Renderer();
 
-	InputSystem::GetInstance()->Update(deltaTime);
+	InputSystem::GetInstance()->Update(currentTime);
 }

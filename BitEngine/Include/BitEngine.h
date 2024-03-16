@@ -4,7 +4,6 @@
 #include "Windows.h"
 #include "GraphicsMain.h"
 
-
 class BitEngine
 {
 public:
