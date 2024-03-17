@@ -165,7 +165,7 @@ xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
   <ItemGroup>
     <ClCompile Include="Source\BitEngine.cpp" />
     <ClCompile Include="Source\Main.cpp" />
-    <ClCompile Include="Source\WindowsApplication.cpp"/>
+    <ClCompile Include="Source\WindowsApplication.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Graphics\Graphics.vcxproj">

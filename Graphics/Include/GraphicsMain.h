@@ -8,6 +8,7 @@
 #include <vector>
 #include "DrawableObject.h"
 #include "Camera.h"
+#include <wrl/client.h>
 
 // Shader resources
 enum ConstantBuffer
@@ -21,22 +22,30 @@ enum ConstantBuffer
 class GraphicsMain
 {
 public:
+	static GraphicsMain* GetInstace()
+	{
+		return _instance;
+	}
+
 	static ID3D11Device* GetDevice() 
 	{ 
 		assert(_instance);
-		return _instance->_device; 
+		return _instance->_device.Get(); 
 	};
 
 	static ID3D11DeviceContext* GetDeviceContext()
 	{
 		assert(_instance);
-		return _instance->_deviceContext;
+		return _instance->_deviceContext.Get();
 	};
 
 	static void UpdateConstantBuffer(ConstantBuffer type, const void* pSrcData)
 	{
 		_instance->_deviceContext->UpdateSubresource(_instance->_constantBuffers[type], 0, nullptr, pSrcData, 0, 0);
 	}
+
+	float GetWidth() { return _clientWidth; }
+	float GetHeight() { return _clientHeight; }
 
 	GraphicsMain(HWND windowHandler);
 	void Init();
@@ -53,8 +62,8 @@ private:
 	static GraphicsMain* _instance;
 
 	IDXGISwapChain* _swapChain;
-	ID3D11Device* _device;
-	ID3D11DeviceContext* _deviceContext;
+	Microsoft::WRL::ComPtr<ID3D11Device> _device;
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext> _deviceContext;
 
 	ID3D11RenderTargetView* _renderTargetView;
 	ID3D11DepthStencilView* _depthStencilView = nullptr;
@@ -65,6 +74,8 @@ private:
 	ID3D11RasterizerState* _rasterizerState;
 	ID3D11Buffer* _constantBuffers[NumConstantBuffers];
 
+	float _clientWidth;
+	float _clientHeight;
 
 	bool LoadContent();
 };

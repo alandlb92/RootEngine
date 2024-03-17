@@ -3,8 +3,13 @@
 #include "GraphicsMain.h"
 #include <stdexcept>
 
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
 Mesh Mesh::MakePrimitiveCube()
 {
+    
     Mesh mesh;
 
     float side = 1.0f / 2.0f;
@@ -64,13 +69,70 @@ Mesh Mesh::MakePrimitiveCube()
     return mesh;
 }
 
+Mesh Mesh::MakeFromFbxFile(const char* filePath)
+{
+    Mesh mesh;
+    Assimp::Importer importer;
+    std::string pFile(filePath);
+
+    vector<Vector3D> vertices;
+    vector<uint16_t> indices;
+    vector<Vector2D> uvs;
+
+    //this is slow to load, we need to convert to a better file
+    const aiScene* aiScene = importer.ReadFile(pFile,
+        aiProcess_CalcTangentSpace |
+        aiProcess_Triangulate |
+        aiProcess_JoinIdenticalVertices |
+        aiProcess_SortByPType);
+
+    if (aiScene == nullptr)
+    {
+        //error to import
+        return Mesh();
+    }
+
+        aiMesh* aiMesh = aiScene->mMeshes[0];
+        for (unsigned int j = 0;j < aiMesh->mNumVertices; j++)
+        {
+            aiVector3D& vertex = aiMesh->mVertices[j];
+            Vector3D vert(vertex.x, vertex.y, vertex.z);
+            vertices.push_back(vert);
+        }
+
+        for (unsigned int j = 0; j < aiMesh->mNumFaces; ++j) {
+            aiFace& face = aiMesh->mFaces[j];
+            for (unsigned int k = 0; k < face.mNumIndices; ++k) {
+                uint16_t index = face.mIndices[k];
+                indices.push_back(index);
+            }
+        }
+
+
+        if (aiMesh->HasTextureCoords(0)) { // Verifica se a malha possui coordenadas de textura
+            for (unsigned int j = 0; j < aiMesh->mNumVertices; ++j) {
+                aiVector3D& uv = aiMesh->mTextureCoords[0][j]; // Acessa as coordenadas de textura do canal 0
+                Vector2D uvCoord(uv.x, uv.y); // Suponha que UV seja uma estrutura que armazena coordenadas de textura
+                uvs.push_back(uvCoord);
+            }
+        }
+    
+    
+
+    mesh.SetVertices(vertices);
+    mesh.SetIndices(indices);
+    mesh.SetUV(uvs);
+
+    return mesh;
+}
+
 void Mesh::SetVertices(vector<Vector3D> verctices)
 {
     _vertices = verctices;
 
     //Create and initialize the vertex buffer
     D3D11_BUFFER_DESC vertexBufferDesc;
-    ZeroMemory(&vertexBufferDesc, sizeof(D3D11_BUFFER_DESC));
+     ZeroMemory(&vertexBufferDesc, sizeof(D3D11_BUFFER_DESC));
     vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
     vertexBufferDesc.ByteWidth = sizeof(Vector3D) * _vertices.size();
     vertexBufferDesc.CPUAccessFlags = 0;
@@ -79,7 +141,7 @@ void Mesh::SetVertices(vector<Vector3D> verctices)
     D3D11_SUBRESOURCE_DATA resourceData;
     ZeroMemory(&resourceData, sizeof(D3D11_SUBRESOURCE_DATA));
     resourceData.pSysMem = _vertices.data();
-    HRESULT hr = GraphicsMain::GetDevice()->CreateBuffer(&vertexBufferDesc, &resourceData, &_vertexBuffer);
+    HRESULT hr = GraphicsMain::GetDevice()->CreateBuffer(&vertexBufferDesc, &resourceData, _vertexBuffer.GetAddressOf());
 
     if (FAILED(hr))
     {
@@ -95,15 +157,16 @@ void Mesh::SetIndices(vector<uint16_t> indices)
     D3D11_BUFFER_DESC indexBufferDesc;
     ZeroMemory(&indexBufferDesc, sizeof(D3D11_BUFFER_DESC));
     indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-    indexBufferDesc.ByteWidth = sizeof(uint32_t) * _indices.size();
+    indexBufferDesc.ByteWidth = sizeof(uint16_t) * _indices.size();
     indexBufferDesc.CPUAccessFlags = 0;
     indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 
     D3D11_SUBRESOURCE_DATA resourceData;
     ZeroMemory(&resourceData, sizeof(D3D11_SUBRESOURCE_DATA));
     resourceData.pSysMem = _indices.data();
-
-    HRESULT hr = GraphicsMain::GetDevice()->CreateBuffer(&indexBufferDesc, &resourceData, &_indexBuffer);
+    
+    auto* device = GraphicsMain::GetDevice();
+    HRESULT hr = device->CreateBuffer(&indexBufferDesc, &resourceData, _indexBuffer.ReleaseAndGetAddressOf());
     if (FAILED(hr))
     {
         throw std::invalid_argument("Faile to create index buffer");
@@ -125,7 +188,7 @@ void Mesh::SetUV(vector<Vector2D> uv)
     ZeroMemory(&resourceData, sizeof(D3D11_SUBRESOURCE_DATA));
     resourceData.pSysMem = _uv.data();
 
-    HRESULT hr = GraphicsMain::GetDevice()->CreateBuffer(&uvBufferDesc, &resourceData, &_uvBuffer);
+    HRESULT hr = GraphicsMain::GetDevice()->CreateBuffer(&uvBufferDesc, &resourceData, _uvBuffer.GetAddressOf());
     if (FAILED(hr))
     {
         throw std::invalid_argument("Faile to create uv buffer");

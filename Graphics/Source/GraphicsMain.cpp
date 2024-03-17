@@ -7,10 +7,6 @@
 #include <DirectXColors.h>
 
 using namespace DirectX;
-// Demo parameters
-XMMATRIX g_WorldMatrix;
-XMMATRIX g_ViewMatrix;
-XMMATRIX _projectionMatrix;
 
 
 // Safely release a COM object.
@@ -81,8 +77,8 @@ void GraphicsMain::Init()
     D3D_FEATURE_LEVEL featureLevel;
     HRESULT hr = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE,
         nullptr, createDeviceFlags, featureLevels, _countof(featureLevels),
-        D3D11_SDK_VERSION, &swapChainDesc, &_swapChain, &_device, &featureLevel,
-        &_deviceContext);
+        D3D11_SDK_VERSION, &swapChainDesc, &_swapChain, _device.GetAddressOf(), &featureLevel,
+        _deviceContext.GetAddressOf());
 
     if (FAILED(hr))
     {
@@ -267,12 +263,23 @@ void GraphicsMain::Renderer()
 bool GraphicsMain::LoadContent()
 {
     assert(_device);
-    
-    Mesh mesh = Mesh::MakePrimitiveCube();
+
+    // Setup the projection matrix.
+    RECT clientRect;
+    GetClientRect(_windowHandler, &clientRect);
+
+    // Compute the exact client dimensions.
+    // This is required for a correct projection matrix.
+    _clientWidth = static_cast<float>(clientRect.right - clientRect.left);
+    _clientHeight = static_cast<float>(clientRect.bottom - clientRect.top);
+
+    //Mesh mesh = Mesh::MakePrimitiveCube();
+    Mesh mesh = Mesh::MakeFromFbxFile("C:/Users/aland/Downloads/HeroGoat.fbx");
     Shader shader = Shader::MakeSimpleShader();
 
     _drawableObjects = { DrawableObject(mesh, shader) };
     _camera = Camera();
+    _camera.Init();
 
     // Create the constant buffers for the variables defined in the vertex shader.
     D3D11_BUFFER_DESC constantBufferDesc;
@@ -298,19 +305,6 @@ bool GraphicsMain::LoadContent()
     {
         return false;
     }    
-
-    // Setup the projection matrix.
-    RECT clientRect;
-    GetClientRect(_windowHandler, &clientRect);
-
-    // Compute the exact client dimensions.
-    // This is required for a correct projection matrix.
-    float clientWidth = static_cast<float>(clientRect.right - clientRect.left);
-    float clientHeight = static_cast<float>(clientRect.bottom - clientRect.top);
-
-    _projectionMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(45.0f), clientWidth / clientHeight, 0.1f, 100.0f);
-
-    _deviceContext->UpdateSubresource(_constantBuffers[CB_Application], 0, nullptr, &_projectionMatrix, 0, 0);
 
     return true;
 }
