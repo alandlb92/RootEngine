@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Graphics", "Graphics\Graphi
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InputSystem", "InputSystem\InputSystem.vcxproj", "{EA6C39F9-8896-4DD7-ACEE-46F5FEA81B31}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FaiaUtils", "FaiaUtils\FaiaUtils.vcxproj", "{9FB7798C-1956-4724-BB16-7E149451C2FD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -41,6 +43,14 @@ Global
 		{EA6C39F9-8896-4DD7-ACEE-46F5FEA81B31}.Release|x64.Build.0 = Release|x64
 		{EA6C39F9-8896-4DD7-ACEE-46F5FEA81B31}.Release|x86.ActiveCfg = Release|Win32
 		{EA6C39F9-8896-4DD7-ACEE-46F5FEA81B31}.Release|x86.Build.0 = Release|Win32
+		{9FB7798C-1956-4724-BB16-7E149451C2FD}.Debug|x64.ActiveCfg = Debug|x64
+		{9FB7798C-1956-4724-BB16-7E149451C2FD}.Debug|x64.Build.0 = Debug|x64
+		{9FB7798C-1956-4724-BB16-7E149451C2FD}.Debug|x86.ActiveCfg = Debug|Win32
+		{9FB7798C-1956-4724-BB16-7E149451C2FD}.Debug|x86.Build.0 = Debug|Win32
+		{9FB7798C-1956-4724-BB16-7E149451C2FD}.Release|x64.ActiveCfg = Release|x64
+		{9FB7798C-1956-4724-BB16-7E149451C2FD}.Release|x64.Build.0 = Release|x64
+		{9FB7798C-1956-4724-BB16-7E149451C2FD}.Release|x86.ActiveCfg = Release|Win32
+		{9FB7798C-1956-4724-BB16-7E149451C2FD}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

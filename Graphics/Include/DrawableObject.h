@@ -1,19 +1,24 @@
 #pragma once
 #include "Mesh.h"
-#include "Shader.h"
+#include "Material.h"
 
 class DrawableObject
 {
 public:
-    DrawableObject();
-    DrawableObject(std::vector<Mesh> mesh, Shader shader);
+    DrawableObject(std::vector<Mesh> mesh, std::vector<Material> materials);
 
     std::vector<Mesh> GetMeshs() { return _meshs; }
-    Shader GetShader() { return _shader; }
+    Material GetMaterial(unsigned int index)
+    {
+        if (index >= _materials.size())
+            return _materials[0]; //TODO: instead return material index 0, return a dummy material, like in unity when you have a pink color
+
+        return _materials[index];
+    }
 
 private:
     std::vector<Mesh> _meshs;
-    Shader _shader;
+    std::vector<Material> _materials;
 
 };
 

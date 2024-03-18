@@ -24,7 +24,7 @@ Camera::Camera()
 
 void Camera::Init()
 {
-    _eyePosition = XMVectorSet(0, 100, -500, 1);
+    _eyePosition = XMVectorSet(0, 100, 400, 1);
     _focusPoint = XMVectorSet(0, 100, 0, 1);
     _upDirection = XMVectorSet(0, 1, 0, 0);
     _viewMatrix = XMMatrixLookAtLH(_eyePosition, _focusPoint, _upDirection);

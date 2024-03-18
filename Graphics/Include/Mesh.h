@@ -23,6 +23,7 @@ public:
     vector<Vector3D> GetVertices() { return _vertices; }
     vector<uint16_t> GetIndices() { return _indices; }
     size_t GetIndicesSize() { return _indices.size(); }
+    uint16_t GetMaterialIndex() { return _materialIndex; }
 
 private:
     Microsoft::WRL::ComPtr<ID3D11Buffer> _vertexBuffer = nullptr;
@@ -31,5 +32,6 @@ private:
     vector<uint16_t> _indices;
     vector<Vector3D> _vertices;
     vector<Vector2D> _uv;
+    uint16_t _materialIndex;
 
 };

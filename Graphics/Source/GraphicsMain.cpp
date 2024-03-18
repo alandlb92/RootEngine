@@ -216,11 +216,12 @@ void GraphicsMain::Renderer()
 
     for (auto& d : _drawableObjects)
     {
-        Shader shader = d.GetShader();
-
         for (auto& mesh : d.GetMeshs())
         {
-            _deviceContext->IASetInputLayout(shader.GetInputLayout());
+            int materialIndex = mesh.GetMaterialIndex();
+            Material material = d.GetMaterial(mesh.GetMaterialIndex());
+
+            _deviceContext->IASetInputLayout(material.GetShader()->GetInputLayout());
 
             const UINT vertexStride = sizeof(Vector3D);
             const UINT uvStride = sizeof(Vector2D);
@@ -236,11 +237,11 @@ void GraphicsMain::Renderer()
 
 
             indexCount += mesh.GetIndicesSize();
-            _deviceContext->VSSetShader(shader.GetVertexShader(), nullptr, 0);
-            _deviceContext->PSSetShader(shader.GetPixelShader(), nullptr, 0);
+            _deviceContext->VSSetShader(material.GetShader()->GetVertexShader(), nullptr, 0);
+            _deviceContext->PSSetShader(material.GetShader()->GetPixelShader(), nullptr, 0);
 
-            ID3D11ShaderResourceView* textureSRV = shader.GetTexture();
-            ID3D11SamplerState* samplerState = shader.GetSamplerState();
+            ID3D11ShaderResourceView* textureSRV = material.GetTexture(0)->GetTexture();
+            ID3D11SamplerState* samplerState = material.GetTexture(0)->GetSamplerState();
             _deviceContext->PSSetShaderResources(0, 1, &textureSRV);
             _deviceContext->PSSetSamplers(0, 1, &samplerState);
 
@@ -278,9 +279,24 @@ bool GraphicsMain::LoadContent()
     //std::vector<Mesh> meshs = { Mesh::MakePrimitiveCube() };
 
     std::vector<Mesh> meshs = Mesh::MakeFromFbxFile("C:\\Users\\alan.bittencourt\\OneDrive\\Projects\\BitEngine\\Content\\Models\\HeroGoat.fbx");
-    Shader shader = Shader::MakeSimpleShader();
 
-    _drawableObjects = { DrawableObject(meshs, shader) };
+    Material material0;
+    material0.SetShader("Simple");
+    material0.SetTexture("Content\\Textures\\HeroGoat\\Ch40_1001_Diffuse.png", 0);
+
+    Material material1;
+    material1.SetShader("Simple");
+    material1.SetTexture("Content\\Textures\\HeroGoat\\Ch40_1002_Diffuse.png", 0);
+
+    Material material2;
+    material2.SetShader("Simple");
+    material2.SetTexture("Content\\Textures\\HeroGoat\\Ch40_1002_Diffuse.png", 0);
+
+    Material material3;
+    material3.SetShader("Simple");
+    material3.SetTexture("Content\\Textures\\HeroGoat\\Ch40_1003_Diffuse.png", 0);
+
+    _drawableObjects = { DrawableObject(meshs, { material0, material1, material2, material3 }) };
     _camera = Camera();
     _camera.Init();
 

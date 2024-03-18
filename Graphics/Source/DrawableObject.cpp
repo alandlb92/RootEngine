@@ -1,13 +1,8 @@
 #include "pch.h"
 #include "DrawableObject.h"
 
-DrawableObject::DrawableObject()
-{
-    DrawableObject(std::vector<Mesh>{Mesh::MakePrimitiveCube()}, Shader());
-}
-
-DrawableObject::DrawableObject(std::vector<Mesh> meshs, Shader shader)
+DrawableObject::DrawableObject(std::vector<Mesh> meshs, std::vector<Material> materials)
 {
     _meshs = meshs;
-    _shader = shader;
+    _materials = materials;
 }

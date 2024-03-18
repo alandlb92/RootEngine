@@ -113,13 +113,12 @@ std::vector<Mesh> Mesh::MakeFromFbxFile(const char* filePath)
             }
         }
 
-
         if (aiMesh->HasTextureCoords(0)) 
         {
             for (unsigned int j = 0; j < aiMesh->mNumVertices; ++j) 
             {
                 aiVector3D& uv = aiMesh->mTextureCoords[0][j];
-                Vector2D uvCoord(uv.x, uv.y);
+                Vector2D uvCoord(uv.x, -uv.y);
                 uvs.push_back(uvCoord);
             }
         }
@@ -127,6 +126,7 @@ std::vector<Mesh> Mesh::MakeFromFbxFile(const char* filePath)
         mesh.SetVertices(vertices);
         mesh.SetIndices(indices);
         mesh.SetUV(uvs);
+        mesh._materialIndex = aiMesh->mMaterialIndex;
         meshs.push_back(mesh);
     }
 
