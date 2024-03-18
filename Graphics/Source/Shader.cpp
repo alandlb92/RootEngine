@@ -131,7 +131,7 @@ void Shader::Load()
 
 
     SafeRelease(pixelShaderBlob);
-    LoadTexture(L"Textures\\brick-wall-bl\\brick-wall_albedo.png");
+    LoadTexture(L"Textures\\Goat_Diffuse.png");
 }
 
 void Shader::LoadTexture(const wchar_t* textureRelativePath)
