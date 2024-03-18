@@ -9,7 +9,7 @@
 
 Mesh Mesh::MakePrimitiveCube()
 {
-    
+
     Mesh mesh;
 
     float side = 1.0f / 2.0f;
@@ -24,10 +24,10 @@ Mesh Mesh::MakePrimitiveCube()
     vertices[7] = Vector3D(side, side, side);
     vertices[8] = Vector3D(-side, -side, -side);
     vertices[9] = Vector3D(side, -side, -side);
-    vertices[10] = Vector3D(-side,-side,-side);
-    vertices[11] = Vector3D(-side,-side,side);
-    vertices[12] = Vector3D(side,-side,-side);
-    vertices[13] = Vector3D(side,-side,side);
+    vertices[10] = Vector3D(-side, -side, -side);
+    vertices[11] = Vector3D(-side, -side, side);
+    vertices[12] = Vector3D(side, -side, -side);
+    vertices[13] = Vector3D(side, -side, side);
 
     vector<uint16_t> indices =
     {
@@ -69,15 +69,11 @@ Mesh Mesh::MakePrimitiveCube()
     return mesh;
 }
 
-Mesh Mesh::MakeFromFbxFile(const char* filePath)
+std::vector<Mesh> Mesh::MakeFromFbxFile(const char* filePath)
 {
-    Mesh mesh;
+    std::vector<Mesh> meshs;
     Assimp::Importer importer;
     std::string pFile(filePath);
-
-    vector<Vector3D> vertices;
-    vector<uint16_t> indices;
-    vector<Vector2D> uvs;
 
     //this is slow to load, we need to convert to a better file
     const aiScene* aiScene = importer.ReadFile(pFile,
@@ -89,11 +85,18 @@ Mesh Mesh::MakeFromFbxFile(const char* filePath)
     if (aiScene == nullptr)
     {
         //error to import
-        return Mesh();
+        return meshs;
     }
 
-        aiMesh* aiMesh = aiScene->mMeshes[0];
-        for (unsigned int j = 0;j < aiMesh->mNumVertices; j++)
+    for (int i = 0; i < aiScene->mNumMeshes; i++)
+    {
+        aiMesh* aiMesh = aiScene->mMeshes[i];
+        Mesh mesh;
+        vector<Vector3D> vertices;
+        vector<uint16_t> indices;
+        vector<Vector2D> uvs;
+
+        for (unsigned int j = 0; j < aiMesh->mNumVertices; j++)
         {
             aiVector3D& vertex = aiMesh->mVertices[j];
             Vector3D vert(vertex.x, vertex.y, vertex.z);
@@ -116,14 +119,14 @@ Mesh Mesh::MakeFromFbxFile(const char* filePath)
                 uvs.push_back(uvCoord);
             }
         }
-    
-    
 
-    mesh.SetVertices(vertices);
-    mesh.SetIndices(indices);
-    mesh.SetUV(uvs);
+        mesh.SetVertices(vertices);
+        mesh.SetIndices(indices);
+        mesh.SetUV(uvs);
+        meshs.push_back(mesh);
+    }
 
-    return mesh;
+    return meshs;
 }
 
 void Mesh::SetVertices(vector<Vector3D> verctices)
@@ -132,7 +135,7 @@ void Mesh::SetVertices(vector<Vector3D> verctices)
 
     //Create and initialize the vertex buffer
     D3D11_BUFFER_DESC vertexBufferDesc;
-     ZeroMemory(&vertexBufferDesc, sizeof(D3D11_BUFFER_DESC));
+    ZeroMemory(&vertexBufferDesc, sizeof(D3D11_BUFFER_DESC));
     vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
     vertexBufferDesc.ByteWidth = sizeof(Vector3D) * _vertices.size();
     vertexBufferDesc.CPUAccessFlags = 0;
@@ -164,7 +167,7 @@ void Mesh::SetIndices(vector<uint16_t> indices)
     D3D11_SUBRESOURCE_DATA resourceData;
     ZeroMemory(&resourceData, sizeof(D3D11_SUBRESOURCE_DATA));
     resourceData.pSysMem = _indices.data();
-    
+
     auto* device = GraphicsMain::GetDevice();
     HRESULT hr = device->CreateBuffer(&indexBufferDesc, &resourceData, _indexBuffer.ReleaseAndGetAddressOf());
     if (FAILED(hr))

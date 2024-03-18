@@ -11,7 +11,7 @@ class Mesh
 {
 public:
     static Mesh MakePrimitiveCube();
-    static Mesh MakeFromFbxFile(const char* filePath);
+    static std::vector<Mesh> MakeFromFbxFile(const char* filePath);
 
     void SetVertices(vector<Vector3D> verctices);
     void SetIndices(vector<uint16_t> indices);

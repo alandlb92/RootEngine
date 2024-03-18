@@ -3,11 +3,11 @@
 
 DrawableObject::DrawableObject()
 {
-    DrawableObject(Mesh::MakePrimitiveCube(), Shader());
+    DrawableObject(std::vector<Mesh>{Mesh::MakePrimitiveCube()}, Shader());
 }
 
-DrawableObject::DrawableObject(Mesh mesh, Shader shader)
+DrawableObject::DrawableObject(std::vector<Mesh> meshs, Shader shader)
 {
-    _mesh = mesh;
+    _meshs = meshs;
     _shader = shader;
 }

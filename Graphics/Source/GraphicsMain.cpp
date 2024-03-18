@@ -216,7 +216,7 @@ void GraphicsMain::Renderer()
 
     for (auto& d: _drawableObjects)
     {
-        Mesh mesh = d.GetMesh();
+        Mesh mesh = d.GetMeshs()[0];
         Shader shader = d.GetShader();
 
         _deviceContext->IASetInputLayout(shader.GetInputLayout());
@@ -274,7 +274,7 @@ bool GraphicsMain::LoadContent()
     _clientHeight = static_cast<float>(clientRect.bottom - clientRect.top);
 
     //Mesh mesh = Mesh::MakePrimitiveCube();
-    Mesh mesh = Mesh::MakeFromFbxFile("C:/Users/aland/Downloads/HeroGoat.fbx");
+    std::vector<Mesh> mesh = Mesh::MakeFromFbxFile("C:/Users/aland/Downloads/HeroGoat.fbx");
     Shader shader = Shader::MakeSimpleShader();
 
     _drawableObjects = { DrawableObject(mesh, shader) };

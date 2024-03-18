@@ -6,13 +6,13 @@ class DrawableObject
 {
 public:
     DrawableObject();
-    DrawableObject(Mesh mesh, Shader shader);
+    DrawableObject(std::vector<Mesh> mesh, Shader shader);
 
-    Mesh GetMesh() { return _mesh; }
+    std::vector<Mesh> GetMeshs() { return _meshs; }
     Shader GetShader() { return _shader; }
 
 private:
-    Mesh _mesh;
+    std::vector<Mesh> _meshs;
     Shader _shader;
 
 };
