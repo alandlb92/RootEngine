@@ -188,7 +188,7 @@ void GraphicsMain::Update(float deltaTime)
 void GraphicsMain::Clear(const FLOAT clearColor[4], FLOAT clearDepth, UINT8 clearStencil)
 {
     _deviceContext->ClearRenderTargetView(_renderTargetView, clearColor);
-    if(_depthStencilView)
+    if (_depthStencilView)
         _deviceContext->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, clearDepth, clearStencil);
 }
 
@@ -214,47 +214,49 @@ void GraphicsMain::Renderer()
 
     uint32_t indexCount = 0;
 
-    for (auto& d: _drawableObjects)
+    for (auto& d : _drawableObjects)
     {
-        Mesh mesh = d.GetMeshs()[0];
         Shader shader = d.GetShader();
 
-        _deviceContext->IASetInputLayout(shader.GetInputLayout());
+        for (auto& mesh : d.GetMeshs())
+        {
+            _deviceContext->IASetInputLayout(shader.GetInputLayout());
 
-        const UINT vertexStride = sizeof(Vector3D);
-        const UINT uvStride = sizeof(Vector2D);
-        const UINT offset = 0;    
+            const UINT vertexStride = sizeof(Vector3D);
+            const UINT uvStride = sizeof(Vector2D);
+            const UINT offset = 0;
 
-        ID3D11Buffer* vertexBuffer = mesh.GetVertexBuffer();
-        ID3D11Buffer* uvBuffer = mesh.GetUvBuffer();
-        ID3D11Buffer* indexBuffer = mesh.GetIndexBuffer();        
-         
-        _deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &vertexStride, &offset);
-        _deviceContext->IASetVertexBuffers(1, 1, &uvBuffer, &uvStride, &offset);
-        _deviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R16_UINT, 0);
+            ID3D11Buffer* vertexBuffer = mesh.GetVertexBuffer();
+            ID3D11Buffer* uvBuffer = mesh.GetUvBuffer();
+            ID3D11Buffer* indexBuffer = mesh.GetIndexBuffer();
+
+            _deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &vertexStride, &offset);
+            _deviceContext->IASetVertexBuffers(1, 1, &uvBuffer, &uvStride, &offset);
+            _deviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R16_UINT, 0);
 
 
-        indexCount += mesh.GetIndicesSize();
-        _deviceContext->VSSetShader(shader.GetVertexShader(), nullptr, 0);
-        _deviceContext->PSSetShader(shader.GetPixelShader(), nullptr, 0);
+            indexCount += mesh.GetIndicesSize();
+            _deviceContext->VSSetShader(shader.GetVertexShader(), nullptr, 0);
+            _deviceContext->PSSetShader(shader.GetPixelShader(), nullptr, 0);
 
-        ID3D11ShaderResourceView* textureSRV = shader.GetTexture();
-        ID3D11SamplerState* samplerState = shader.GetSamplerState();
-        _deviceContext->PSSetShaderResources(0, 1, &textureSRV);
-        _deviceContext->PSSetSamplers(0, 1, &samplerState);
+            ID3D11ShaderResourceView* textureSRV = shader.GetTexture();
+            ID3D11SamplerState* samplerState = shader.GetSamplerState();
+            _deviceContext->PSSetShaderResources(0, 1, &textureSRV);
+            _deviceContext->PSSetSamplers(0, 1, &samplerState);
+
+            _deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+            _deviceContext->VSSetConstantBuffers(0, 3, _constantBuffers);
+            _deviceContext->RSSetState(_rasterizerState);
+            _deviceContext->RSSetViewports(1, &_viewport);
+
+            _deviceContext->OMSetRenderTargets(1, &_renderTargetView, _depthStencilView);
+            _deviceContext->OMSetDepthStencilState(_depthStencilState, 1);
+
+            _deviceContext->DrawIndexed(indexCount, 0, 0);
+
+        }
     }
-    
-    
-    _deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-    _deviceContext->VSSetConstantBuffers(0, 3, _constantBuffers);
-    _deviceContext->RSSetState(_rasterizerState);
-    _deviceContext->RSSetViewports(1, &_viewport);
 
-    _deviceContext->OMSetRenderTargets(1, &_renderTargetView, _depthStencilView);
-    _deviceContext->OMSetDepthStencilState(_depthStencilState, 1);
-
-    _deviceContext->DrawIndexed(indexCount, 0, 0);
-    
     Present(false);
 }
 
@@ -304,7 +306,7 @@ bool GraphicsMain::LoadContent()
     if (FAILED(hr))
     {
         return false;
-    }    
+    }
 
     return true;
 }
