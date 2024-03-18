@@ -275,11 +275,12 @@ bool GraphicsMain::LoadContent()
     _clientWidth = static_cast<float>(clientRect.right - clientRect.left);
     _clientHeight = static_cast<float>(clientRect.bottom - clientRect.top);
 
-    //Mesh mesh = Mesh::MakePrimitiveCube();
-    std::vector<Mesh> mesh = Mesh::MakeFromFbxFile("C:/Users/aland/Downloads/HeroGoat.fbx");
+    //std::vector<Mesh> meshs = { Mesh::MakePrimitiveCube() };
+
+    std::vector<Mesh> meshs = Mesh::MakeFromFbxFile("C:\\Users\\alan.bittencourt\\OneDrive\\Projects\\BitEngine\\Content\\Models\\HeroGoat.fbx");
     Shader shader = Shader::MakeSimpleShader();
 
-    _drawableObjects = { DrawableObject(mesh, shader) };
+    _drawableObjects = { DrawableObject(meshs, shader) };
     _camera = Camera();
     _camera.Init();
 

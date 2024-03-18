@@ -103,19 +103,23 @@ std::vector<Mesh> Mesh::MakeFromFbxFile(const char* filePath)
             vertices.push_back(vert);
         }
 
-        for (unsigned int j = 0; j < aiMesh->mNumFaces; ++j) {
+        for (unsigned int j = 0; j < aiMesh->mNumFaces; ++j) 
+        {
             aiFace& face = aiMesh->mFaces[j];
-            for (unsigned int k = 0; k < face.mNumIndices; ++k) {
+            for (unsigned int k = 0; k < face.mNumIndices; ++k) 
+            {
                 uint16_t index = face.mIndices[k];
                 indices.push_back(index);
             }
         }
 
 
-        if (aiMesh->HasTextureCoords(0)) { // Verifica se a malha possui coordenadas de textura
-            for (unsigned int j = 0; j < aiMesh->mNumVertices; ++j) {
-                aiVector3D& uv = aiMesh->mTextureCoords[0][j]; // Acessa as coordenadas de textura do canal 0
-                Vector2D uvCoord(uv.x, uv.y); // Suponha que UV seja uma estrutura que armazena coordenadas de textura
+        if (aiMesh->HasTextureCoords(0)) 
+        {
+            for (unsigned int j = 0; j < aiMesh->mNumVertices; ++j) 
+            {
+                aiVector3D& uv = aiMesh->mTextureCoords[0][j];
+                Vector2D uvCoord(uv.x, uv.y);
                 uvs.push_back(uvCoord);
             }
         }

@@ -131,7 +131,7 @@ void Shader::Load()
 
 
     SafeRelease(pixelShaderBlob);
-    LoadTexture(L"Textures\\Goat_Diffuse.png");
+    LoadTexture(L"Content\\Textures\\Goat_Diffuse.png");
 }
 
 void Shader::LoadTexture(const wchar_t* textureRelativePath)

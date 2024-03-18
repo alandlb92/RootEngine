@@ -72,6 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Label="Vcpkg">
     <VcpkgEnableManifest>true</VcpkgEnableManifest>
+    <VcpkgXUseBuiltInApplocalDeps>true</VcpkgXUseBuiltInApplocalDeps>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -119,8 +120,8 @@
       </Command>
     </CustomBuildStep>
     <PreBuildEvent>
-      <Command>if not exist "$(OutDirFullPath)Textures" mkdir "$(OutDirFullPath)Textures"
-xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
+      <Command>if not exist "$(OutDirFullPath)Content" mkdir "$(OutDirFullPath)Content"
+xcopy /E /Y $(SolutionDir)Content $(OutDirFullPath)Content</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
