@@ -9,7 +9,7 @@
 //XMVECTOR rotationAxis = XMVectorSet(0.5f, .5f, .5f, 0);
 //g_WorldMatrix = XMMatrixRotationAxis(rotationAxis, XMConvertToRadians(angle));
 
-Camera::Camera()
+Camera::Camera() : Super()
 {
     _eyePosition = XMVECTOR();
     _focusPoint = XMVECTOR();
@@ -24,42 +24,35 @@ Camera::Camera()
 
 void Camera::Init()
 {
-    _eyePosition = XMVectorSet(0, 100, 400, 1);
-    _focusPoint = XMVectorSet(0, 100, 0, 1);
-    _upDirection = XMVectorSet(0, 1, 0, 0);
-    _viewMatrix = XMMatrixLookAtLH(_eyePosition, _focusPoint, _upDirection);
+    Super::SetPosition(Vector3D(0, -300, 0));
+    UpdateViewMatrix();
     _worldMatrix = XMMatrixRotationAxis(XMVectorSet(.5f, .5f, .5f, .0f), XMConvertToRadians(0));
     _fieldOfView = XMConvertToRadians(45.0f); // Ângulo de visão de 45 graus
     float w = GraphicsMain::GetInstace()->GetWidth();
     float h = GraphicsMain::GetInstace()->GetHeight();
-    _aspectRatio = w / h; // Proporção de aspecto da tela
-    _nearPlane = 0.1f; // Distância do plano de visão próximo
-    _farPlane = 1000.0f; // Distância do plano de visão distante
+    _aspectRatio = w / h;
+    _nearPlane = 0.1f;
+    _farPlane = 1000.0f;
     _projectionMatrix = XMMatrixPerspectiveFovLH(_fieldOfView, _aspectRatio, _nearPlane, _farPlane);
-}
-
-void Camera::Update(float deltaTime)
-{
-    if (_rotate)
-    {
-        angle += 30.0f * deltaTime;
-        _viewMatrix = XMMatrixLookAtLH(_eyePosition, _focusPoint, _upDirection);
-        _worldMatrix = XMMatrixRotationAxis(XMVectorSet(.5f, .5f, .5f, .0f), XMConvertToRadians(angle));
-    }
-
-    GraphicsMain::UpdateConstantBuffer(ConstantBuffer::CB_Frame, &_viewMatrix);
     GraphicsMain::UpdateConstantBuffer(ConstantBuffer::CB_Object, &_worldMatrix);
     GraphicsMain::UpdateConstantBuffer(ConstantBuffer::CB_Application, &_projectionMatrix);
 }
 
-void Camera::StartRotate()
-{
-    OutputDebugStringA("StartRotate");
-    _rotate = true;
+void Camera::AddPosition(Vector3D positionToAdd)
+{    
+    Super::AddPosition(positionToAdd);
+    UpdateViewMatrix();
 }
 
-void Camera::StopRotate()
+void Camera::UpdateViewMatrix()
 {
-    OutputDebugStringA("StopRotate");
-    _rotate = false;
+    _eyePosition = XMVectorSet(0, 100, 400, 1);
+    _focusPoint = XMVectorSet(0, 100, 0, 1);
+    _upDirection = XMVectorSet(0, 1, 0, 0);
+    _viewMatrix = XMMatrixLookAtLH(_eyePosition, _focusPoint, _upDirection);
+    GraphicsMain::UpdateConstantBuffer(ConstantBuffer::CB_Frame, &_viewMatrix);
+}
+
+void Camera::Update(float deltaTime)
+{
 }

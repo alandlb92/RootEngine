@@ -5,6 +5,11 @@ struct Vector3D  : public Vector2D
 {
     float Z;
 
+    Vector3D() : Vector2D()
+    {
+        Z = 0;
+    }
+
     Vector3D(float f) : Vector2D(f)
     {
         Z = f;
@@ -18,5 +23,18 @@ struct Vector3D  : public Vector2D
     Vector3D operator* (const float value)
     {
         return Vector3D(X * value, Y * value, Z * value);
+    }
+
+    Vector3D operator+ (const Vector3D value)
+    {
+        return Vector3D(X + value.X, Y + value.Y, Z + value.Z);
+    }
+
+    Vector3D& operator += (const Vector3D value)
+    {
+        this->X += value.X;
+        this->Y += value.Y;
+        this->Z += value.Z;
+        return *this;
     }
 };

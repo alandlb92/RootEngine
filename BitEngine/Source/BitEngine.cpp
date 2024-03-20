@@ -8,7 +8,9 @@ const float BitEngine::maxTimeStep = 1.0f / targetFramerate;
 
 
 BitEngine::BitEngine(HWND windowHandler) : _windowHandler(windowHandler)
-{}
+{
+
+}
 
 void BitEngine::Init()
 {
@@ -16,9 +18,10 @@ void BitEngine::Init()
 	_graphicsMain = std::make_unique<GraphicsMain>(_windowHandler);
 	_graphicsMain->Init();
 
-	InputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_PRESSED, KeyCode::A, std::bind(&Camera::StartRotate, &_graphicsMain->_camera));
-	InputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_RELEASED, KeyCode::A, std::bind(&Camera::StopRotate, &_graphicsMain->_camera));
+	InputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::W, std::bind(&BitEngine::MoveCameraYFront, this, std::placeholders::_1));
+	InputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::S, std::bind(&BitEngine::MoveCameraYBack, this, std::placeholders::_1));
 }
+
 
 void BitEngine::Update()
 {
@@ -31,4 +34,14 @@ void BitEngine::Update()
 	_graphicsMain->Renderer();
 
 	InputSystem::GetInstance()->Update(currentTime);
+}
+
+void BitEngine::MoveCameraYFront(float deltaTime)
+{
+	_graphicsMain->_camera->AddPosition(Vector3D(0, 10 * deltaTime, 0));
+}
+
+void BitEngine::MoveCameraYBack(float deltaTime)
+{
+	_graphicsMain->_camera->AddPosition(Vector3D(0, -10 * deltaTime, 0));
 }

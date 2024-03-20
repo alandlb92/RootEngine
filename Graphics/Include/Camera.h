@@ -1,21 +1,22 @@
 #pragma once
 #include "d3d11.h"
 #include "directxmath.h"
+#include "Transform.h"
 
 using namespace DirectX;
 
-class Camera 
+class Camera : public Transform
 {
+    typedef Transform Super;
+
 public:
     Camera();
     void Update(float deltaTime);
-    void StartRotate();
-    void StopRotate();
     void Init();
+    void AddPosition(Vector3D positionToAdd) override;
 
 private:
-    float angle = 0.0f;
-    bool _rotate = false;
+    void UpdateViewMatrix();
 
     float _fieldOfView;
     float _aspectRatio;
@@ -28,5 +29,7 @@ private:
     XMMATRIX _worldMatrix;
     XMMATRIX _viewMatrix;
     XMMATRIX _projectionMatrix;
+
+    const float eyeDistance = 100.0f;
 
 };

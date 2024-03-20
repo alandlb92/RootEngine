@@ -116,7 +116,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)Include;%(AdditionalIncludeDirectories);$(SolutionDir)FaiaUtils\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Include;%(AdditionalIncludeDirectories);$(SolutionDir)FaiaUtils\Include;$(SolutionDir)DataShared\Include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -134,7 +134,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)Include;%(AdditionalIncludeDirectories);$(SolutionDir)FaiaUtils\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Include;%(AdditionalIncludeDirectories);$(SolutionDir)FaiaUtils\Include;$(SolutionDir)DataShared\Include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -154,8 +154,6 @@
     <ClInclude Include="Include\pch.h" />
     <ClInclude Include="Include\Shader.h" />
     <ClInclude Include="Include\Texture2D.h" />
-    <ClInclude Include="Include\Vector2D.h" />
-    <ClInclude Include="Include\Vector3D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Camera.cpp" />
@@ -186,6 +184,9 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DataShared\DataShared.vcxproj">
+      <Project>{4f0e7d21-4eee-4144-b93d-fc81ba26e52e}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\FaiaUtils\FaiaUtils.vcxproj">
       <Project>{9fb7798c-1956-4724-bb16-7e149451c2fd}</Project>
     </ProjectReference>

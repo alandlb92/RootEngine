@@ -182,7 +182,7 @@ void GraphicsMain::Init()
 
 void GraphicsMain::Update(float deltaTime)
 {
-    _camera.Update(deltaTime);
+    _camera->Update(deltaTime);
 }
 
 void GraphicsMain::Clear(const FLOAT clearColor[4], FLOAT clearDepth, UINT8 clearStencil)
@@ -297,8 +297,6 @@ bool GraphicsMain::LoadContent()
     material3.SetTexture("Content\\Textures\\HeroGoat\\Ch40_1003_Diffuse.png", 0);
 
     _drawableObjects = { DrawableObject(meshs, { material0, material1, material2, material3 }) };
-    _camera = Camera();
-    _camera.Init();
 
     // Create the constant buffers for the variables defined in the vertex shader.
     D3D11_BUFFER_DESC constantBufferDesc;
@@ -325,5 +323,8 @@ bool GraphicsMain::LoadContent()
         return false;
     }
 
+    _camera = std::make_unique<Camera>();
+    _camera->Init();
+    
     return true;
 }

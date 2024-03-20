@@ -33,7 +33,7 @@ enum class KeyCode
 
 class InputSystem
 {
-	using ActionEvent = std::function<void()>;
+	using ActionEvent = std::function<void(float deltaTime)>;
 	friend class WindowsApplication;
 	friend class BitEngine;
 	

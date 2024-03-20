@@ -17,6 +17,9 @@ private:
 	HWND _windowHandler;
 
 	std::unique_ptr<GraphicsMain> _graphicsMain;
+	void MoveCameraYFront(float deltaTime);
+	void MoveCameraYBack(float deltaTime);
+
 
 	static const float targetFramerate;
 	static const float maxTimeStep;

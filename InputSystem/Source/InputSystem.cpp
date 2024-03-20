@@ -1,4 +1,3 @@
-#include "pch.h"
 #include "InputSystem.h"
 #include <stdexcept>
 
@@ -31,7 +30,7 @@ void InputSystem::Update(float deltaTime)
                     {
                         if (evt)
                         {
-                            evt();
+                            evt(deltaTime);
                         }
                     }
                 }

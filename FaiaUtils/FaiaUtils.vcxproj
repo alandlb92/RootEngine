@@ -22,11 +22,9 @@
     <ClInclude Include="Include\Faia\Converter.h" />
     <ClInclude Include="Include\Faia\Memory.h" />
     <ClInclude Include="Include\Faia\Paths.h" />
-    <ClInclude Include="Include\Faia\pch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Faia\Converter.cpp" />
-    <ClCompile Include="Source\Faia\pch.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -120,7 +118,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(ProjectDir)Include\Faia;</AdditionalIncludeDirectories>
     </ClCompile>
@@ -138,7 +136,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(ProjectDir)Include\Faia;</AdditionalIncludeDirectories>
     </ClCompile>
