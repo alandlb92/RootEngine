@@ -29,6 +29,7 @@ private:
     Microsoft::WRL::ComPtr<ID3D11Buffer> _vertexBuffer = nullptr;
     Microsoft::WRL::ComPtr<ID3D11Buffer> _indexBuffer = nullptr;
     Microsoft::WRL::ComPtr<ID3D11Buffer> _uvBuffer = nullptr;
+    
     vector<uint16_t> _indices;
     vector<Vector3D> _vertices;
     vector<Vector2D> _uv;

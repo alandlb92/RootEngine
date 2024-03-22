@@ -2,10 +2,7 @@
 #include "Mesh.h"
 #include "GraphicsMain.h"
 #include <stdexcept>
-
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
+#include "BitMeshData.h"
 
 Mesh Mesh::MakePrimitiveCube()
 {
@@ -71,64 +68,18 @@ Mesh Mesh::MakePrimitiveCube()
 
 std::vector<Mesh> Mesh::MakeFromFbxFile(const char* filePath)
 {
+    BitMeshData bmd;
     std::vector<Mesh> meshs;
-    Assimp::Importer importer;
-    std::string pFile(filePath);
-
-    //this is slow to load, we need to convert to a better file
-    const aiScene* aiScene = importer.ReadFile(pFile,
-        aiProcess_CalcTangentSpace |
-        aiProcess_Triangulate |
-        aiProcess_JoinIdenticalVertices |
-        aiProcess_SortByPType);
-
-    if (aiScene == nullptr)
+    bmd.ReadFromPath(filePath);
+    for (auto& bmesh: bmd._meshs)
     {
-        //error to import
-        return meshs;
-    }
-
-    for (int i = 0; i < aiScene->mNumMeshes; i++)
-    {
-        aiMesh* aiMesh = aiScene->mMeshes[i];
         Mesh mesh;
-        vector<Vector3D> vertices;
-        vector<uint16_t> indices;
-        vector<Vector2D> uvs;
-
-        for (unsigned int j = 0; j < aiMesh->mNumVertices; j++)
-        {
-            aiVector3D& vertex = aiMesh->mVertices[j];
-            Vector3D vert(vertex.x, vertex.y, vertex.z);
-            vertices.push_back(vert);
-        }
-
-        for (unsigned int j = 0; j < aiMesh->mNumFaces; ++j) 
-        {
-            aiFace& face = aiMesh->mFaces[j];
-            for (unsigned int k = 0; k < face.mNumIndices; ++k) 
-            {
-                uint16_t index = face.mIndices[k];
-                indices.push_back(index);
-            }
-        }
-
-        if (aiMesh->HasTextureCoords(0)) 
-        {
-            for (unsigned int j = 0; j < aiMesh->mNumVertices; ++j) 
-            {
-                aiVector3D& uv = aiMesh->mTextureCoords[0][j];
-                Vector2D uvCoord(uv.x, -uv.y);
-                uvs.push_back(uvCoord);
-            }
-        }
-
-        mesh.SetVertices(vertices);
-        mesh.SetIndices(indices);
-        mesh.SetUV(uvs);
-        mesh._materialIndex = aiMesh->mMaterialIndex;
+        mesh.SetIndices(bmesh._indices);
+        mesh.SetVertices(bmesh._vertices);
+        mesh.SetUV(bmesh._uv);
+        mesh._materialIndex = bmesh._materialIndex;
         meshs.push_back(mesh);
-    }
+    }    
 
     return meshs;
 }

@@ -278,7 +278,7 @@ bool GraphicsMain::LoadContent()
 
     //std::vector<Mesh> meshs = { Mesh::MakePrimitiveCube() };
 
-    std::vector<Mesh> meshs = Mesh::MakeFromFbxFile("C:\\Users\\alan.bittencourt\\OneDrive\\Projects\\BitEngine\\Content\\Models\\HeroGoat.fbx");
+    std::vector<Mesh> meshs = Mesh::MakeFromFbxFile("C:\\Users\\alan.bittencourt\\Documents\\Projects\\Personal\\BitEngine\\x64\\Debug\\Content\\Models\\HeroGoat.bitMesh");
 
     Material material0;
     material0.SetShader("Simple");

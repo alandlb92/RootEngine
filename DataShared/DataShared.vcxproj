@@ -19,11 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\BitMeshData.h" />
     <ClInclude Include="Include\Transform.h" />
     <ClInclude Include="Include\Vector2D.h" />
     <ClInclude Include="Include\Vector3D.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\BitMeshData.cpp" />
     <ClCompile Include="Source\Transform.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
