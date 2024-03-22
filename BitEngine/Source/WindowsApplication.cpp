@@ -4,9 +4,13 @@
 
 WindowsApplication* WindowsApplication::_appInstance = nullptr;
 
-WindowsApplication::WindowsApplication(HINSTANCE hInstance) : hInstance(hInstance), windowHandler(nullptr) {
-    LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
-    LoadStringW(hInstance, IDC_BITENGINE, szWindowClass, MAX_LOADSTRING);
+WindowsApplication::WindowsApplication(HINSTANCE hInstance, UINT idsAppTittle, UINT idcGame, UINT idcSamall)
+    : hInstance(hInstance), windowHandler(nullptr) {
+    _idcSamall = idcSamall ;
+    _idsAppTittle = idsAppTittle;
+    _idcGame = idcGame;
+    LoadStringW(hInstance, _idsAppTittle, szTitle, MAX_LOADSTRING);
+    LoadStringW(hInstance, _idcGame, szWindowClass, MAX_LOADSTRING);
     _appInstance = this;
 }
 
@@ -23,7 +27,7 @@ int WindowsApplication::Run(int nCmdShow) {
         return FALSE;
     }
 
-    HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_BITENGINE));
+    HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(_idcGame));
 
     MSG msg = { 0 };
     std::unique_ptr<BitEngine> engine = std::make_unique<BitEngine>(windowHandler);
@@ -51,12 +55,12 @@ ATOM WindowsApplication::MyRegisterClass() {
     wcex.cbClsExtra = 0;
     wcex.cbWndExtra = 0;
     wcex.hInstance = hInstance;
-    wcex.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_BITENGINE));
+    wcex.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(_idcGame));
     wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
     wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-    wcex.lpszMenuName = MAKEINTRESOURCEW(IDC_BITENGINE);
+    wcex.lpszMenuName = MAKEINTRESOURCEW(_idcGame);
     wcex.lpszClassName = szWindowClass;
-    wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
+    wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(_idcSamall));
 
     return RegisterClassExW(&wcex);
 }

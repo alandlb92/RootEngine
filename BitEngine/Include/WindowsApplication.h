@@ -1,6 +1,4 @@
 ﻿#pragma once
-#include "framework.h"
-#include "Resource.h"
 #include <memory>
 #include "InputSystem.h"
 
@@ -10,7 +8,7 @@
 class WindowsApplication {
 
 public:
-    WindowsApplication(HINSTANCE hInstance);
+    WindowsApplication(HINSTANCE hInstance, UINT idsAppTittle, UINT idcGame, UINT idcSamall);
     ~WindowsApplication();
 
     int Run(int nCmdShow);
@@ -18,6 +16,10 @@ public:
 private:
     static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
     static WindowsApplication* _appInstance;
+
+    UINT _idcSamall;
+    UINT _idsAppTittle;
+    UINT _idcGame;
 
     HINSTANCE hInstance;
     HWND windowHandler;
