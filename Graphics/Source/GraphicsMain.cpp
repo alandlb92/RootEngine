@@ -212,12 +212,12 @@ void GraphicsMain::Renderer()
     Clear(Colors::CornflowerBlue, 1.0f, 0);
 
 
-    uint32_t indexCount = 0;
 
     for (auto& d : _drawableObjects)
     {
         for (auto& mesh : d.GetMeshs())
         {
+            uint32_t indexCount = 0;
             int materialIndex = mesh.GetMaterialIndex();
             Material material = d.GetMaterial(mesh.GetMaterialIndex());
 
@@ -254,11 +254,10 @@ void GraphicsMain::Renderer()
             _deviceContext->OMSetDepthStencilState(_depthStencilState, 1);
 
             _deviceContext->DrawIndexed(indexCount, 0, 0);
-
         }
     }
 
-    Present(false);
+    Present(true);
 }
 
 

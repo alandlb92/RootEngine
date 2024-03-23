@@ -2,6 +2,7 @@
 #include <windows.h>
 #include <vector>
 #include <map>
+#include <set>
 #include <functional>
 #include <cassert>
 
@@ -13,12 +14,6 @@ enum class InputEventType
 	KEY_HELD,
 	KEY_IDLE,
 	NONE
-};
-
-enum class KeyState
-{
-	IDLE,
-	HOLD
 };
 
 enum class KeyCode
@@ -65,10 +60,13 @@ private:
 
 
 	std::map<InputEventType, std::map<KeyCode,std::vector<ActionEvent>>> _eventFunctions;
-	std::map<KeyCode, KeyState> keyStates;
+	std::set<KeyCode> _heldKeys;
 
 	void Update(float deltaTime);
 	void SendOSEvent(UINT message, WPARAM wParam, LPARAM lParam);
+	
+	void FindEvtAndCall(InputEventType evtType, KeyCode keyCode, float deltaTime);
+
 	EventKeyCode InterpretOsEvent(UINT message, WPARAM wParam);
 	
 

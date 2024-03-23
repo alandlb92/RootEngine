@@ -24,7 +24,7 @@ Camera::Camera() : Super()
 
 void Camera::Init()
 {
-    Super::SetPosition(Vector3D(0, -300, 0));
+    Super::SetPosition(Vector3D(0, -300, 100));
     UpdateViewMatrix();
     _worldMatrix = XMMatrixRotationAxis(XMVectorSet(.5f, .5f, .5f, .0f), XMConvertToRadians(0));
     _fieldOfView = XMConvertToRadians(45.0f); // Ângulo de visão de 45 graus
@@ -39,15 +39,26 @@ void Camera::Init()
 }
 
 void Camera::AddPosition(Vector3D positionToAdd)
-{    
+{
     Super::AddPosition(positionToAdd);
     UpdateViewMatrix();
 }
-
+#include "Windows.h"
+#include "sstream"
 void Camera::UpdateViewMatrix()
 {
-    _eyePosition = XMVectorSet(0, 100, 400, 1);
-    _focusPoint = XMVectorSet(0, 100, 0, 1);
+    _eyePosition = XMVectorSet(
+        GetPosition().X,
+        100.0f,
+        400.0f + GetPosition().Z,
+        1
+    );
+    _focusPoint = XMVectorSet(
+        GetPosition().X,
+        100,
+        100.0f + GetPosition().Z,
+        1
+    );
     _upDirection = XMVectorSet(0, 1, 0, 0);
     _viewMatrix = XMMatrixLookAtLH(_eyePosition, _focusPoint, _upDirection);
     GraphicsMain::UpdateConstantBuffer(ConstantBuffer::CB_Frame, &_viewMatrix);
@@ -55,4 +66,5 @@ void Camera::UpdateViewMatrix()
 
 void Camera::Update(float deltaTime)
 {
+    /*AddPosition(Vector3D(100 * deltaTime, 0, 0));*/
 }

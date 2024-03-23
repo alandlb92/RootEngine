@@ -1,5 +1,6 @@
 #include "InputSystem.h"
 #include <stdexcept>
+#include <sstream>
 
 InputSystem* InputSystem::_instance = nullptr;
 
@@ -13,33 +14,28 @@ InputSystem::~InputSystem()
     _instance = nullptr;
 }
 
-
 void InputSystem::Update(float deltaTime)
 {
+    //Pressed and Released events
     if (_events.size() > 0)
     {
         for (int i = 0;i < _events.size(); i++) 
         {
-            auto mapOfEventType = _eventFunctions.find(_events[i].type);
-            if (mapOfEventType != _eventFunctions.end())
-            {
-                auto listOfEvents = mapOfEventType->second.find(_events[i].key);
-                if (listOfEvents != mapOfEventType->second.end())
-                {
-                    for (auto& evt : listOfEvents->second)
-                    {
-                        if (evt)
-                        {
-                            evt(deltaTime);
-                        }
-                    }
-                }
-            }
+            FindEvtAndCall(_events[i].type, _events[i].key, deltaTime);
         }
 
         _events.clear();
     }
+
+    //Held events
+    for (auto& heldKey : _heldKeys)
+    {
+            FindEvtAndCall(InputEventType::KEY_HELD, heldKey, deltaTime);
+     
+    } 
 }
+
+
 
 void InputSystem::RegisterActionEvent(InputEventType eventType, KeyCode keyCode, ActionEvent eventFunction)
 {
@@ -66,21 +62,19 @@ void InputSystem::SendOSEvent(UINT message, WPARAM wParam, LPARAM lParam)
 InputSystem::EventKeyCode InputSystem::InterpretOsEvent(UINT message, WPARAM wParam)
 {
     KeyCode currentKeyCode = static_cast<KeyCode>(wParam);
-    if (currentKeyCode != KeyCode::A)
-        return EventKeyCode();
-
     EventKeyCode eventKeyCode;
     eventKeyCode.key = currentKeyCode;
 
-    if (message == WM_KEYDOWN && keyStates[currentKeyCode] != KeyState::HOLD)
+    auto it = _heldKeys.find(currentKeyCode);
+    if (message == WM_KEYDOWN && it == _heldKeys.end())
     {
         eventKeyCode.type = InputEventType::KEY_PRESSED;
-        keyStates[currentKeyCode] = KeyState::HOLD;
+        _heldKeys.insert(currentKeyCode);
     }
     else if (message == WM_KEYUP)
     {
         eventKeyCode.type = InputEventType::KEY_RELEASED;
-        keyStates[currentKeyCode] = KeyState::IDLE;
+        _heldKeys.erase(currentKeyCode);
     }
     else
     {
@@ -88,4 +82,23 @@ InputSystem::EventKeyCode InputSystem::InterpretOsEvent(UINT message, WPARAM wPa
     }
 
     return eventKeyCode;
+}
+
+void InputSystem::FindEvtAndCall(InputEventType evtType, KeyCode keyCode, float deltaTime)
+{
+    auto mapOfEventType = _eventFunctions.find(evtType);
+    if (mapOfEventType != _eventFunctions.end())
+    {
+        auto listOfEvents = mapOfEventType->second.find(keyCode);
+        if (listOfEvents != mapOfEventType->second.end())
+        {
+            for (auto& evt : listOfEvents->second)
+            {
+                if (evt)
+                {
+                    evt(deltaTime);
+                }
+            }
+        }
+    }
 }

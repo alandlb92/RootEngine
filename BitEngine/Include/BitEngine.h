@@ -19,6 +19,8 @@ private:
 	std::unique_ptr<GraphicsMain> _graphicsMain;
 	void MoveCameraYFront(float deltaTime);
 	void MoveCameraYBack(float deltaTime);
+	void MoveCameraXRight(float deltaTime);
+	void MoveCameraXLeft(float deltaTime);
 
 
 	static const float targetFramerate;

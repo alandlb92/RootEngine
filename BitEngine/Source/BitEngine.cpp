@@ -14,34 +14,46 @@ BitEngine::BitEngine(HWND windowHandler) : _windowHandler(windowHandler)
 
 void BitEngine::Init()
 {
-	_previousTime = timeGetTime();
-	_graphicsMain = std::make_unique<GraphicsMain>(_windowHandler);
-	_graphicsMain->Init();
+    _previousTime = timeGetTime();
+    _graphicsMain = std::make_unique<GraphicsMain>(_windowHandler);
+    _graphicsMain->Init();
 
-	InputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::W, std::bind(&BitEngine::MoveCameraYFront, this, std::placeholders::_1));
-	InputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::S, std::bind(&BitEngine::MoveCameraYBack, this, std::placeholders::_1));
+    InputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::W, std::bind(&BitEngine::MoveCameraYFront, this, std::placeholders::_1));
+    InputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::S, std::bind(&BitEngine::MoveCameraYBack, this, std::placeholders::_1));
+    InputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::A, std::bind(&BitEngine::MoveCameraXRight, this, std::placeholders::_1));
+    InputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::D, std::bind(&BitEngine::MoveCameraXLeft, this, std::placeholders::_1));
 }
 
 
 void BitEngine::Update()
 {
-	DWORD currentTime = timeGetTime();
-	float deltaTime = (currentTime - _previousTime) / 1000.0f;
-	_previousTime = currentTime;
-	deltaTime = std::min<float>(deltaTime, maxTimeStep);
+    DWORD currentTime = timeGetTime();
+    float deltaTime = (currentTime - _previousTime) / 1000.0f;
+    _previousTime = currentTime;
+    //deltaTime = std::min<float>(deltaTime, maxTimeStep);
 
-	_graphicsMain->Update(deltaTime);
-	_graphicsMain->Renderer();
+    _graphicsMain->Update(deltaTime);
+    _graphicsMain->Renderer();
 
-	InputSystem::GetInstance()->Update(currentTime);
+    InputSystem::GetInstance()->Update(deltaTime);
 }
 
 void BitEngine::MoveCameraYFront(float deltaTime)
 {
-	_graphicsMain->_camera->AddPosition(Vector3D(0, 10 * deltaTime, 0));
+    _graphicsMain->_camera->AddPosition(Vector3D(0, 0, -100 * deltaTime));
 }
 
 void BitEngine::MoveCameraYBack(float deltaTime)
 {
-	_graphicsMain->_camera->AddPosition(Vector3D(0, -10 * deltaTime, 0));
+    _graphicsMain->_camera->AddPosition(Vector3D(0, 0, 100 * deltaTime));
+}
+
+void BitEngine::MoveCameraXRight(float deltaTime)
+{
+    _graphicsMain->_camera->AddPosition(Vector3D(100 * deltaTime, 0, 0));
+}
+
+void BitEngine::MoveCameraXLeft(float deltaTime)
+{
+    _graphicsMain->_camera->AddPosition(Vector3D(-100 * deltaTime, 0, 0));
 }
