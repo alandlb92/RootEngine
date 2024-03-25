@@ -1,7 +1,7 @@
 // BitGame.cpp : Defines the entry point for the application.
 //
 #include "BitGame.h"
-#include "WindowsApplication.h"
+#include "Core/WindowsApplication.h"
 
 
 

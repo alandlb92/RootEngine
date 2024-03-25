@@ -1,6 +1,6 @@
-#include "pch.h"
-#include "Material.h"
-#include "MaterialManager.h"
+
+#include "Graphics/Material.h"
+#include "Graphics/MaterialManager.h"
 #include <stdexcept>
 
 void Material::SetShader(const char* shaderName)

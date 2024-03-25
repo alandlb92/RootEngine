@@ -1,5 +1,4 @@
-#include "pch.h"
-#include "DrawableObject.h"
+#include "Graphics/DrawableObject.h"
 
 DrawableObject::DrawableObject(std::vector<Mesh> meshs, std::vector<Material> materials)
 {

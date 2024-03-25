@@ -1,5 +1,5 @@
 #include "FBXImporter.h"
-#include "BitMeshData.h"
+#include "Data/BitMeshData.h"
 #include <iostream>
 #include <sstream>
 

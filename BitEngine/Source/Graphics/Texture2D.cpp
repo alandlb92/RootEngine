@@ -1,6 +1,5 @@
-#include "pch.h"
-#include "Texture2D.h"
-#include "GraphicsMain.h"
+#include "Graphics/Texture2D.h"
+#include "Graphics/GraphicsMain.h"
 #include "Faia/Converter.h"
 #include <string>
 #include "Faia/Paths.h"

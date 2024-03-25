@@ -1,4 +1,4 @@
-#include "BitMeshData.h"
+#include "Data/BitMeshData.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>

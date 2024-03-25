@@ -100,14 +100,6 @@ xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Include\BitEngine.h" />
-    <ClInclude Include="Include\WindowsApplication.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Source\BitEngine.cpp" />
-    <ClCompile Include="Source\WindowsApplication.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\DataShared\DataShared.vcxproj">
       <Project>{4f0e7d21-4eee-4144-b93d-fc81ba26e52e}</Project>
     </ProjectReference>
@@ -120,6 +112,36 @@ xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
     <ProjectReference Include="..\InputSystem\InputSystem.vcxproj">
       <Project>{ea6c39f9-8896-4dd7-acee-46f5fea81b31}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Include\Core\BitEngine.h" />
+    <ClInclude Include="Include\Core\WindowsApplication.h" />
+    <ClInclude Include="Include\Data\BitMeshData.h" />
+    <ClInclude Include="Include\Data\Transform.h" />
+    <ClInclude Include="Include\Data\Vector2D.h" />
+    <ClInclude Include="Include\Data\Vector3D.h" />
+    <ClInclude Include="Include\Graphics\Camera.h" />
+    <ClInclude Include="Include\Graphics\DrawableObject.h" />
+    <ClInclude Include="Include\Graphics\GraphicsMain.h" />
+    <ClInclude Include="Include\Graphics\Material.h" />
+    <ClInclude Include="Include\Graphics\MaterialManager.h" />
+    <ClInclude Include="Include\Graphics\Mesh.h" />
+    <ClInclude Include="Include\Graphics\Shader.h" />
+    <ClInclude Include="Include\Graphics\Texture2D.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Core\BitEngine.cpp" />
+    <ClCompile Include="Source\Core\WindowsApplication.cpp" />
+    <ClCompile Include="Source\Data\BitMeshData.cpp" />
+    <ClCompile Include="Source\Data\Transform.cpp" />
+    <ClCompile Include="Source\Graphics\Camera.cpp" />
+    <ClCompile Include="Source\Graphics\DrawableObject.cpp" />
+    <ClCompile Include="Source\Graphics\GraphicsMain.cpp" />
+    <ClCompile Include="Source\Graphics\Material.cpp" />
+    <ClCompile Include="Source\Graphics\MaterialManager.cpp" />
+    <ClCompile Include="Source\Graphics\Mesh.cpp" />
+    <ClCompile Include="Source\Graphics\Shader.cpp" />
+    <ClCompile Include="Source\Graphics\Texture2D.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

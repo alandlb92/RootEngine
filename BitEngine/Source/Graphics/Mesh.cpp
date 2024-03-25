@@ -1,8 +1,7 @@
-#include "pch.h"
-#include "Mesh.h"
-#include "GraphicsMain.h"
+#include "Graphics/Mesh.h"
+#include "Graphics/GraphicsMain.h"
 #include <stdexcept>
-#include "BitMeshData.h"
+#include "Data/BitMeshData.h"
 
 Mesh Mesh::MakePrimitiveCube()
 {

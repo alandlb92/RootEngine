@@ -2,7 +2,7 @@
 
 #include <memory>
 #include "Windows.h"
-#include "GraphicsMain.h"
+#include "Graphics/GraphicsMain.h"
 
 class BitEngine
 {
@@ -21,6 +21,8 @@ private:
 	void MoveCameraYBack(float deltaTime);
 	void MoveCameraXRight(float deltaTime);
 	void MoveCameraXLeft(float deltaTime);
+	void MoveCameraZUp(float deltaTime);
+	void MoveCameraZDown(float deltaTime);
 
 
 	static const float targetFramerate;

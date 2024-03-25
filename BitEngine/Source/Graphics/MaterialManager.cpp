@@ -1,5 +1,4 @@
-#include "pch.h"
-#include "MaterialManager.h"
+#include "Graphics/MaterialManager.h"
 
 
 std::unique_ptr<MaterialManager> MaterialManager::_instance = nullptr;

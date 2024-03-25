@@ -1,9 +1,8 @@
-#include "pch.h"
-#include "Shader.h"
+#include "Graphics/Shader.h"
 #include "directxmath.h"
 #include "d3dcompiler.h"
 #include <stdexcept>
-#include "GraphicsMain.h"
+#include "Graphics/GraphicsMain.h"
 #include "Faia/Memory.h"
 #include "Faia/Converter.h"
 

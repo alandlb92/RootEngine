@@ -1,7 +1,7 @@
-#include "BitEngine.h"
+#include "Core/BitEngine.h"
+#include "Data/Vector3D.h"
 #include "timeapi.h"
 #include "FaiaInputSystem.h"
-#include "GraphicsMain.h"
 
 const float BitEngine::targetFramerate = 30.0f;
 const float BitEngine::maxTimeStep = 1.0f / targetFramerate;
@@ -23,6 +23,9 @@ void BitEngine::Init()
     FaiaInputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::S, std::bind(&BitEngine::MoveCameraYBack, this, std::placeholders::_1));
     FaiaInputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::A, std::bind(&BitEngine::MoveCameraXRight, this, std::placeholders::_1));
     FaiaInputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::D, std::bind(&BitEngine::MoveCameraXLeft, this, std::placeholders::_1));
+
+    FaiaInputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::Q, std::bind(&BitEngine::MoveCameraZUp, this, std::placeholders::_1));
+    FaiaInputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::E, std::bind(&BitEngine::MoveCameraZDown, this, std::placeholders::_1));
 }
 
 
@@ -57,4 +60,14 @@ void BitEngine::MoveCameraXRight(float deltaTime)
 void BitEngine::MoveCameraXLeft(float deltaTime)
 {
     _graphicsMain->_camera->AddPosition(Vector3D(-100 * deltaTime, 0, 0));
+}
+
+void BitEngine::MoveCameraZUp(float deltaTime)
+{
+    _graphicsMain->_camera->AddPosition(Vector3D(0, 100 * deltaTime, 0));
+}
+
+void BitEngine::MoveCameraZDown(float deltaTime)
+{
+    _graphicsMain->_camera->AddPosition(Vector3D(0, -100 * deltaTime, 0));
 }

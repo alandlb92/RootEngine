@@ -1,7 +1,6 @@
 
-#include "pch.h"
-#include "Camera.h"
-#include "GraphicsMain.h"
+#include "Graphics/Camera.h"
+#include "Graphics/GraphicsMain.h"
 
 
 //static float angle = 0.0f;
@@ -19,12 +18,12 @@ Camera::Camera() : Super()
     _fieldOfView = 0;
     _aspectRatio = 0;
     _nearPlane = 0;
-    _farPlane = 0;
+    _farPlane = 0;    
 }
 
 void Camera::Init()
 {
-    Super::SetPosition(Vector3D(0, -300, 100));
+    Super::SetPosition(Vector3D(0, 100, 0));
     UpdateViewMatrix();
     _worldMatrix = XMMatrixRotationAxis(XMVectorSet(.5f, .5f, .5f, .0f), XMConvertToRadians(0));
     _fieldOfView = XMConvertToRadians(45.0f); // Ângulo de visão de 45 graus
@@ -43,19 +42,18 @@ void Camera::AddPosition(Vector3D positionToAdd)
     Super::AddPosition(positionToAdd);
     UpdateViewMatrix();
 }
-#include "Windows.h"
-#include "sstream"
+
 void Camera::UpdateViewMatrix()
 {
     _eyePosition = XMVectorSet(
         GetPosition().X,
-        100.0f,
+        GetPosition().Y,
         400.0f + GetPosition().Z,
         1
     );
     _focusPoint = XMVectorSet(
         GetPosition().X,
-        100,
+        GetPosition().Y,
         100.0f + GetPosition().Z,
         1
     );

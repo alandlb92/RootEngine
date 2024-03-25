@@ -1,5 +1,5 @@
-﻿#include "WindowsApplication.h"
-#include "BitEngine.h"
+﻿#include "Core/WindowsApplication.h"
+#include "Core/BitEngine.h"
 
 
 WindowsApplication* WindowsApplication::_appInstance = nullptr;

@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "Vector3D.h"
+#include "Data/Vector3D.h"
 #include "d3d11.h"
 #include <memory>
 #include <wrl/client.h>
