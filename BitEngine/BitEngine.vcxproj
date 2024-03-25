@@ -111,6 +111,9 @@ xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
     <ProjectReference Include="..\DataShared\DataShared.vcxproj">
       <Project>{4f0e7d21-4eee-4144-b93d-fc81ba26e52e}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\FaiaInputSystem\FaiaInputSystem.vcxproj">
+      <Project>{ea6c39f9-8896-4dd7-acee-46f5fea81b31}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Graphics\Graphics.vcxproj">
       <Project>{ac40e91a-0268-412a-a9f3-5224b0bbbb34}</Project>
     </ProjectReference>

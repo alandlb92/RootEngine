@@ -1,0 +1,3 @@
+[submodule "FaiaInputSystem"]
+	path = FaiaInputSystem
+	url = git@github.com:alandlb92/FaiaInputSystem.git

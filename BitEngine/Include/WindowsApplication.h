@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include <memory>
-#include "InputSystem.h"
+#include "FaiaInputSystem.h"
 
 
 #define MAX_LOADSTRING 100
@@ -25,7 +25,7 @@ private:
     HWND windowHandler;
     WCHAR szTitle[MAX_LOADSTRING];
     WCHAR szWindowClass[MAX_LOADSTRING];
-    std::unique_ptr<InputSystem> _inputSystem;
+    std::unique_ptr<Faia::InputSystem::FaiaInputSystem> _inputSystem;
 
     ATOM MyRegisterClass();
     BOOL InitInstance(int nCmdShow);

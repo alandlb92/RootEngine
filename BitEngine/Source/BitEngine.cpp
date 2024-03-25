@@ -1,11 +1,12 @@
 #include "BitEngine.h"
 #include "timeapi.h"
-#include "InputSystem.h"
+#include "FaiaInputSystem.h"
 #include "GraphicsMain.h"
 
 const float BitEngine::targetFramerate = 30.0f;
 const float BitEngine::maxTimeStep = 1.0f / targetFramerate;
 
+using namespace Faia::InputSystem;
 
 BitEngine::BitEngine(HWND windowHandler) : _windowHandler(windowHandler)
 {
@@ -18,10 +19,10 @@ void BitEngine::Init()
     _graphicsMain = std::make_unique<GraphicsMain>(_windowHandler);
     _graphicsMain->Init();
 
-    InputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::W, std::bind(&BitEngine::MoveCameraYFront, this, std::placeholders::_1));
-    InputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::S, std::bind(&BitEngine::MoveCameraYBack, this, std::placeholders::_1));
-    InputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::A, std::bind(&BitEngine::MoveCameraXRight, this, std::placeholders::_1));
-    InputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::D, std::bind(&BitEngine::MoveCameraXLeft, this, std::placeholders::_1));
+    FaiaInputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::W, std::bind(&BitEngine::MoveCameraYFront, this, std::placeholders::_1));
+    FaiaInputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::S, std::bind(&BitEngine::MoveCameraYBack, this, std::placeholders::_1));
+    FaiaInputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::A, std::bind(&BitEngine::MoveCameraXRight, this, std::placeholders::_1));
+    FaiaInputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::D, std::bind(&BitEngine::MoveCameraXLeft, this, std::placeholders::_1));
 }
 
 
@@ -35,7 +36,7 @@ void BitEngine::Update()
     _graphicsMain->Update(deltaTime);
     _graphicsMain->Renderer();
 
-    InputSystem::GetInstance()->Update(deltaTime);
+    FaiaInputSystem::GetInstance()->Update(deltaTime);
 }
 
 void BitEngine::MoveCameraYFront(float deltaTime)

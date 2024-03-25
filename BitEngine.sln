@@ -7,8 +7,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BitEngine", "BitEngine\BitE
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Graphics", "Graphics\Graphics.vcxproj", "{AC40E91A-0268-412A-A9F3-5224B0BBBB34}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InputSystem", "InputSystem\InputSystem.vcxproj", "{EA6C39F9-8896-4DD7-ACEE-46F5FEA81B31}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FaiaUtils", "FaiaUtils\FaiaUtils.vcxproj", "{9FB7798C-1956-4724-BB16-7E149451C2FD}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DataShared", "DataShared\DataShared.vcxproj", "{4F0E7D21-4EEE-4144-B93D-FC81BA26E52E}"
@@ -16,6 +14,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BitEngineEditor", "BitEngineEditor\BitEngineEditor.vcxproj", "{23382A00-0960-47D3-926C-E4AE453733DB}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BitGame", "BitGame\BitGame.vcxproj", "{FCD574B7-1C9A-41D4-B1C4-3C66837C92DF}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FaiaInputSystem", "FaiaInputSystem\FaiaInputSystem.vcxproj", "{EA6C39F9-8896-4DD7-ACEE-46F5FEA81B31}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,14 +39,6 @@ Global
 		{AC40E91A-0268-412A-A9F3-5224B0BBBB34}.Release|x64.Build.0 = Release|x64
 		{AC40E91A-0268-412A-A9F3-5224B0BBBB34}.Release|x86.ActiveCfg = Release|Win32
 		{AC40E91A-0268-412A-A9F3-5224B0BBBB34}.Release|x86.Build.0 = Release|Win32
-		{EA6C39F9-8896-4DD7-ACEE-46F5FEA81B31}.Debug|x64.ActiveCfg = Debug|x64
-		{EA6C39F9-8896-4DD7-ACEE-46F5FEA81B31}.Debug|x64.Build.0 = Debug|x64
-		{EA6C39F9-8896-4DD7-ACEE-46F5FEA81B31}.Debug|x86.ActiveCfg = Debug|Win32
-		{EA6C39F9-8896-4DD7-ACEE-46F5FEA81B31}.Debug|x86.Build.0 = Debug|Win32
-		{EA6C39F9-8896-4DD7-ACEE-46F5FEA81B31}.Release|x64.ActiveCfg = Release|x64
-		{EA6C39F9-8896-4DD7-ACEE-46F5FEA81B31}.Release|x64.Build.0 = Release|x64
-		{EA6C39F9-8896-4DD7-ACEE-46F5FEA81B31}.Release|x86.ActiveCfg = Release|Win32
-		{EA6C39F9-8896-4DD7-ACEE-46F5FEA81B31}.Release|x86.Build.0 = Release|Win32
 		{9FB7798C-1956-4724-BB16-7E149451C2FD}.Debug|x64.ActiveCfg = Debug|x64
 		{9FB7798C-1956-4724-BB16-7E149451C2FD}.Debug|x64.Build.0 = Debug|x64
 		{9FB7798C-1956-4724-BB16-7E149451C2FD}.Debug|x86.ActiveCfg = Debug|Win32
@@ -79,6 +71,14 @@ Global
 		{FCD574B7-1C9A-41D4-B1C4-3C66837C92DF}.Release|x64.Build.0 = Release|x64
 		{FCD574B7-1C9A-41D4-B1C4-3C66837C92DF}.Release|x86.ActiveCfg = Release|Win32
 		{FCD574B7-1C9A-41D4-B1C4-3C66837C92DF}.Release|x86.Build.0 = Release|Win32
+		{EA6C39F9-8896-4DD7-ACEE-46F5FEA81B31}.Debug|x64.ActiveCfg = Debug|x64
+		{EA6C39F9-8896-4DD7-ACEE-46F5FEA81B31}.Debug|x64.Build.0 = Debug|x64
+		{EA6C39F9-8896-4DD7-ACEE-46F5FEA81B31}.Debug|x86.ActiveCfg = Debug|Win32
+		{EA6C39F9-8896-4DD7-ACEE-46F5FEA81B31}.Debug|x86.Build.0 = Debug|Win32
+		{EA6C39F9-8896-4DD7-ACEE-46F5FEA81B31}.Release|x64.ActiveCfg = Release|x64
+		{EA6C39F9-8896-4DD7-ACEE-46F5FEA81B31}.Release|x64.Build.0 = Release|x64
+		{EA6C39F9-8896-4DD7-ACEE-46F5FEA81B31}.Release|x86.ActiveCfg = Release|Win32
+		{EA6C39F9-8896-4DD7-ACEE-46F5FEA81B31}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

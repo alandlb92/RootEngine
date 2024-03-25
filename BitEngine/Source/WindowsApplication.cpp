@@ -31,7 +31,7 @@ int WindowsApplication::Run(int nCmdShow) {
 
     MSG msg = { 0 };
     std::unique_ptr<BitEngine> engine = std::make_unique<BitEngine>(windowHandler);
-    _inputSystem = std::make_unique<InputSystem>();
+    _inputSystem = std::make_unique<Faia::InputSystem::FaiaInputSystem>();
     engine->Init();
 
     while (msg.message != WM_QUIT) {
