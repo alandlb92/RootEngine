@@ -255,8 +255,8 @@ void GraphicsMain::Renderer()
             _deviceContext->DrawIndexed(indexCount, 0, 0);
         }
     }
-
-    Present(true);
+    //TODO: i cant use vsync right now because this will bring a problem in input system
+    Present(false);
 }
 
 

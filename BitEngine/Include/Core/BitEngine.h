@@ -23,6 +23,8 @@ private:
 	void MoveCameraXLeft(float deltaTime);
 	void MoveCameraZUp(float deltaTime);
 	void MoveCameraZDown(float deltaTime);
+	void RotateCameraX(float axisValue, float deltaTime);
+	void RotateCameraY(float axisValue, float deltaTime);
 
 
 	static const float targetFramerate;

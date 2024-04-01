@@ -8,7 +8,7 @@
 //XMVECTOR rotationAxis = XMVectorSet(0.5f, .5f, .5f, 0);
 //g_WorldMatrix = XMMatrixRotationAxis(rotationAxis, XMConvertToRadians(angle));
 
-Camera::Camera() : Super()
+Camera::Camera()// : Super()
 {
     _eyePosition = XMVECTOR();
     _focusPoint = XMVECTOR();
@@ -18,12 +18,20 @@ Camera::Camera() : Super()
     _fieldOfView = 0;
     _aspectRatio = 0;
     _nearPlane = 0;
-    _farPlane = 0;    
+    _farPlane = 0;
+
+    _forward = Vector3D(0.0f, 0.0f, 1.0f);
+    _left = Vector3D(-1.0f, 0.0f, 0.0f);
+    _right = Vector3D(1.0f, 0.0f, 0.0f);
+    _backward = Vector3D(0.0f, 0.0f, -1.0f);
+
+    _camPosition = Vector3D(0,0,-1000);
+    _camRotation = Vector3D(0);
 }
 
 void Camera::Init()
 {
-    Super::SetPosition(Vector3D(0, 100, 0));
+    //Super::SetPosition(Vector3D(0, 100, 0));
     UpdateViewMatrix();
     _worldMatrix = XMMatrixRotationAxis(XMVectorSet(.5f, .5f, .5f, .0f), XMConvertToRadians(0));
     _fieldOfView = XMConvertToRadians(45.0f); // Ângulo de visão de 45 graus
@@ -39,26 +47,56 @@ void Camera::Init()
 
 void Camera::AddPosition(Vector3D positionToAdd)
 {
-    Super::AddPosition(positionToAdd);
+    _camPosition += positionToAdd;
+    UpdateViewMatrix();
+}
+
+void Camera::Rotate(float pitch, float yaw, float roll) 
+{
+    _camRotation += Vector3D(pitch, yaw, roll);
     UpdateViewMatrix();
 }
 
 void Camera::UpdateViewMatrix()
 {
-    _eyePosition = XMVectorSet(
-        GetPosition().X,
-        GetPosition().Y,
-        400.0f + GetPosition().Z,
-        1
-    );
-    _focusPoint = XMVectorSet(
-        GetPosition().X,
-        GetPosition().Y,
-        100.0f + GetPosition().Z,
-        1
-    );
-    _upDirection = XMVectorSet(0, 1, 0, 0);
-    _viewMatrix = XMMatrixLookAtLH(_eyePosition, _focusPoint, _upDirection);
+    //Calculate camera rotation matrix
+    XMMATRIX camRotationMatrix = XMMatrixRotationRollPitchYaw(this->_camRotation.X, this->_camRotation.Y, this->_camRotation.Z);
+
+    //Calculate unit vector of cam target based off camera forward value transformed by cam rotation matrix
+    XMVECTOR camTarget = XMVector3TransformCoord(this->DEFAULT_FORWARD_VECTOR, camRotationMatrix);
+    XMFLOAT3 XMFcamPos = XMFLOAT3(_camPosition.X, _camPosition.Y, _camPosition.Z);
+    XMVECTOR XMVcamPosition =  XMLoadFloat3(&XMFcamPos);
+
+    //Adjust cam target to be offset by the camera's current position
+    camTarget += XMVcamPosition;
+
+    //Calculate up direction based on current rotation
+    XMVECTOR upDir = XMVector3TransformCoord(this->DEFAULT_UP_VECTOR, camRotationMatrix);
+    
+    //Rebuild view matrix
+    _viewMatrix = XMMatrixLookAtLH(XMVcamPosition, camTarget, upDir);
+
+	XMMATRIX vecRotationMatrix = XMMatrixRotationRollPitchYaw(0.0f, _camRotation.Y, 0.0f);
+
+    //Conversions to storage data about vectors 
+    XMVECTOR vec_forward = XMVector3TransformCoord(this->DEFAULT_FORWARD_VECTOR, vecRotationMatrix);
+    XMVECTOR vec_backward = XMVector3TransformCoord(this->DEFAULT_BACKWARD_VECTOR, vecRotationMatrix);
+    XMVECTOR vec_left = XMVector3TransformCoord(this->DEFAULT_LEFT_VECTOR, vecRotationMatrix);
+    XMVECTOR vec_right = XMVector3TransformCoord(this->DEFAULT_RIGHT_VECTOR, vecRotationMatrix);
+    XMFLOAT3 float3Foward;
+    XMStoreFloat3(&float3Foward, vec_forward);
+    _forward = Vector3D(float3Foward.x, float3Foward.y, float3Foward.z);
+    XMFLOAT3 float3Backward;
+    XMStoreFloat3(&float3Backward, vec_backward);
+    _backward = Vector3D(float3Backward.x, float3Backward.y, float3Backward.z);
+    XMFLOAT3 float3Left;
+    XMStoreFloat3(&float3Left, vec_left);
+    _left = Vector3D(float3Left.x, float3Left.y, float3Left.z);
+    XMFLOAT3 float3Right;
+    XMStoreFloat3(&float3Right, vec_right);
+    _right = Vector3D(float3Right.x, float3Right.y, float3Right.z);    
+
+    //update buffer
     GraphicsMain::UpdateConstantBuffer(ConstantBuffer::CB_Frame, &_viewMatrix);
 }
 

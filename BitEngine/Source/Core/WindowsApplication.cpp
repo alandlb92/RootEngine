@@ -6,7 +6,7 @@ WindowsApplication* WindowsApplication::_appInstance = nullptr;
 
 WindowsApplication::WindowsApplication(HINSTANCE hInstance, UINT idsAppTittle, UINT idcGame, UINT idcSamall)
     : hInstance(hInstance), windowHandler(nullptr) {
-    _idcSamall = idcSamall ;
+    _idcSamall = idcSamall;
     _idsAppTittle = idsAppTittle;
     _idcGame = idcGame;
     LoadStringW(hInstance, _idsAppTittle, szTitle, MAX_LOADSTRING);
@@ -50,7 +50,7 @@ ATOM WindowsApplication::MyRegisterClass() {
     WNDCLASSEXW wcex;
     wcex.cbSize = sizeof(WNDCLASSEX);
 
-    wcex.style = CS_HREDRAW | CS_VREDRAW;
+    wcex.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
     wcex.lpfnWndProc = WndProc;
     wcex.cbClsExtra = 0;
     wcex.cbWndExtra = 0;
@@ -87,12 +87,8 @@ LRESULT CALLBACK WindowsApplication::WndProc(HWND hWnd, UINT message, WPARAM wPa
 
     if (_appInstance)
     {
-        if(_appInstance->_inputSystem)
+      if(_appInstance->_inputSystem)
             _appInstance->_inputSystem->SendOSEvent(message, wParam, lParam);
-
-        switch (message) {
-            // Handle other messages
-        }
     }
 
     return DefWindowProc(hWnd, message, wParam, lParam);
