@@ -2,12 +2,6 @@
 #include "Graphics/Camera.h"
 #include "Graphics/GraphicsMain.h"
 
-
-//static float angle = 0.0f;
-//angle += 30.0f * deltaTime;
-//XMVECTOR rotationAxis = XMVectorSet(0.5f, .5f, .5f, 0);
-//g_WorldMatrix = XMMatrixRotationAxis(rotationAxis, XMConvertToRadians(angle));
-
 Camera::Camera()// : Super()
 {
     _eyePosition = XMVECTOR();
@@ -45,7 +39,15 @@ void Camera::Init()
     GraphicsMain::UpdateConstantBuffer(ConstantBuffer::CB_Application, &_projectionMatrix);
 }
 
-void Camera::AddPosition(Vector3D positionToAdd)
+void Camera::AddLocalPosition(Vector3D positionToAdd)
+{
+    _camPosition += (_right * positionToAdd.X);
+    _camPosition += (_forward * positionToAdd.Z);
+    _camPosition += (positionToAdd.Y);
+    UpdateViewMatrix();
+}
+
+void Camera::AddWorldPosition(Vector3D positionToAdd)
 {
     _camPosition += positionToAdd;
     UpdateViewMatrix();
@@ -76,14 +78,16 @@ void Camera::UpdateViewMatrix()
     //Rebuild view matrix
     _viewMatrix = XMMatrixLookAtLH(XMVcamPosition, camTarget, upDir);
 
-	XMMATRIX vecRotationMatrix = XMMatrixRotationRollPitchYaw(0.0f, _camRotation.Y, 0.0f);
+	XMMATRIX vecRotationMatrixY = XMMatrixRotationRollPitchYaw(_camRotation.X, _camRotation.Y, 0.0f);
 
     //Conversions to storage data about vectors 
-    XMVECTOR vec_forward = XMVector3TransformCoord(this->DEFAULT_FORWARD_VECTOR, vecRotationMatrix);
-    XMVECTOR vec_backward = XMVector3TransformCoord(this->DEFAULT_BACKWARD_VECTOR, vecRotationMatrix);
-    XMVECTOR vec_left = XMVector3TransformCoord(this->DEFAULT_LEFT_VECTOR, vecRotationMatrix);
-    XMVECTOR vec_right = XMVector3TransformCoord(this->DEFAULT_RIGHT_VECTOR, vecRotationMatrix);
+    XMVECTOR vec_forward = XMVector3TransformCoord(this->DEFAULT_FORWARD_VECTOR, vecRotationMatrixY);
+    XMVECTOR vec_backward = XMVector3TransformCoord(this->DEFAULT_BACKWARD_VECTOR, vecRotationMatrixY);
+    XMVECTOR vec_left = XMVector3TransformCoord(this->DEFAULT_LEFT_VECTOR, vecRotationMatrixY);
+    XMVECTOR vec_right = XMVector3TransformCoord(this->DEFAULT_RIGHT_VECTOR, vecRotationMatrixY);
+    
     XMFLOAT3 float3Foward;
+    
     XMStoreFloat3(&float3Foward, vec_forward);
     _forward = Vector3D(float3Foward.x, float3Foward.y, float3Foward.z);
     XMFLOAT3 float3Backward;
@@ -94,7 +98,9 @@ void Camera::UpdateViewMatrix()
     _left = Vector3D(float3Left.x, float3Left.y, float3Left.z);
     XMFLOAT3 float3Right;
     XMStoreFloat3(&float3Right, vec_right);
-    _right = Vector3D(float3Right.x, float3Right.y, float3Right.z);    
+    _right = Vector3D(float3Right.x, float3Right.y, float3Right.z);
+
+    OutputDebugStringA(_forward.ToString().c_str());
 
     //update buffer
     GraphicsMain::UpdateConstantBuffer(ConstantBuffer::CB_Frame, &_viewMatrix);

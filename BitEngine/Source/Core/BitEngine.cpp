@@ -47,32 +47,32 @@ void BitEngine::Update()
 
 void BitEngine::MoveCameraYFront(float deltaTime)
 {
-    _graphicsMain->_camera->AddPosition(Vector3D(0, 0, 100 * deltaTime));
+    _graphicsMain->_camera->AddLocalPosition(Vector3D(0, 0, 100 * deltaTime));
 }
 
 void BitEngine::MoveCameraYBack(float deltaTime)
 {
-    _graphicsMain->_camera->AddPosition(Vector3D(0, 0, -100 * deltaTime));
+    _graphicsMain->_camera->AddLocalPosition(Vector3D(0, 0, -100 * deltaTime));
 }
 
 void BitEngine::MoveCameraXRight(float deltaTime)
 {
-    _graphicsMain->_camera->AddPosition(Vector3D(-100 * deltaTime, 0, 0));
+    _graphicsMain->_camera->AddLocalPosition(Vector3D(-100 * deltaTime, 0, 0));
 }
 
 void BitEngine::MoveCameraXLeft(float deltaTime)
 {
-    _graphicsMain->_camera->AddPosition(Vector3D(100 * deltaTime, 0, 0));
+    _graphicsMain->_camera->AddLocalPosition(Vector3D(100 * deltaTime, 0, 0));
 }
 
 void BitEngine::MoveCameraZUp(float deltaTime)
 {
-    _graphicsMain->_camera->AddPosition(Vector3D(0, 100 * deltaTime, 0));
+    _graphicsMain->_camera->AddWorldPosition(Vector3D(0, 100 * deltaTime, 0));
 }
 
 void BitEngine::MoveCameraZDown(float deltaTime)
 {
-    _graphicsMain->_camera->AddPosition(Vector3D(0, -100 * deltaTime, 0));
+    _graphicsMain->_camera->AddWorldPosition(Vector3D(0, -100 * deltaTime, 0));
 }
 
 void BitEngine::RotateCameraX(float axisValue, float deltaTime)

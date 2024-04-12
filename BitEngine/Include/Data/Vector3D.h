@@ -25,6 +25,11 @@ struct Vector3D  : public Vector2D
         return Vector3D(X * value, Y * value, Z * value);
     }
 
+    Vector3D operator* (const Vector3D value)
+    {
+        return Vector3D(X * value.X, Y * value.Y, Z * value.Z);
+    }
+
     Vector3D operator+ (const Vector3D value)
     {
         return Vector3D(X + value.X, Y + value.Y, Z + value.Z);
@@ -36,5 +41,19 @@ struct Vector3D  : public Vector2D
         this->Y += value.Y;
         this->Z += value.Z;
         return *this;
+    }
+
+    std::string ToString()
+    {
+        std::string s("X: ");
+        s.append(std::to_string(X));
+        s.append("\n");
+        s.append("Y: ");
+        s.append(std::to_string(Y));
+        s.append("\n");
+        s.append("Z: ");
+        s.append(std::to_string(Z));
+        s.append("\n");
+        return s;
     }
 };

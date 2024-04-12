@@ -14,7 +14,8 @@ public:
     Camera();
     void Update(float deltaTime);
     void Init();
-    void AddPosition(Vector3D positionToAdd);
+    void AddWorldPosition(Vector3D positionToAdd);
+    void AddLocalPosition(Vector3D positionToAdd);
     void Rotate(float pitch, float yaw, float roll);
 private:
     void UpdateViewMatrix();
@@ -41,7 +42,6 @@ private:
     Vector3D _left;
     Vector3D _right;
     Vector3D _backward;
-
 
     const XMVECTOR DEFAULT_FORWARD_VECTOR = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
     const XMVECTOR DEFAULT_UP_VECTOR = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
