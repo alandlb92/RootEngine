@@ -1,4 +1,5 @@
 #pragma once
+#include "Core/Scene/SceneObject.h"
 #include "d3d11.h"
 #include "directxmath.h"
 #include "Data/Transform.h"
@@ -6,9 +7,9 @@
 
 using namespace DirectX;
 
-class Camera
+class Camera : public SceneObject
 {
-    //typedef Transform Super;
+    typedef SceneObject Super;
 
 public:
     Camera();
@@ -30,9 +31,6 @@ private:
     XMVECTOR _upDirection;
     XMMATRIX _viewMatrix;
     XMMATRIX _projectionMatrix;
-
-    Vector3D _camRotation;
-    Vector3D _camPosition;
 
     const float eyeDistance = 100.0f;
 

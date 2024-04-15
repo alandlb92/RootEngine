@@ -27,6 +27,12 @@
     <Filter Include="Source Files\Graphics">
       <UniqueIdentifier>{06cf09c1-3906-4842-8b99-af4cbc2dd103}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Core\Scene">
+      <UniqueIdentifier>{e5821b7e-da1f-4bda-886a-e250969100d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Scene">
+      <UniqueIdentifier>{d28b19bd-7bef-4b26-a8da-8a314d495493}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Core\BitEngine.h">
@@ -74,6 +80,15 @@
     <ClInclude Include="Include\Data\Vector4D.h">
       <Filter>Header Files\Data</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Core\Scene\Scene.h">
+      <Filter>Header Files\Core\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Core\Scene\SceneObject.h">
+      <Filter>Header Files\Core\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Core\BObject.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\BitEngine.cpp">
@@ -111,6 +126,15 @@
     </ClCompile>
     <ClCompile Include="Source\Graphics\Texture2D.cpp">
       <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Scene\Scene.cpp">
+      <Filter>Source Files\Core\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Scene\SceneObject.cpp">
+      <Filter>Source Files\Core\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\BObject.cpp">
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
