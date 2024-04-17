@@ -3,9 +3,11 @@
 #include <memory>
 #include "Windows.h"
 #include "Graphics/GraphicsMain.h"
+#include "Core/Scene/SceneManager.h"
 
 class BitEngine
 {
+
 public:
 	BitEngine(HWND windowHandler);
 
@@ -17,6 +19,7 @@ private:
 	HWND _windowHandler;
 
 	std::unique_ptr<GraphicsMain> _graphicsMain;
+	std::unique_ptr<SceneManager> _sceneManager;
 
 	void MoveCameraYFront(float deltaTime);
 	void MoveCameraYBack(float deltaTime);

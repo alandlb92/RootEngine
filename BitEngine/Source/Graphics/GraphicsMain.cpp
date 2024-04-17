@@ -4,6 +4,7 @@
 #include "Graphics/GraphicsMain.h"
 #include "directxmath.h"
 #include <DirectXColors.h>
+#include "Core/Scene/SceneManager.h";
 
 using namespace DirectX;
 
@@ -27,7 +28,7 @@ GraphicsMain::GraphicsMain(HWND windowHandler)
     _windowHandler = windowHandler;
 }
 
-void GraphicsMain::Init()
+void GraphicsMain::SetupDevice()
 {
     // A window handle must have been created already.
     assert(_windowHandler != 0);
@@ -174,14 +175,38 @@ void GraphicsMain::Init()
     _viewport.MinDepth = 0.0f;
     _viewport.MaxDepth = 1.0f;
 
+        
+    // Compute the exact client dimensions.
+    // This is required for a correct projection matrix.
+    _clientWidth = static_cast<float>(clientRect.right - clientRect.left);
+    _clientHeight = static_cast<float>(clientRect.bottom - clientRect.top);
+
+    // Create the constant buffers for the variables defined in the vertex shader.
+    D3D11_BUFFER_DESC constantBufferDesc;
+    ZeroMemory(&constantBufferDesc, sizeof(D3D11_BUFFER_DESC));
+
+    constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    constantBufferDesc.ByteWidth = sizeof(XMMATRIX);
+    constantBufferDesc.CPUAccessFlags = 0;
+    constantBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+
+    hr = _device->CreateBuffer(&constantBufferDesc, nullptr, &_constantBuffers[CB_Application]);
+    if (FAILED(hr))
+    {
+        OutputDebugStringA("Failed to create Buffer CB_Application\n");
+    }
+    hr = _device->CreateBuffer(&constantBufferDesc, nullptr, &_constantBuffers[CB_Frame]);
+    if (FAILED(hr))
+    {
+        OutputDebugStringA("Failed to create Buffer CB_Frame\n");
+    }
+    hr = _device->CreateBuffer(&constantBufferDesc, nullptr, &_constantBuffers[CB_Object]);
+    if (FAILED(hr))
+    {
+        OutputDebugStringA("Failed to create Buffer CB_Object\n");
+    }
+
     _instance = this;
-
-    LoadContent();
-}
-
-void GraphicsMain::Update(float deltaTime)
-{
-    _camera->Update(deltaTime);
 }
 
 void GraphicsMain::Clear(const FLOAT clearColor[4], FLOAT clearDepth, UINT8 clearStencil)
@@ -211,36 +236,35 @@ void GraphicsMain::Renderer()
     Clear(Colors::CornflowerBlue, 1.0f, 0);
 
 
-
-    for (auto& d : _drawableObjects)
+    for (auto& ro : SceneManager::GetInstance()->GetCurrentScene()->GetRenderablebleObjects())
     {
-        for (auto& mesh : d.GetMeshs())
+        for (auto& mesh : ro->GetMeshComponent()->GetMeshs())
         {
             uint32_t indexCount = 0;
-            int materialIndex = mesh.GetMaterialIndex();
-            Material material = d.GetMaterial(mesh.GetMaterialIndex());
+            int materialIndex = mesh->GetMaterialIndex();
+            Material* material = ro->GetMaterialComponent()->GetMaterialOfIndex(materialIndex);
 
-            _deviceContext->IASetInputLayout(material.GetShader()->GetInputLayout());
+            _deviceContext->IASetInputLayout(material->GetShader()->GetInputLayout());
 
             const UINT vertexStride = sizeof(Vector3D);
             const UINT uvStride = sizeof(Vector2D);
             const UINT offset = 0;
 
-            ID3D11Buffer* vertexBuffer = mesh.GetVertexBuffer();
-            ID3D11Buffer* uvBuffer = mesh.GetUvBuffer();
-            ID3D11Buffer* indexBuffer = mesh.GetIndexBuffer();
+            ID3D11Buffer* vertexBuffer = mesh->GetVertexBuffer();
+            ID3D11Buffer* uvBuffer = mesh->GetUvBuffer();
+            ID3D11Buffer* indexBuffer = mesh->GetIndexBuffer();
 
             _deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &vertexStride, &offset);
             _deviceContext->IASetVertexBuffers(1, 1, &uvBuffer, &uvStride, &offset);
             _deviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R16_UINT, 0);
 
 
-            indexCount += mesh.GetIndicesSize();
-            _deviceContext->VSSetShader(material.GetShader()->GetVertexShader(), nullptr, 0);
-            _deviceContext->PSSetShader(material.GetShader()->GetPixelShader(), nullptr, 0);
+            indexCount += mesh->GetIndicesSize();
+            _deviceContext->VSSetShader(material->GetShader()->GetVertexShader(), nullptr, 0);
+            _deviceContext->PSSetShader(material->GetShader()->GetPixelShader(), nullptr, 0);
 
-            ID3D11ShaderResourceView* textureSRV = material.GetTexture(0)->GetTexture();
-            ID3D11SamplerState* samplerState = material.GetTexture(0)->GetSamplerState();
+            ID3D11ShaderResourceView* textureSRV = material->GetTexture(0)->GetTexture();
+            ID3D11SamplerState* samplerState = material->GetTexture(0)->GetSamplerState();
             _deviceContext->PSSetShaderResources(0, 1, &textureSRV);
             _deviceContext->PSSetSamplers(0, 1, &samplerState);
 
@@ -257,72 +281,4 @@ void GraphicsMain::Renderer()
     }
     //TODO: i cant use vsync right now because this will bring a problem in input system
     Present(false);
-}
-
-
-
-bool GraphicsMain::LoadContent()
-{
-    assert(_device);
-
-    // Setup the projection matrix.
-    RECT clientRect;
-    GetClientRect(_windowHandler, &clientRect);
-
-    // Compute the exact client dimensions.
-    // This is required for a correct projection matrix.
-    _clientWidth = static_cast<float>(clientRect.right - clientRect.left);
-    _clientHeight = static_cast<float>(clientRect.bottom - clientRect.top);
-
-    //std::vector<Mesh> meshs = { Mesh::MakePrimitiveCube() };
-
-    std::vector<Mesh> meshs = Mesh::MakeFromFbxFile("C:\\Users\\alan.bittencourt\\Documents\\Projects\\Personal\\BitEngine\\x64\\Debug\\Content\\Models\\HeroGoat.bitMesh");
-
-    Material material0;
-    material0.SetShader("Simple");
-    material0.SetTexture("Content\\Textures\\HeroGoat\\Ch40_1001_Diffuse.png", 0);
-
-    Material material1;
-    material1.SetShader("Simple");
-    material1.SetTexture("Content\\Textures\\HeroGoat\\Ch40_1002_Diffuse.png", 0);
-
-    Material material2;
-    material2.SetShader("Simple");
-    material2.SetTexture("Content\\Textures\\HeroGoat\\Ch40_1002_Diffuse.png", 0);
-
-    Material material3;
-    material3.SetShader("Simple");
-    material3.SetTexture("Content\\Textures\\HeroGoat\\Ch40_1003_Diffuse.png", 0);
-
-    _drawableObjects = { DrawableObject(meshs, { material0, material1, material2, material3 }) };
-
-    // Create the constant buffers for the variables defined in the vertex shader.
-    D3D11_BUFFER_DESC constantBufferDesc;
-    ZeroMemory(&constantBufferDesc, sizeof(D3D11_BUFFER_DESC));
-
-    constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-    constantBufferDesc.ByteWidth = sizeof(XMMATRIX);
-    constantBufferDesc.CPUAccessFlags = 0;
-    constantBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-
-    HRESULT hr = _device->CreateBuffer(&constantBufferDesc, nullptr, &_constantBuffers[CB_Application]);
-    if (FAILED(hr))
-    {
-        return false;
-    }
-    hr = _device->CreateBuffer(&constantBufferDesc, nullptr, &_constantBuffers[CB_Frame]);
-    if (FAILED(hr))
-    {
-        return false;
-    }
-    hr = _device->CreateBuffer(&constantBufferDesc, nullptr, &_constantBuffers[CB_Object]);
-    if (FAILED(hr))
-    {
-        return false;
-    }
-
-    _camera = std::make_unique<Camera>();
-    _camera->Init();
-    
-    return true;
 }

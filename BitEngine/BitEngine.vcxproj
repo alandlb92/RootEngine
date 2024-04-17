@@ -114,9 +114,13 @@ xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\Components\MaterialComponent.h" />
+    <ClInclude Include="Include\Components\MeshComponent.h" />
+    <ClInclude Include="Include\Core\BComponent.h" />
     <ClInclude Include="Include\Core\BitEngine.h" />
     <ClInclude Include="Include\Core\BObject.h" />
     <ClInclude Include="Include\Core\Scene\Scene.h" />
+    <ClInclude Include="Include\Core\Scene\SceneManager.h" />
     <ClInclude Include="Include\Core\Scene\SceneObject.h" />
     <ClInclude Include="Include\Core\WindowsApplication.h" />
     <ClInclude Include="Include\Data\BitMeshData.h" />
@@ -134,9 +138,13 @@ xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
     <ClInclude Include="Include\Graphics\Texture2D.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Components\MaterialComponent.cpp" />
+    <ClCompile Include="Source\Components\MeshComponent.cpp" />
+    <ClCompile Include="Source\Core\BComponent.cpp" />
     <ClCompile Include="Source\Core\BitEngine.cpp" />
     <ClCompile Include="Source\Core\BObject.cpp" />
     <ClCompile Include="Source\Core\Scene\Scene.cpp" />
+    <ClCompile Include="Source\Core\Scene\SceneManager.cpp" />
     <ClCompile Include="Source\Core\Scene\SceneObject.cpp" />
     <ClCompile Include="Source\Core\WindowsApplication.cpp" />
     <ClCompile Include="Source\Data\BitMeshData.cpp" />

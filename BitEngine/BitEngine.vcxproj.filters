@@ -33,6 +33,12 @@
     <Filter Include="Source Files\Core\Scene">
       <UniqueIdentifier>{d28b19bd-7bef-4b26-a8da-8a314d495493}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Components">
+      <UniqueIdentifier>{1c157b17-fdc5-49d8-8e4f-47e38eacfadb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Components">
+      <UniqueIdentifier>{0cb35c93-8b0c-419c-b82f-b29e94d8422c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Core\BitEngine.h">
@@ -89,6 +95,18 @@
     <ClInclude Include="Include\Core\BObject.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Core\BComponent.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Core\Scene\SceneManager.h">
+      <Filter>Header Files\Core\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Components\MaterialComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Components\MeshComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\BitEngine.cpp">
@@ -135,6 +153,18 @@
     </ClCompile>
     <ClCompile Include="Source\Core\BObject.cpp">
       <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\BComponent.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Scene\SceneManager.cpp">
+      <Filter>Source Files\Core\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Components\MaterialComponent.cpp">
+      <Filter>Source Files\Core\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Components\MeshComponent.cpp">
+      <Filter>Source Files\Core\Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

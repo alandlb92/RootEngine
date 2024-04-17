@@ -20,11 +20,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Faia\Converter.h" />
+    <ClInclude Include="Include\Faia\Debug.h" />
     <ClInclude Include="Include\Faia\Memory.h" />
     <ClInclude Include="Include\Faia\Paths.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Faia\Converter.cpp" />
+    <ClCompile Include="Source\Faia\Debug.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

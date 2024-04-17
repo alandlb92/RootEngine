@@ -48,17 +48,12 @@ public:
 	float GetHeight() { return _clientHeight; }
 
 	GraphicsMain(HWND windowHandler);
-	void Init();
-	void Update(float deltaTime);
+	void SetupDevice();
 	void Clear(const FLOAT clearColor[4], FLOAT clearDepth, UINT8 clearStencil);
 	void Present(bool vSync);
 	void Renderer();
 
-	std::unique_ptr<Camera> _camera;
 private:
-	std::vector<DrawableObject> _drawableObjects;
-	
-
 	static GraphicsMain* _instance;
 
 	IDXGISwapChain* _swapChain;
@@ -76,6 +71,4 @@ private:
 
 	float _clientWidth;
 	float _clientHeight;
-
-	bool LoadContent();
 };
