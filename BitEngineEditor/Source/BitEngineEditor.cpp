@@ -6,7 +6,7 @@
 
 int main(int argc, char* argv[])
 {
-    std::cout << "Hello World!\n";
+    std::cout << "Start Root Engine Editor\n";
 
     Faia::BitEngineEditor::Importer::FBXImporter fbxImporter;
     

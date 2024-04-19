@@ -1,4 +1,5 @@
 #include "Components/MeshComponent.h"
+#include "FaiaInputSystem.h"
 
 void MeshComponent::AddMeshs(std::vector<Mesh> meshs)
 {

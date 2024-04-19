@@ -5,6 +5,7 @@
 #include "directxmath.h"
 #include <DirectXColors.h>
 #include "Core/Scene/SceneManager.h";
+#include <numbers>
 
 using namespace DirectX;
 
@@ -244,6 +245,28 @@ void GraphicsMain::Renderer()
             int materialIndex = mesh->GetMaterialIndex();
             Material* material = ro->GetMaterialComponent()->GetMaterialOfIndex(materialIndex);
 
+            XMFLOAT3 XMFObjPos = XMFLOAT3(ro->GetPosition().X, ro->GetPosition().Y, ro->GetPosition().Z);
+            XMVECTOR XMVObjPos = XMLoadFloat3(&XMFObjPos);
+
+            const float pi = 3.14159265358979323846f;
+            Vector3D radianVector = ro->GetRotation() * (pi / 180);
+            XMFLOAT3 XMFObjRot = XMFLOAT3(radianVector.X, radianVector.Y, radianVector.Z);
+            XMVECTOR XMVObjRot = XMLoadFloat3(&XMFObjRot);
+
+
+            XMFLOAT3 XMFObjSca = XMFLOAT3(ro->GetScale().X, ro->GetScale().Y, ro->GetScale().Z);
+            XMVECTOR XMVObjSca = XMLoadFloat3(&XMFObjSca);
+
+
+            DirectX::XMMATRIX translationMatrix = DirectX::XMMatrixTranslationFromVector(XMVObjPos);
+            XMVECTOR quaternion = DirectX::XMQuaternionRotationRollPitchYawFromVector(XMVObjRot);
+            DirectX::XMMATRIX rotationMatrix = DirectX::XMMatrixRotationQuaternion(quaternion);
+            DirectX::XMMATRIX scaleMatrix = DirectX::XMMatrixScalingFromVector(XMVObjSca);
+
+            DirectX::XMMATRIX transformMatrix = scaleMatrix * rotationMatrix * translationMatrix;
+
+            UpdateConstantBuffer(ConstantBuffer::CB_Object, &transformMatrix);
+
             _deviceContext->IASetInputLayout(material->GetShader()->GetInputLayout());
 
             const UINT vertexStride = sizeof(Vector3D);
@@ -263,8 +286,14 @@ void GraphicsMain::Renderer()
             _deviceContext->VSSetShader(material->GetShader()->GetVertexShader(), nullptr, 0);
             _deviceContext->PSSetShader(material->GetShader()->GetPixelShader(), nullptr, 0);
 
-            ID3D11ShaderResourceView* textureSRV = material->GetTexture(0)->GetTexture();
-            ID3D11SamplerState* samplerState = material->GetTexture(0)->GetSamplerState();
+            ID3D11ShaderResourceView* textureSRV = NULL;
+            ID3D11SamplerState* samplerState = NULL;
+            if (material->GetTexture(0))
+            {
+                textureSRV = material->GetTexture(0)->GetTexture();
+                samplerState = material->GetTexture(0)->GetSamplerState();
+            }
+
             _deviceContext->PSSetShaderResources(0, 1, &textureSRV);
             _deviceContext->PSSetSamplers(0, 1, &samplerState);
 

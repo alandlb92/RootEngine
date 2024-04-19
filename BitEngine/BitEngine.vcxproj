@@ -116,6 +116,7 @@ xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
   <ItemGroup>
     <ClInclude Include="Include\Components\MaterialComponent.h" />
     <ClInclude Include="Include\Components\MeshComponent.h" />
+    <ClInclude Include="Include\Components\TestComponent.h" />
     <ClInclude Include="Include\Core\BComponent.h" />
     <ClInclude Include="Include\Core\BitEngine.h" />
     <ClInclude Include="Include\Core\BObject.h" />

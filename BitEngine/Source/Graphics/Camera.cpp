@@ -1,6 +1,7 @@
 
 #include "Graphics/Camera.h"
 #include "Graphics/GraphicsMain.h"
+#include "FaiaInputSystem.h"
 
 Camera::Camera()// : Super()
 {
@@ -22,6 +23,7 @@ Camera::Camera()// : Super()
     _position = Vector3D(0,0,-1000);
     _rotation = Vector3D(0);
 }
+using namespace Faia::InputSystem;
 
 void Camera::Init()
 {
@@ -37,6 +39,17 @@ void Camera::Init()
     _projectionMatrix = XMMatrixPerspectiveFovLH(_fieldOfView, _aspectRatio, _nearPlane, _farPlane);
     GraphicsMain::UpdateConstantBuffer(ConstantBuffer::CB_Object, &_worldMatrix);
     GraphicsMain::UpdateConstantBuffer(ConstantBuffer::CB_Application, &_projectionMatrix);
+
+    FaiaInputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::W, std::bind(&Camera::MoveCameraYFront, this, std::placeholders::_1));
+    FaiaInputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::S, std::bind(&Camera::MoveCameraYBack, this, std::placeholders::_1));
+    FaiaInputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::A, std::bind(&Camera::MoveCameraXRight, this, std::placeholders::_1));
+    FaiaInputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::D, std::bind(&Camera::MoveCameraXLeft, this, std::placeholders::_1));
+    //FaiaInputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::Q, std::bind(&Camera::MoveCameraZUp, this, std::placeholders::_1));
+    //FaiaInputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::E, std::bind(&Camera::MoveCameraZDown, this, std::placeholders::_1));
+
+    FaiaInputSystem::GetInstance()->RegisterAxisEvent(AxisType::MOUSE_X, std::bind(&Camera::RotateCameraX, this, std::placeholders::_1, std::placeholders::_2));
+    FaiaInputSystem::GetInstance()->RegisterAxisEvent(AxisType::MOUSE_Y, std::bind(&Camera::RotateCameraY, this, std::placeholders::_1, std::placeholders::_2));
+
 }
 
 void Camera::AddLocalPosition(Vector3D positionToAdd)
@@ -109,4 +122,47 @@ void Camera::UpdateViewMatrix()
 void Camera::Update(float deltaTime)
 {
     Super::Update(deltaTime);
+}
+
+
+
+
+void Camera::MoveCameraYFront(float deltaTime)
+{
+    AddLocalPosition(Vector3D(0, 0, 100 * deltaTime));
+}
+
+void Camera::MoveCameraYBack(float deltaTime)
+{
+    AddLocalPosition(Vector3D(0, 0, -100 * deltaTime));
+}
+
+void Camera::MoveCameraXRight(float deltaTime)
+{
+    AddLocalPosition(Vector3D(-100 * deltaTime, 0, 0));
+}
+
+void Camera::MoveCameraXLeft(float deltaTime)
+{
+    AddLocalPosition(Vector3D(100 * deltaTime, 0, 0));
+}
+
+void Camera::MoveCameraZUp(float deltaTime)
+{
+    AddWorldPosition(Vector3D(0, 100 * deltaTime, 0));
+}
+
+void Camera::MoveCameraZDown(float deltaTime)
+{
+    AddWorldPosition(Vector3D(0, -100 * deltaTime, 0));
+}
+
+void Camera::RotateCameraX(float axisValue, float deltaTime)
+{
+    Rotate(0, axisValue * deltaTime * 300, 0);
+}
+
+void Camera::RotateCameraY(float axisValue, float deltaTime)
+{
+    Rotate(axisValue * deltaTime * 300, 0, 0);
 }

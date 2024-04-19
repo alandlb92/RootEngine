@@ -32,6 +32,7 @@ void BObject::AddComponent(BComponent* component)
     }
 
 
+    component->_owner = this;
     _components.push_back(component);
     for (auto& onNotifyComponentAdded : _onNotifyComponentAddedList)
     {
@@ -44,10 +45,33 @@ void BObject::RegisterOnNotifyComponentAddedEvent(NotifyAddComponentEvent evt)
     _onNotifyComponentAddedList.push_back(evt);
 }
 
+void BObject::SetPosition(Vector3D newPosition)
+{
+    _position = newPosition;
+}
+
+void BObject::SetRotation(Vector3D newRotation)
+{
+    _rotation = newRotation;
+}
+
+void BObject::SetScale(Vector3D newScale)
+{
+    _scale = newScale;
+}
+
 void BObject::Update(float deltaTime)
 {
+    for (auto& comp : _components)
+    {
+        comp->Update(deltaTime);
+    }
 }
 
 void BObject::Init()
 {
+    for (auto& comp : _components)
+    {
+        comp->Init();
+    }
 }

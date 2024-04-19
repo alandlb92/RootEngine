@@ -16,11 +16,18 @@ void Material::SetTexture(const char* texturePath, int32_t channel)
 
 Texture2D* Material::GetTexture(int32_t channel)
 {
-    auto it = _textures.find(channel);
-    if (it == _textures.end())
+    if (_textures.size() > 0)
     {
-        throw std::invalid_argument("Invalid channel passed to get texture from material");
-    }
+        auto it = _textures.find(channel);
+        if (it == _textures.end())
+        {
+            throw std::invalid_argument("Invalid channel passed to get texture from material");
+        }
 
-    return _textures[channel].get();
+        return _textures[channel].get();
+    }
+    else
+    {
+        return NULL;
+    }
 }

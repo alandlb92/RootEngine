@@ -12,7 +12,7 @@ class BObject;
 
 using NotifyAddComponentEvent = std::function<void(BObject* obj, BComponent* newComponent)>;
 
-class BObject 
+class BObject
 {
 
     friend class Scene;
@@ -37,6 +37,15 @@ public:
 
     MeshComponent* GetMeshComponent() const { return _meshComponent; }
     MaterialComponent* GetMaterialComponent() const { return _materialComponent; }
+
+    void SetPosition(Vector3D newPosition);
+    void SetRotation(Vector3D newRotation);
+    void SetScale(Vector3D newScale);
+
+    Vector3D GetPosition() { return _position; }
+    Vector3D GetRotation() { return _rotation; }
+    Vector3D GetScale() { return _scale; }
+
 
 protected:
     virtual void Init();

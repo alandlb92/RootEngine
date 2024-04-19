@@ -46,4 +46,15 @@ private:
     const XMVECTOR DEFAULT_BACKWARD_VECTOR = XMVectorSet(0.0f, 0.0f, -1.0f, 0.0f);
     const XMVECTOR DEFAULT_LEFT_VECTOR = XMVectorSet(-1.0f, 0.0f, 0.0f, 0.0f);
     const XMVECTOR DEFAULT_RIGHT_VECTOR = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
+
+
+    void MoveCameraYFront(float deltaTime);
+    void MoveCameraYBack(float deltaTime);
+    void MoveCameraXRight(float deltaTime);
+    void MoveCameraXLeft(float deltaTime);
+    void MoveCameraZUp(float deltaTime);
+    void MoveCameraZDown(float deltaTime);
+
+    void RotateCameraX(float axisValue, float deltaTime);
+    void RotateCameraY(float axisValue, float deltaTime);
 };
