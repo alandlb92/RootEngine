@@ -16,6 +16,7 @@ enum ConstantBuffer
 	CB_Application,
 	CB_Frame,
 	CB_Object,
+	CB_Globals,
 	NumConstantBuffers
 };
 

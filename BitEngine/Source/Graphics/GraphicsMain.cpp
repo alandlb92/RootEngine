@@ -206,6 +206,11 @@ void GraphicsMain::SetupDevice()
     {
         OutputDebugStringA("Failed to create Buffer CB_Object\n");
     }
+    hr = _device->CreateBuffer(&constantBufferDesc, nullptr, &_constantBuffers[CB_Globals]);
+    if (FAILED(hr))
+    {
+        OutputDebugStringA("Failed to create Buffer CB_Globals\n");
+    }
 
     _instance = this;
 }
@@ -264,7 +269,6 @@ void GraphicsMain::Renderer()
             DirectX::XMMATRIX scaleMatrix = DirectX::XMMatrixScalingFromVector(XMVObjSca);
 
             DirectX::XMMATRIX transformMatrix = scaleMatrix * rotationMatrix * translationMatrix;
-
             UpdateConstantBuffer(ConstantBuffer::CB_Object, &transformMatrix);
 
             _deviceContext->IASetInputLayout(material->GetShader()->GetInputLayout());
@@ -294,11 +298,16 @@ void GraphicsMain::Renderer()
                 samplerState = material->GetTexture(0)->GetSamplerState();
             }
 
+            const UINT hasTexture = textureSRV == NULL ? 0 : 1;
+            UpdateConstantBuffer(ConstantBuffer::CB_Globals, &hasTexture);
+
+
             _deviceContext->PSSetShaderResources(0, 1, &textureSRV);
             _deviceContext->PSSetSamplers(0, 1, &samplerState);
+            _deviceContext->PSSetConstantBuffers(0, NumConstantBuffers, _constantBuffers);
 
             _deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-            _deviceContext->VSSetConstantBuffers(0, 3, _constantBuffers);
+            _deviceContext->VSSetConstantBuffers(0, NumConstantBuffers, _constantBuffers);
             _deviceContext->RSSetState(_rasterizerState);
             _deviceContext->RSSetViewports(1, &_viewport);
 
