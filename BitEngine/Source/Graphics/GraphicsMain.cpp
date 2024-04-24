@@ -211,6 +211,11 @@ void GraphicsMain::SetupDevice()
     {
         OutputDebugStringA("Failed to create Buffer CB_Globals\n");
     }
+    hr = _device->CreateBuffer(&constantBufferDesc, nullptr, &_constantBuffers[CB_Light]);
+    if (FAILED(hr))
+    {
+        OutputDebugStringA("Failed to create Buffer CB_Light\n");
+    }
 
     _instance = this;
 }

@@ -20,7 +20,7 @@ Camera::Camera()// : Super()
     _right = Vector3D(1.0f, 0.0f, 0.0f);
     _backward = Vector3D(0.0f, 0.0f, -1.0f);
 
-    _position = Vector3D(0,0,-1000);
+    _position = Vector3D(0, 0, -1000);
     _rotation = Vector3D(0);
 }
 using namespace Faia::InputSystem;
@@ -47,8 +47,8 @@ void Camera::Init()
     //FaiaInputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::Q, std::bind(&Camera::MoveCameraZUp, this, std::placeholders::_1));
     //FaiaInputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::E, std::bind(&Camera::MoveCameraZDown, this, std::placeholders::_1));
 
-    FaiaInputSystem::GetInstance()->RegisterAxisEvent(AxisType::MOUSE_X, std::bind(&Camera::RotateCameraX, this, std::placeholders::_1, std::placeholders::_2));
-    FaiaInputSystem::GetInstance()->RegisterAxisEvent(AxisType::MOUSE_Y, std::bind(&Camera::RotateCameraY, this, std::placeholders::_1, std::placeholders::_2));
+    FaiaInputSystem::GetInstance()->RegisterAxisEvent(AxisType::MOUSE_X, std::bind(&Camera::RotateCameraX, this, std::placeholders::_1, std::placeholders::_2), { KeyCode::MOUSE_LEFT });
+    FaiaInputSystem::GetInstance()->RegisterAxisEvent(AxisType::MOUSE_Y, std::bind(&Camera::RotateCameraY, this, std::placeholders::_1, std::placeholders::_2), { KeyCode::MOUSE_LEFT });
 
 }
 
@@ -66,7 +66,7 @@ void Camera::AddWorldPosition(Vector3D positionToAdd)
     UpdateViewMatrix();
 }
 
-void Camera::Rotate(float pitch, float yaw, float roll) 
+void Camera::Rotate(float pitch, float yaw, float roll)
 {
     _rotation += Vector3D(pitch, yaw, roll);
     UpdateViewMatrix();
@@ -80,27 +80,27 @@ void Camera::UpdateViewMatrix()
     //Calculate unit vector of cam target based off camera forward value transformed by cam rotation matrix
     XMVECTOR camTarget = XMVector3TransformCoord(this->DEFAULT_FORWARD_VECTOR, camRotationMatrix);
     XMFLOAT3 XMFcamPos = XMFLOAT3(_position.X, _position.Y, _position.Z);
-    XMVECTOR XMVcamPosition =  XMLoadFloat3(&XMFcamPos);
+    XMVECTOR XMVcamPosition = XMLoadFloat3(&XMFcamPos);
 
     //Adjust cam target to be offset by the camera's current position
     camTarget += XMVcamPosition;
 
     //Calculate up direction based on current rotation
     XMVECTOR upDir = XMVector3TransformCoord(this->DEFAULT_UP_VECTOR, camRotationMatrix);
-    
+
     //Rebuild view matrix
     _viewMatrix = XMMatrixLookAtLH(XMVcamPosition, camTarget, upDir);
 
-	XMMATRIX vecRotationMatrixY = XMMatrixRotationRollPitchYaw(_rotation.X, _rotation.Y, 0.0f);
+    XMMATRIX vecRotationMatrixY = XMMatrixRotationRollPitchYaw(_rotation.X, _rotation.Y, 0.0f);
 
     //Conversions to storage data about vectors 
     XMVECTOR vec_forward = XMVector3TransformCoord(this->DEFAULT_FORWARD_VECTOR, vecRotationMatrixY);
     XMVECTOR vec_backward = XMVector3TransformCoord(this->DEFAULT_BACKWARD_VECTOR, vecRotationMatrixY);
     XMVECTOR vec_left = XMVector3TransformCoord(this->DEFAULT_LEFT_VECTOR, vecRotationMatrixY);
     XMVECTOR vec_right = XMVector3TransformCoord(this->DEFAULT_RIGHT_VECTOR, vecRotationMatrixY);
-    
+
     XMFLOAT3 float3Foward;
-    
+
     XMStoreFloat3(&float3Foward, vec_forward);
     _forward = Vector3D(float3Foward.x, float3Foward.y, float3Foward.z);
     XMFLOAT3 float3Backward;

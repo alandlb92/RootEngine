@@ -21,17 +21,6 @@ private:
 	std::unique_ptr<GraphicsMain> _graphicsMain;
 	std::unique_ptr<SceneManager> _sceneManager;
 
-	//void MoveCameraYFront(float deltaTime);
-	//void MoveCameraYBack(float deltaTime);
-	//void MoveCameraXRight(float deltaTime);
-	//void MoveCameraXLeft(float deltaTime);
-	//void MoveCameraZUp(float deltaTime);
-	//void MoveCameraZDown(float deltaTime);
-
-	//void RotateCameraX(float axisValue, float deltaTime);
-	//void RotateCameraY(float axisValue, float deltaTime);
-
-
 	static const float targetFramerate;
 	static const float maxTimeStep;
 

@@ -10,6 +10,12 @@
 #include "Camera.h"
 #include <wrl/client.h>
 
+struct CB_Light
+{
+	Vector3D ambientLightColor;
+	float ambientLightStrength;
+};
+
 // Shader resources
 enum ConstantBuffer
 {
@@ -17,6 +23,7 @@ enum ConstantBuffer
 	CB_Frame,
 	CB_Object,
 	CB_Globals,
+	CB_Light,
 	NumConstantBuffers
 };
 

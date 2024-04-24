@@ -17,3 +17,9 @@ cbuffer Globals : register(b3)
 {
     int hasTexture;
 }
+
+cbuffer LightBuffer : register(b4)
+{
+    float3 ambientLightColor;
+    float ambientLightStrength;
+}
