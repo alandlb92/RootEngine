@@ -68,6 +68,7 @@ namespace Faia
                     aiMesh* aiMesh = aiScene->mMeshes[i];
                     BitMeshNode mesh;
 
+                    //Import vertices
                     for (unsigned int j = 0; j < aiMesh->mNumVertices; j++)
                     {
                         aiVector3D& vertex = aiMesh->mVertices[j];
@@ -75,6 +76,7 @@ namespace Faia
                         mesh._vertices.push_back(vert);
                     }
 
+                    //Import faces
                     for (unsigned int j = 0; j < aiMesh->mNumFaces; ++j)
                     {
                         aiFace& face = aiMesh->mFaces[j];
@@ -83,6 +85,14 @@ namespace Faia
                             uint16_t index = face.mIndices[k];
                             mesh._indices.push_back(index);
                         }
+                    }
+
+                    //Import Normals
+                    for (unsigned int j = 0; j < aiMesh->mNumVertices; ++j)
+                    {
+                        aiVector3D& normal = aiMesh->mNormals[j];
+                        Vector3D rnorm(normal.x, normal.y, normal.z);
+                        mesh._normals.push_back(rnorm);
                     }
 
                     if (aiMesh->HasTextureCoords(0))
