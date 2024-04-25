@@ -68,7 +68,7 @@ Scene* Scene::MakeDemoScene()
     AmbientLightComponent* ambientLight = new AmbientLightComponent();
     sceneObject3->AddComponent(ambientLight);
     ambientLight->SetColor(1, 1, 1);
-    ambientLight->SetStrength(.9f);
+    ambientLight->SetStrength(.5f);
 
     TestComponent* test = new TestComponent();
     sceneObject->AddComponent(test);

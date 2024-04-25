@@ -7,7 +7,10 @@ class TestComponent : public BComponent
 {
     typedef BComponent Super;
 
+
 public:
+    float objVelocity = 150.0f;
+
     virtual void Init() override
     {
         Super::Init();
@@ -24,7 +27,7 @@ private:
         if (_owner)
         {
             Vector3D curPos = _owner->GetPosition();
-            curPos += Vector3D(50 * deltaTime, 0, 0);
+            curPos += Vector3D(objVelocity * deltaTime, 0, 0);
             _owner->SetPosition(curPos);
         }
     }
@@ -34,7 +37,7 @@ private:
         if (_owner)
         {
             Vector3D curPos = _owner->GetPosition();
-            curPos += Vector3D(-50 * deltaTime, 0, 0);
+            curPos += Vector3D(-objVelocity * deltaTime, 0, 0);
             _owner->SetPosition(curPos);
         }
     }

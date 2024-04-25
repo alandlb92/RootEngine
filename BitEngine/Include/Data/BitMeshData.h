@@ -9,6 +9,7 @@ struct BitMeshNode
 {
     vector<uint16_t> _indices;
     vector<Vector3D> _vertices;
+    vector<Vector3D> _normals;
     vector<Vector2D> _uv;
     uint16_t _materialIndex;
 };

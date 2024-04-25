@@ -129,22 +129,22 @@ void Camera::Update(float deltaTime)
 
 void Camera::MoveCameraYFront(float deltaTime)
 {
-    AddLocalPosition(Vector3D(0, 0, 100 * deltaTime));
+    AddLocalPosition(Vector3D(0, 0, cameraTranslationVelocity * deltaTime));
 }
 
 void Camera::MoveCameraYBack(float deltaTime)
 {
-    AddLocalPosition(Vector3D(0, 0, -100 * deltaTime));
+    AddLocalPosition(Vector3D(0, 0, -cameraTranslationVelocity * deltaTime));
 }
 
 void Camera::MoveCameraXRight(float deltaTime)
 {
-    AddLocalPosition(Vector3D(-100 * deltaTime, 0, 0));
+    AddLocalPosition(Vector3D(-cameraTranslationVelocity * deltaTime, 0, 0));
 }
 
 void Camera::MoveCameraXLeft(float deltaTime)
 {
-    AddLocalPosition(Vector3D(100 * deltaTime, 0, 0));
+    AddLocalPosition(Vector3D(cameraTranslationVelocity * deltaTime, 0, 0));
 }
 
 void Camera::MoveCameraZUp(float deltaTime)
@@ -159,10 +159,10 @@ void Camera::MoveCameraZDown(float deltaTime)
 
 void Camera::RotateCameraX(float axisValue, float deltaTime)
 {
-    Rotate(0, axisValue * deltaTime * 300, 0);
+    Rotate(0, axisValue * deltaTime * cameraRotationVelocity, 0);
 }
 
 void Camera::RotateCameraY(float axisValue, float deltaTime)
 {
-    Rotate(axisValue * deltaTime * 300, 0, 0);
+    Rotate(axisValue * deltaTime * cameraRotationVelocity, 0, 0);
 }
