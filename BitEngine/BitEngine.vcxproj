@@ -114,6 +114,7 @@ xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\Components\AmbientLightComponent.h" />
     <ClInclude Include="Include\Components\MaterialComponent.h" />
     <ClInclude Include="Include\Components\MeshComponent.h" />
     <ClInclude Include="Include\Components\TestComponent.h" />
@@ -125,6 +126,7 @@ xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
     <ClInclude Include="Include\Core\Scene\SceneObject.h" />
     <ClInclude Include="Include\Core\WindowsApplication.h" />
     <ClInclude Include="Include\Data\BitMeshData.h" />
+    <ClInclude Include="Include\Data\RColor.h" />
     <ClInclude Include="Include\Data\Transform.h" />
     <ClInclude Include="Include\Data\Vector2D.h" />
     <ClInclude Include="Include\Data\Vector3D.h" />
@@ -139,6 +141,7 @@ xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
     <ClInclude Include="Include\Graphics\Texture2D.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Components\AmbientLightComponent.cpp" />
     <ClCompile Include="Source\Components\MaterialComponent.cpp" />
     <ClCompile Include="Source\Components\MeshComponent.cpp" />
     <ClCompile Include="Source\Core\BComponent.cpp" />

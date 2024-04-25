@@ -14,16 +14,20 @@ struct PixelShaderInput
 
 float4 SimplePixelShader(PixelShaderInput IN) : SV_TARGET
 {
-    float4 color;
+    float4 mainColor;
     if (hasTexture == 1)
     {
-        color = mainTexture.Sample(samplerState, IN.texCoord);
+        mainColor = mainTexture.Sample(samplerState, IN.texCoord);
     }
     else
     {
-        color = float4(1, 1, 1, 1);
+        mainColor = float4(1, 1, 1, 1);
     }
 
-    color *= IN.color;
-    return color;
+    mainColor *= IN.color;
+    
+    float4 ambientLight = float4(ambientLightColor, 1) * ambientLightStrength;
+    float4 finalColor = mainColor * ambientLight;
+    
+    return finalColor;
 }

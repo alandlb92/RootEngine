@@ -5,7 +5,7 @@
 #include "Components/MeshComponent.h"
 #include "Components/MaterialComponent.h"
 #include "Components/TestComponent.h"
-
+#include "Components/AmbientLightComponent.h"
 
 Scene* Scene::MakeDemoScene()
 {
@@ -13,6 +13,7 @@ Scene* Scene::MakeDemoScene()
 
     SceneObject* sceneObject = new SceneObject();
     SceneObject* sceneObject2 = new SceneObject();
+    SceneObject* sceneObject3 = new SceneObject();
 
     MaterialComponent* materialComponent = new MaterialComponent();
     MaterialComponent* materialComponent2 = new MaterialComponent();
@@ -64,8 +65,14 @@ Scene* Scene::MakeDemoScene()
 
     sceneObject2->SetScale(Vector3D(100, 1, 100));
 
+    AmbientLightComponent* ambientLight = new AmbientLightComponent();
+    sceneObject3->AddComponent(ambientLight);
+    ambientLight->SetColor(1, 1, 1);
+    ambientLight->SetStrength(.9f);
+
     TestComponent* test = new TestComponent();
     sceneObject->AddComponent(test);
+    
 
     scene->AddObject(sceneObject);
     scene->AddObject(sceneObject2);

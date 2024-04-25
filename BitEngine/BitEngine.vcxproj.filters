@@ -36,7 +36,7 @@
     <Filter Include="Header Files\Components">
       <UniqueIdentifier>{1c157b17-fdc5-49d8-8e4f-47e38eacfadb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Core\Components">
+    <Filter Include="Source Files\Components">
       <UniqueIdentifier>{0cb35c93-8b0c-419c-b82f-b29e94d8422c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -110,6 +110,12 @@
     <ClInclude Include="Include\Components\TestComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Components\AmbientLightComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Data\RColor.h">
+      <Filter>Header Files\Data</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\BitEngine.cpp">
@@ -164,10 +170,13 @@
       <Filter>Source Files\Core\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Source\Components\MaterialComponent.cpp">
-      <Filter>Source Files\Core\Components</Filter>
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="Source\Components\MeshComponent.cpp">
-      <Filter>Source Files\Core\Components</Filter>
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Components\AmbientLightComponent.cpp">
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

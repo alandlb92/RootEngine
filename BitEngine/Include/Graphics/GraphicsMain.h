@@ -9,10 +9,11 @@
 #include "DrawableObject.h"
 #include "Camera.h"
 #include <wrl/client.h>
+#include "Data/RColor.h"
 
-struct CB_Light
+struct CB_LightData
 {
-	Vector3D ambientLightColor;
+	RColorRGB ambientLightColor;
 	float ambientLightStrength;
 };
 
