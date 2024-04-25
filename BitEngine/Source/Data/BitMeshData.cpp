@@ -20,13 +20,16 @@ void BitMeshData::Write(const char* output)
         uint32_t numIndices = node._indices.size();
         uint32_t numVertices = node._vertices.size();
         uint32_t numUV = node._uv.size();
+        uint32_t numNormals = node._uv.size();
 
         os.write(reinterpret_cast<char*>(&numIndices), sizeof(uint32_t));
         os.write(reinterpret_cast<char*>(&numVertices), sizeof(uint32_t));
+        os.write(reinterpret_cast<char*>(&numNormals), sizeof(uint32_t));
         os.write(reinterpret_cast<char*>(&numUV), sizeof(uint32_t));
 
         os.write(reinterpret_cast<const char*>(node._indices.data()), numIndices * sizeof(uint16_t));
         os.write(reinterpret_cast<const char*>(node._vertices.data()), numVertices * sizeof(Vector3D));
+        os.write(reinterpret_cast<const char*>(node._normals.data()), numNormals * sizeof(Vector3D));
         os.write(reinterpret_cast<const char*>(node._uv.data()), numUV * sizeof(Vector2D));
         os.write(reinterpret_cast<const char*>(&node._materialIndex), sizeof(uint16_t));
 
@@ -51,17 +54,20 @@ void BitMeshData::ReadFromPath(const char* filePath)
     for (uint32_t i = 0; i < numMeshs; ++i)
     {
         BitMeshNode node;
-        uint32_t numIndices, numVertices, numUV;
+        uint32_t numIndices, numVertices, numUV, numNormals;
         is.read(reinterpret_cast<char*>(&numIndices), sizeof(uint32_t));
         is.read(reinterpret_cast<char*>(&numVertices), sizeof(uint32_t));
+        is.read(reinterpret_cast<char*>(&numNormals), sizeof(uint32_t));
         is.read(reinterpret_cast<char*>(&numUV), sizeof(uint32_t));
 
         node._indices.resize(numIndices);
         node._vertices.resize(numVertices);
         node._uv.resize(numUV);
+        node._normals.resize(numNormals);
 
         is.read(reinterpret_cast<char*>(node._indices.data()), numIndices * sizeof(uint16_t));
         is.read(reinterpret_cast<char*>(node._vertices.data()), numVertices * sizeof(Vector3D));
+        is.read(reinterpret_cast<char*>(node._normals.data()), numVertices * sizeof(Vector3D));
         is.read(reinterpret_cast<char*>(node._uv.data()), numUV * sizeof(Vector2D));
         is.read(reinterpret_cast<char*>(&node._materialIndex), sizeof(uint16_t));
 

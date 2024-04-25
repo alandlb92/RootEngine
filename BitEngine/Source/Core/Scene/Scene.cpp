@@ -20,7 +20,7 @@ Scene* Scene::MakeDemoScene()
     MeshComponent* meshComponent = new MeshComponent();
     MeshComponent* meshComponent2 = new MeshComponent();
 
-    std::vector<Mesh> meshs = 
+   std::vector<Mesh> meshs = 
         Mesh::MakeFromFbxFile("C:\\Users\\alan.bittencourt\\Documents\\Projects\\Personal\\BitEngine\\x64\\Debug\\Content\\Models\\HeroGoat.bitMesh");
 
     std::vector<Mesh> cubeMeshs =

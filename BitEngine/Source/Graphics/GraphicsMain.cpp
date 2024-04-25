@@ -284,10 +284,12 @@ void GraphicsMain::Renderer()
 
             ID3D11Buffer* vertexBuffer = mesh->GetVertexBuffer();
             ID3D11Buffer* uvBuffer = mesh->GetUvBuffer();
+            ID3D11Buffer* normalBuffer = mesh->GetNormalBuffer();
             ID3D11Buffer* indexBuffer = mesh->GetIndexBuffer();
 
             _deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &vertexStride, &offset);
             _deviceContext->IASetVertexBuffers(1, 1, &uvBuffer, &uvStride, &offset);
+            _deviceContext->IASetVertexBuffers(2, 1, &normalBuffer, &uvStride, &offset);
             _deviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R16_UINT, 0);
 
 
