@@ -74,6 +74,10 @@ namespace Faia
                         aiVector3D& vertex = aiMesh->mVertices[j];
                         Vector3D vert(vertex.x, vertex.y, vertex.z);
                         mesh._vertices.push_back(vert);
+
+                        aiVector3D& normal = aiMesh->mNormals[j];
+                        Vector3D rnorm(normal.x, normal.y, normal.z);
+                        mesh._normals.push_back(rnorm);
                     }
 
                     //Import faces
@@ -85,14 +89,6 @@ namespace Faia
                             uint16_t index = face.mIndices[k];
                             mesh._indices.push_back(index);
                         }
-                    }
-
-                    //Import Normals
-                    for (unsigned int j = 0; j < aiMesh->mNumVertices; ++j)
-                    {
-                        aiVector3D& normal = aiMesh->mNormals[j];
-                        Vector3D rnorm(normal.x, normal.y, normal.z);
-                        mesh._normals.push_back(rnorm);
                     }
 
                     if (aiMesh->HasTextureCoords(0))

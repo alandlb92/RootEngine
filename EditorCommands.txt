@@ -1,0 +1,9 @@
+--Import cube---
+
+C:\Users\alan.bittencourt\Documents\Projects\Personal\BitEngine\x64\Debug\BitEngineEditor.exe C:\Users\alan.bittencourt\OneDrive\Faia\Projetos\WIP\BitEngine\Content\Models\cube.fbx C:\Users\alan.bittencourt\Documents\Projects\Personal\BitEngine\Content\Models\cube.bitMesh
+
+
+--Import hero---
+
+
+C:\Users\alan.bittencourt\Documents\Projects\Personal\BitEngine\x64\Debug\BitEngineEditor.exe C:\Users\alan.bittencourt\OneDrive\Faia\Projetos\WIP\BitEngine\Content\Models\HeroGoat.fbx C:\Users\alan.bittencourt\Documents\Projects\Personal\BitEngine\Content\Models\HeroGoat.bitMesh

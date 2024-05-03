@@ -280,7 +280,8 @@ void GraphicsMain::Renderer()
 
             const UINT vertexStride = sizeof(Vector3D);
             const UINT uvStride = sizeof(Vector2D);
-            const UINT offset = 0;
+            const UINT normalStride = sizeof(Vector3D);
+            UINT offset = 0;
 
             ID3D11Buffer* vertexBuffer = mesh->GetVertexBuffer();
             ID3D11Buffer* uvBuffer = mesh->GetUvBuffer();
@@ -289,7 +290,7 @@ void GraphicsMain::Renderer()
 
             _deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &vertexStride, &offset);
             _deviceContext->IASetVertexBuffers(1, 1, &uvBuffer, &uvStride, &offset);
-            _deviceContext->IASetVertexBuffers(2, 1, &normalBuffer, &uvStride, &offset);
+            _deviceContext->IASetVertexBuffers(2, 1, &normalBuffer, &normalStride, &offset);
             _deviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R16_UINT, 0);
 
 

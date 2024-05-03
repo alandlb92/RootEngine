@@ -1,16 +1,17 @@
+
 cbuffer PerApplication : register(b0)
 {
-    matrix projectionMatrix;
+    float4x4 projectionMatrix;
 }
 
 cbuffer PerFrame : register(b1)
 {
-    matrix viewMatrix;
+    float4x4 viewMatrix;
 }
 
 cbuffer PerObject : register(b2)
 {
-    matrix worldMatrix;
+    float4x4 worldMatrix;
 }
 
 cbuffer Globals : register(b3)
