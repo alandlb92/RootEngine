@@ -15,19 +15,50 @@ public:
     {
         Super::Init();
         Faia::InputSystem::FaiaInputSystem::GetInstance()->RegisterActionEvent(Faia::InputSystem::InputEventType::KEY_HELD,
-            Faia::InputSystem::KeyCode::Q, std::bind(&TestComponent::MoveRight, this, std::placeholders::_1));
+            Faia::InputSystem::KeyCode::ARROW_RIGHT, std::bind(&TestComponent::MoveRight, this, std::placeholders::_1));
         Faia::InputSystem::FaiaInputSystem::GetInstance()->RegisterActionEvent(Faia::InputSystem::InputEventType::KEY_HELD,
-            Faia::InputSystem::KeyCode::E, std::bind(&TestComponent::MoveLeft, this, std::placeholders::_1));
+            Faia::InputSystem::KeyCode::ARROW_LEFT, std::bind(&TestComponent::MoveLeft, this, std::placeholders::_1));
+
+        Faia::InputSystem::FaiaInputSystem::GetInstance()->RegisterActionEvent(Faia::InputSystem::InputEventType::KEY_HELD,
+            Faia::InputSystem::KeyCode::ARROW_UP, std::bind(&TestComponent::MoveUp, this, std::placeholders::_1));
+        Faia::InputSystem::FaiaInputSystem::GetInstance()->RegisterActionEvent(Faia::InputSystem::InputEventType::KEY_HELD,
+            Faia::InputSystem::KeyCode::ARROW_DOWN, std::bind(&TestComponent::MoveDown, this, std::placeholders::_1));
+
+
+        Faia::InputSystem::FaiaInputSystem::GetInstance()->RegisterActionEvent(Faia::InputSystem::InputEventType::KEY_HELD,
+            Faia::InputSystem::KeyCode::KEYPAD_2, std::bind(&TestComponent::MoveFoward, this, std::placeholders::_1));
+        Faia::InputSystem::FaiaInputSystem::GetInstance()->RegisterActionEvent(Faia::InputSystem::InputEventType::KEY_HELD,
+            Faia::InputSystem::KeyCode::KEYPAD_8, std::bind(&TestComponent::MoveBack, this, std::placeholders::_1));
 
     }
 
 private:
+    void MoveUp(float deltaTime)
+    {
+        if (_owner)
+        {
+            Vector3D curPos = _owner->GetPosition();
+            curPos += Vector3D(0, objVelocity * deltaTime, 0);
+            _owner->SetPosition(curPos);
+        }
+    }
+
+    void MoveDown(float deltaTime)
+    {
+        if (_owner)
+        {
+            Vector3D curPos = _owner->GetPosition();
+            curPos += Vector3D(0, -objVelocity * deltaTime, 0);
+            _owner->SetPosition(curPos);
+        }
+    }
+
     void MoveRight(float deltaTime)
     {
         if (_owner)
         {
             Vector3D curPos = _owner->GetPosition();
-            curPos += Vector3D(objVelocity * deltaTime, 0, 0);
+            curPos += Vector3D(-objVelocity * deltaTime, 0, 0);
             _owner->SetPosition(curPos);
         }
     }
@@ -37,7 +68,27 @@ private:
         if (_owner)
         {
             Vector3D curPos = _owner->GetPosition();
-            curPos += Vector3D(-objVelocity * deltaTime, 0, 0);
+            curPos += Vector3D(objVelocity * deltaTime, 0, 0);
+            _owner->SetPosition(curPos);
+        }
+    }
+
+    void MoveFoward(float deltaTime)
+    {
+        if (_owner)
+        {
+            Vector3D curPos = _owner->GetPosition();
+            curPos += Vector3D(0, 0, objVelocity * deltaTime);
+            _owner->SetPosition(curPos);
+        }
+    }
+
+    void MoveBack(float deltaTime)
+    {
+        if (_owner)
+        {
+            Vector3D curPos = _owner->GetPosition();
+            curPos += Vector3D(0, 0, -objVelocity * deltaTime);
             _owner->SetPosition(curPos);
         }
     }

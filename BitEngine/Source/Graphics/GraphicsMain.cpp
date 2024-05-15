@@ -217,6 +217,32 @@ void GraphicsMain::SetupDevice()
         OutputDebugStringA("Failed to create Buffer CB_Light\n");
     }
 
+
+    D3D11_SAMPLER_DESC samplerDesc;
+    ZeroMemory(&samplerDesc, sizeof(samplerDesc));
+    samplerDesc = D3D11_SAMPLER_DESC();
+    samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+    samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+    samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+    samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+    samplerDesc.MipLODBias = 0;
+    samplerDesc.MaxAnisotropy = 1;
+    samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+    samplerDesc.BorderColor[0] = 1.0f;
+    samplerDesc.BorderColor[1] = 1.0f;
+    samplerDesc.BorderColor[2] = 1.0f;
+    samplerDesc.BorderColor[3] = 1.0f;
+    samplerDesc.MinLOD = -FLT_MAX;
+    samplerDesc.MaxLOD = FLT_MAX;
+
+    hr = _device->CreateSamplerState(&samplerDesc, _defaultSamplerState.GetAddressOf());
+    if (FAILED(hr))
+    {
+        std::string msg;
+        msg.append("Fail to create samplerState");
+        OutputDebugStringA(msg.c_str());
+    }
+
     _instance = this;
 }
 
@@ -298,8 +324,8 @@ void GraphicsMain::Renderer()
             _deviceContext->VSSetShader(material->GetShader()->GetVertexShader(), nullptr, 0);
             _deviceContext->PSSetShader(material->GetShader()->GetPixelShader(), nullptr, 0);
 
-            ID3D11ShaderResourceView* textureSRV = NULL;
-            ID3D11SamplerState* samplerState = NULL;
+            ID3D11ShaderResourceView* textureSRV = nullptr;
+            ID3D11SamplerState* samplerState = _defaultSamplerState.Get();
             if (material->GetTexture(0))
             {
                 textureSRV = material->GetTexture(0)->GetTexture();

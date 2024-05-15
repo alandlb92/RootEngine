@@ -1,5 +1,6 @@
 #pragma once
 class BObject;
+struct Vector3D;
 
 class BComponent
 {

@@ -23,4 +23,10 @@ cbuffer LightBuffer : register(b4)
 {
     float3 ambientLightColor;
     float ambientLightStrength;
+    
+    float3 pointLightColor;
+    float offset;
+    
+    float3 pointLightposition;
+    float pointLightStrenght;
 }

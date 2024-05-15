@@ -11,15 +11,16 @@
 class BObject;
 
 using NotifyAddComponentEvent = std::function<void(BObject* obj, BComponent* newComponent)>;
+using NotifyTrasnformChange = std::function<void(Vector3D)>;
 
 class BObject
 {
-
     friend class Scene;
 public:
     BObject();
     virtual void AddComponent(BComponent* component);
     void RegisterOnNotifyComponentAddedEvent(NotifyAddComponentEvent evt);
+    void RegisterOnNotifyPositionChange(NotifyTrasnformChange evt);
 
     template<typename T>
     T* GetComponentOfType()
@@ -58,6 +59,9 @@ protected:
 
 private:
     std::list<NotifyAddComponentEvent> _onNotifyComponentAddedList;
+    std::list<NotifyTrasnformChange> _onNotifyPositionChange;
+    std::list<NotifyTrasnformChange> _onNotifyRotationChange;
+    std::list<NotifyTrasnformChange> _onNotifyScaleChange;
     MeshComponent* _meshComponent;
     MaterialComponent* _materialComponent;
 };

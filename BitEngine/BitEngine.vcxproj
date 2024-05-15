@@ -114,7 +114,7 @@ xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Include\Components\AmbientLightComponent.h" />
+    <ClInclude Include="Include\Components\PointLightComponent.h" />
     <ClInclude Include="Include\Components\MaterialComponent.h" />
     <ClInclude Include="Include\Components\MeshComponent.h" />
     <ClInclude Include="Include\Components\TestComponent.h" />
@@ -134,6 +134,7 @@ xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
     <ClInclude Include="Include\Graphics\Camera.h" />
     <ClInclude Include="Include\Graphics\DrawableObject.h" />
     <ClInclude Include="Include\Graphics\GraphicsMain.h" />
+    <ClInclude Include="Include\Graphics\LightManager.h" />
     <ClInclude Include="Include\Graphics\Material.h" />
     <ClInclude Include="Include\Graphics\MaterialManager.h" />
     <ClInclude Include="Include\Graphics\Mesh.h" />
@@ -141,7 +142,7 @@ xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
     <ClInclude Include="Include\Graphics\Texture2D.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Components\AmbientLightComponent.cpp" />
+    <ClCompile Include="Source\Components\PointLightComponent.cpp" />
     <ClCompile Include="Source\Components\MaterialComponent.cpp" />
     <ClCompile Include="Source\Components\MeshComponent.cpp" />
     <ClCompile Include="Source\Core\BComponent.cpp" />
@@ -156,6 +157,7 @@ xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
     <ClCompile Include="Source\Graphics\Camera.cpp" />
     <ClCompile Include="Source\Graphics\DrawableObject.cpp" />
     <ClCompile Include="Source\Graphics\GraphicsMain.cpp" />
+    <ClCompile Include="Source\Graphics\LightManager.cpp" />
     <ClCompile Include="Source\Graphics\Material.cpp" />
     <ClCompile Include="Source\Graphics\MaterialManager.cpp" />
     <ClCompile Include="Source\Graphics\Mesh.cpp" />

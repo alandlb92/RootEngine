@@ -15,6 +15,8 @@ BitEngine::BitEngine(HWND windowHandler) : _windowHandler(windowHandler)
 
 void BitEngine::Init()
 {
+    _lightManager = std::make_unique<Graphics::Light::LightManager>();
+
     _previousTime = timeGetTime();
     _graphicsMain = std::make_unique<GraphicsMain>(_windowHandler);
     _graphicsMain->SetupDevice();
@@ -22,6 +24,7 @@ void BitEngine::Init()
     _sceneManager = std::make_unique<SceneManager>();
     _sceneManager->LoadScene(Scene::MakeDemoScene());
     _sceneManager->Init();
+
 }
 
 

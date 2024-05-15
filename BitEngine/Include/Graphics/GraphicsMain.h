@@ -11,11 +11,6 @@
 #include <wrl/client.h>
 #include "Data/RColor.h"
 
-struct CB_LightData
-{
-	RColorRGB ambientLightColor;
-	float ambientLightStrength;
-};
 
 // Shader resources
 enum ConstantBuffer
@@ -77,6 +72,8 @@ private:
 	D3D11_VIEWPORT _viewport = { 0 };
 	ID3D11RasterizerState* _rasterizerState;
 	ID3D11Buffer* _constantBuffers[NumConstantBuffers];
+
+	Microsoft::WRL::ComPtr<ID3D11SamplerState> _defaultSamplerState;
 
 	float _clientWidth;
 	float _clientHeight;

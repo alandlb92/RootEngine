@@ -110,11 +110,14 @@
     <ClInclude Include="Include\Components\TestComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Components\AmbientLightComponent.h">
+    <ClInclude Include="Include\Components\PointLightComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="Include\Data\RColor.h">
       <Filter>Header Files\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\LightManager.h">
+      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -175,8 +178,11 @@
     <ClCompile Include="Source\Components\MeshComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Components\AmbientLightComponent.cpp">
+    <ClCompile Include="Source\Components\PointLightComponent.cpp">
       <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\LightManager.cpp">
+      <Filter>Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

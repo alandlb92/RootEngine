@@ -2,10 +2,11 @@
 #include "Graphics/Mesh.h"
 #include "Graphics/Material.h"
 #include "Graphics/Camera.h"
+#include "Graphics/LightManager.h"
 #include "Components/MeshComponent.h"
 #include "Components/MaterialComponent.h"
 #include "Components/TestComponent.h"
-#include "Components/AmbientLightComponent.h"
+#include "Components/PointLightComponent.h"
 
 Scene* Scene::MakeDemoScene()
 {
@@ -19,6 +20,7 @@ Scene* Scene::MakeDemoScene()
     MaterialComponent* materialComponent2 = new MaterialComponent();
     MeshComponent* meshComponent = new MeshComponent();
     MeshComponent* meshComponent2 = new MeshComponent();
+    MeshComponent* meshComponent3 = new MeshComponent();
 
    std::vector<Mesh> meshs = 
         Mesh::MakeFromFbxFile("C:\\Users\\alan.bittencourt\\Documents\\Projects\\Personal\\BitEngine\\x64\\Debug\\Content\\Models\\HeroGoat.bitMesh");
@@ -28,6 +30,7 @@ Scene* Scene::MakeDemoScene()
 
     meshComponent->AddMeshs(meshs);
     meshComponent2->AddMeshs(cubeMeshs);
+    meshComponent3->AddMeshs(cubeMeshs);
 
     Material material0;
     material0.SetShader("Simple");
@@ -47,6 +50,7 @@ Scene* Scene::MakeDemoScene()
 
     Material cubeMaterial;
     cubeMaterial.SetShader("Simple");
+
     
     materialComponent->AddMaterial(material0);
     materialComponent->AddMaterial(material1);
@@ -56,6 +60,8 @@ Scene* Scene::MakeDemoScene()
     materialComponent2->AddMaterial(cubeMaterial);
 
     Camera* camera = new Camera();
+    camera->SetPosition(Vector3D(0, 200, 500));
+    camera->SetRotation(Vector3D(0.367590f, 110, 0));
 
     sceneObject->AddComponent(meshComponent);
     sceneObject->AddComponent(materialComponent);
@@ -65,18 +71,23 @@ Scene* Scene::MakeDemoScene()
 
     sceneObject2->SetScale(Vector3D(100, 1, 100));
 
-    AmbientLightComponent* ambientLight = new AmbientLightComponent();
-    sceneObject3->AddComponent(ambientLight);
-    ambientLight->SetColor(1, 1, 1);
-    ambientLight->SetStrength(.5f);
-
     TestComponent* test = new TestComponent();
-    sceneObject->AddComponent(test);
-    
+    PointLightComponent* pointLight = new PointLightComponent();
+    sceneObject3->AddComponent(meshComponent3);
+    sceneObject3->AddComponent(pointLight);
+    sceneObject3->AddComponent(test);
+    sceneObject3->AddComponent(materialComponent2);
+    pointLight->SetColor(1, 1, 1);
+    pointLight->SetStrength(1);
 
+    
     scene->AddObject(sceneObject);
     scene->AddObject(sceneObject2);
+    scene->AddObject(sceneObject3);
     scene->AddObject(camera);
+
+    Graphics::Light::LightManager::GetInstance()->SetAmbientLightColor(RColorRGB(1, 1, 1));
+    Graphics::Light::LightManager::GetInstance()->SetAmbientLightStrength(1.0f);
 
     return scene;
 }

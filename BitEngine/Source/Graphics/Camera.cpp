@@ -20,7 +20,7 @@ Camera::Camera()// : Super()
     _right = Vector3D(1.0f, 0.0f, 0.0f);
     _backward = Vector3D(0.0f, 0.0f, -1.0f);
 
-    _position = Vector3D(0, 0, -1000);
+    _position = Vector3D(0, 0, -100);
     _rotation = Vector3D(0);
 }
 using namespace Faia::InputSystem;
@@ -160,9 +160,11 @@ void Camera::MoveCameraZDown(float deltaTime)
 void Camera::RotateCameraX(float axisValue, float deltaTime)
 {
     Rotate(0, axisValue * deltaTime * cameraRotationVelocity, 0);
+    OutputDebugStringA(_rotation.ToString().c_str());
 }
 
 void Camera::RotateCameraY(float axisValue, float deltaTime)
 {
     Rotate(axisValue * deltaTime * cameraRotationVelocity, 0, 0);
+    OutputDebugStringA(_rotation.ToString().c_str());
 }

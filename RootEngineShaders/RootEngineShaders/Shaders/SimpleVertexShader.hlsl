@@ -25,7 +25,6 @@ VertexShaderOutput SimpleVertexShader(AppData IN)
     OUT.color = float4(1.0f, 1.0f, 1.0f, 1.0f);
     OUT.texCoord = IN.texCoord;
     float3 normalTransformed = mul(worldMatrix, float4(IN.normal, 0.0));
-    OUT.normal = normalize(normalTransformed);
-    
+    OUT.normal = normalize(normalTransformed);    
     return OUT;
 }
