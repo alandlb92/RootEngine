@@ -5,7 +5,7 @@
 
 std::vector<Mesh> Mesh::MakeFromFbxFile(const char* filePath)
 {
-    BitMeshData bmd;
+    RMeshData bmd;
     std::vector<Mesh> meshs;
     bmd.ReadFromPath(filePath);
     for (auto& bmesh: bmd._meshs)

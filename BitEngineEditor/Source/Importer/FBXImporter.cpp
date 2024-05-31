@@ -25,7 +25,7 @@ namespace Faia
             {
                 if (inputPath != "" && outputPath != "")
                 {
-                    _asyncResult = std::async(std::launch::async, &FBXImporter::ImportAsync, this);
+                    _asyncResult = std::async(std::launch::async, &FBXImporter::ImportMeshAsync, this);
                     _state = RUNNING;
                 }
                 else
@@ -40,9 +40,9 @@ namespace Faia
                 return _state;
             }
 
-            void FBXImporter::ImportAsync()
+            void FBXImporter::ImportMeshAsync()
             {
-                BitMeshData bmd;
+                RMeshData rmd;
                 Assimp::Importer importer;
                 std::string pFile(inputPath);
 
@@ -66,10 +66,10 @@ namespace Faia
                 for (int i = 0; i < aiScene->mNumMeshes; i++)
                 {
                     aiMesh* aiMesh = aiScene->mMeshes[i];
-                    BitMeshNode mesh;
+                    RMeshNode mesh;
 
                     //Import vertices
-                    for (unsigned int j = 0; j < aiMesh->mNumVertices; j++)
+                    for (unsigned int j = 0; j < aiMesh->mNumVertices; ++j)
                     {
                         aiVector3D& vertex = aiMesh->mVertices[j];
                         Vector3D vert(vertex.x, vertex.y, vertex.z);
@@ -91,6 +91,7 @@ namespace Faia
                         }
                     }
 
+                    //Import UV
                     if (aiMesh->HasTextureCoords(0))
                     {
                         for (unsigned int j = 0; j < aiMesh->mNumVertices; ++j)
@@ -101,15 +102,35 @@ namespace Faia
                         }
                     }
 
+                    //Import Bone
+                    if (aiMesh->mNumBones > 0)
+                    {
+                        for (size_t j = 0; j < aiMesh->mNumBones; j++)
+                        {
+                            aiBone* aiBone = aiMesh->mBones[j];
+                            RBone rBone;
+                            rBone._boneName = aiBone->mName.C_Str();
+                            for (rsize_t k = 0; k < aiBone->mNumWeights; ++k)
+                            {
+                                RVertexWeightData rVertexData;
+                                rVertexData.vertexId = aiBone->mWeights[k].mVertexId;
+                                rVertexData.weight = aiBone->mWeights[k].mWeight;
+                                rBone._weights.push_back(rVertexData);
+                            }
+
+                            mesh._skeletonData._bones.push_back(rBone);
+                        }
+                    }
+
                     mesh._materialIndex = aiMesh->mMaterialIndex;
-                    bmd._meshs.push_back(mesh);
+                    rmd._meshs.push_back(mesh);
                 }
 
 
-                bmd.Write(outputPath);
+                rmd.Write(outputPath);
 
                 _state = DONE;
-            }
+            }           
         }
     }
 }

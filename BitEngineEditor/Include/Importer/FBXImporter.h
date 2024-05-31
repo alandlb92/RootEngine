@@ -10,6 +10,8 @@ namespace Faia
     {
         namespace Importer
         {
+
+
             class FBXImporter
             {
             public:
@@ -29,7 +31,7 @@ namespace Faia
                 State GetState();
             private:
                 std::future<void> _asyncResult;
-                void ImportAsync();
+                void ImportMeshAsync();
                 State _state;
             };
         }

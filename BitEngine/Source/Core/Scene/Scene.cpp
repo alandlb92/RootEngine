@@ -77,7 +77,7 @@ Scene* Scene::MakeDemoScene()
     sceneObject3->AddComponent(pointLight);
     sceneObject3->AddComponent(test);
     sceneObject3->AddComponent(materialComponent2);
-    pointLight->SetColor(1, 1, 1);
+    pointLight->SetColor(1, .5f, .2f);
     pointLight->SetStrength(1);
 
     
@@ -87,7 +87,7 @@ Scene* Scene::MakeDemoScene()
     scene->AddObject(camera);
 
     Graphics::Light::LightManager::GetInstance()->SetAmbientLightColor(RColorRGB(1, 1, 1));
-    Graphics::Light::LightManager::GetInstance()->SetAmbientLightStrength(1.0f);
+    Graphics::Light::LightManager::GetInstance()->SetAmbientLightStrength(.2f);
 
     return scene;
 }

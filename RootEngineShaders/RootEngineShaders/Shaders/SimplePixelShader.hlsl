@@ -12,23 +12,34 @@ struct PixelShaderInput
     float2 texCoord : TEXCOORD0;
     float4 position : SV_POSITION;
     float3 normal : NORMAL;
+    float3 worldPos : WORLD_POSITION;
 };
 
 float4 SimplePixelShader(PixelShaderInput IN) : SV_TARGET
 {
-    float4 mainColor;
+    float3 mainColor;
     if (hasTexture == 1)
     {
         mainColor = mainTexture.Sample(samplerState, IN.texCoord);
     }
     else
     {
-        mainColor = float4(1, 1, 1, 1);
+        mainColor = float3(1, 1, 1);
     }
-
-    float4 ambientLight = float4(ambientLightColor, 1) * ambientLightStrength;
-    mainColor *= IN.color;
-    float4 finalColor = mainColor * ambientLight;
     
-    return finalColor;
+    mainColor *= IN.color;   
+
+    float3 ambientLight = ambientLightColor * ambientLightStrength;    
+    
+    float3 vectorToLight = normalize(pointLightposition - IN.worldPos);
+    
+    float3 difuseLightIntensity = max(dot(vectorToLight, IN.normal), 0);
+    
+    float3 difuseLight = difuseLightIntensity * pointLightStrenght * pointLightColor;
+        
+    float3 appliedLight = ambientLight + difuseLight;
+    
+    float3 finalColor = mainColor * appliedLight;
+    
+    return float4(finalColor, 1);
 }
