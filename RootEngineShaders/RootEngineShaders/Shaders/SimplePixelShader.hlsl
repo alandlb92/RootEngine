@@ -12,6 +12,7 @@ struct PixelShaderInput
     float2 texCoord : TEXCOORD0;
     float4 position : SV_POSITION;
     float3 normal : NORMAL;
+    int bone : BONE_ID;
     float3 worldPos : WORLD_POSITION;
 };
 

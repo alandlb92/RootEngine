@@ -4,6 +4,17 @@
 #include <iostream>
 #include "Importer/FBXImporter.h"
 
+
+// params:
+// arg[0] is the .exe 
+// arg[1] can be:
+//      "import"
+// arg[2] can be:
+//      "-ms" mesh and skeleton 
+//      "-anim" animation
+//arg[3] input file
+//arg[4] output file
+
 int main(int argc, char* argv[])
 {
     std::cout << "Start Root Engine Editor\n";
@@ -17,13 +28,17 @@ int main(int argc, char* argv[])
 
 
     const char* command = argv[1];
+    const char* commandType = argv[2];
 
-    fbxImporter.inputPath = argv[2];
-    fbxImporter.outputPath = argv[3];    
+    fbxImporter.inputPath = argv[3];
+    fbxImporter.outputPath = argv[4];    
 
     std::cout << "Start command! " << command << "\n";
 
-    fbxImporter.Run();
+
+    fbxImporter.Run(commandType);
+   
+    
     while (fbxImporter.GetState() == Faia::BitEngineEditor::Importer::FBXImporter::WAITING_START
         || fbxImporter.GetState() == Faia::BitEngineEditor::Importer::FBXImporter::RUNNING)
     {

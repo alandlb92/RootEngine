@@ -21,14 +21,39 @@ namespace Faia
                 _state = WAITING_START;
             }
 
-            void FBXImporter::Run()
+            void FBXImporter::Run(const std::string& commandType)
             {
+                bool error = false;
                 if (inputPath != "" && outputPath != "")
                 {
-                    _asyncResult = std::async(std::launch::async, &FBXImporter::ImportMeshAsync, this);
+                    ImporterType importerType = NOT_FOUND;
+                    auto it = s_typeMap.find(commandType);
+                    if (it != s_typeMap.end())
+                    {
+                        importerType = it->second;
+                    }
+
+                    switch (importerType)
+                    {
+                        case MS:                        
+                            _asyncResult = std::async(std::launch::async, &FBXImporter::ImportMeshAsync, this);
+                            break;
+                        
+                        case ANIM:
+                            _asyncResult = std::async(std::launch::async, &FBXImporter::ImportAnimationAsync, this);
+                            break;
+                        default:
+                            error = true;
+                            break;
+                    }
                     _state = RUNNING;
                 }
                 else
+                {
+                    error = true;
+                }
+
+                if (error)
                 {
                     throw std::invalid_argument("inputPath and outputPath cant be empty");
                     _state = ERROR;
@@ -63,9 +88,9 @@ namespace Faia
                     return;
                 }
 
-                for (int i = 0; i < aiScene->mNumMeshes; i++)
+                for (int meshIndex = 0; meshIndex < aiScene->mNumMeshes; meshIndex++)
                 {
-                    aiMesh* aiMesh = aiScene->mMeshes[i];
+                    aiMesh* aiMesh = aiScene->mMeshes[meshIndex];
                     RMeshNode mesh;
 
                     //Import vertices
@@ -102,23 +127,53 @@ namespace Faia
                         }
                     }
 
-                    //Import Bone
+                    //Import Bone                    
                     if (aiMesh->mNumBones > 0)
                     {
+                        mesh._boneData.resize(aiMesh->mNumVertices);
+
                         for (size_t j = 0; j < aiMesh->mNumBones; j++)
                         {
                             aiBone* aiBone = aiMesh->mBones[j];
-                            RBone rBone;
-                            rBone._boneName = aiBone->mName.C_Str();
-                            for (rsize_t k = 0; k < aiBone->mNumWeights; ++k)
-                            {
-                                RVertexWeightData rVertexData;
-                                rVertexData.vertexId = aiBone->mWeights[k].mVertexId;
-                                rVertexData.weight = aiBone->mWeights[k].mWeight;
-                                rBone._weights.push_back(rVertexData);
-                            }
 
-                            mesh._skeletonData._bones.push_back(rBone);
+
+                            for (rsize_t wightIndex = 0; wightIndex < aiBone->mNumWeights; ++wightIndex)
+                            {
+                                RVertexBoneData& boneData = mesh._boneData[aiBone->mWeights[wightIndex].mVertexId];
+                                uint32_t boneId = 0;
+                                std::string boneName(aiBone->mName.C_Str());
+
+                                if (mesh._boneNameToIdexMap.find(boneName) == mesh._boneNameToIdexMap.end())
+                                {
+                                    boneId = mesh._boneNameToIdexMap.size();
+                                    mesh._boneNameToIdexMap[boneName] = boneId;
+                                }
+                                else
+                                {
+                                    boneId = mesh._boneNameToIdexMap[boneName];
+                                }
+
+                                bool moreThan4Bones = true;
+                                
+                                //Find the lowest value index
+                                float minValue = 2.0f;
+                                int minValueIndex = 0;
+
+                                for (size_t i = 0; i < MAX_NUM_OF_BONES_PER_VERTEX; ++i)
+                                {
+                                    if (boneData.weights[i] < minValue)
+                                    {
+                                        minValue = boneData.weights[i];
+                                        minValueIndex = i;
+                                    }                 
+                                }
+
+                                if (minValue < aiBone->mWeights[wightIndex].mWeight)
+                                {
+                                    boneData.boneId[minValueIndex] = boneId;
+                                    boneData.weights[minValueIndex] = aiBone->mWeights[wightIndex].mWeight;
+                                }
+                            }
                         }
                     }
 
@@ -126,11 +181,32 @@ namespace Faia
                     rmd._meshs.push_back(mesh);
                 }
 
-
                 rmd.Write(outputPath);
 
                 _state = DONE;
-            }           
+            }
+            void FBXImporter::ImportAnimationAsync()
+            {
+                Assimp::Importer importer;
+                std::string pFile(inputPath);
+
+                //this is slow to load, we need to convert to a better file
+                const aiScene* aiScene = importer.ReadFile(pFile,
+                    aiProcess_CalcTangentSpace |
+                    aiProcess_Triangulate |
+                    aiProcess_JoinIdenticalVertices |
+                    aiProcess_SortByPType);
+
+                if (aiScene == nullptr)
+                {
+                    //error to import
+                    stringstream ss;
+                    ss << "error to import: " << inputPath << std::endl;
+                    _state = ERROR;
+                    throw std::invalid_argument(ss.str().c_str());
+                    return;
+                }
+            }
         }
     }
 }
