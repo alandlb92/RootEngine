@@ -15,7 +15,7 @@ struct PixelShaderInput
     float3 worldPos : WORLD_POSITION;
 };
 
-float4 SimplePixelShader(PixelShaderInput IN) : SV_TARGET
+float4 SimpleSkeletonPixelShader(PixelShaderInput IN) : SV_TARGET
 {
     float3 mainColor;
     if (hasTexture == 1)

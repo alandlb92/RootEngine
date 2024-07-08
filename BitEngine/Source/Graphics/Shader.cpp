@@ -5,12 +5,15 @@
 #include "Graphics/GraphicsMain.h"
 #include "Faia/Memory.h"
 #include "Faia/Converter.h"
+#include "Data/BitMeshData.h"
 
 using namespace DirectX;
 using namespace Faia::Memory;
 
 void Shader::Load(const char* shaderName)
 {
+    _shaderName = std::string(shaderName);
+
     ID3D11Device* device = GraphicsMain::GetDevice();
 
     // Load the compiled vertex shader.
@@ -36,15 +39,44 @@ void Shader::Load(const char* shaderName)
         throw std::invalid_argument(msg.c_str());
     }
 
-    // Create the input layout for the vertex shader.
-    D3D11_INPUT_ELEMENT_DESC vertexLayoutDesc[] =
+    D3D11_INPUT_ELEMENT_DESC vertexLayoutDesc;
+    //TODO: This is just temp for tests
+    if (shaderName == "SimpleSkeleton")
     {
-        { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-        { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 1, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-        { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 2, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-    };
+        std::vector<D3D11_INPUT_ELEMENT_DESC> vertexLayoutDesc;
+        vertexLayoutDesc.push_back({ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 });
+        vertexLayoutDesc.push_back({ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 1, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 });
+        vertexLayoutDesc.push_back({ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 2, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 });
+        
+        UINT offset = 0;
+        for (UINT i = 0; i < MAX_NUM_OF_BONES_PER_VERTEX; ++i)
+        {
+            vertexLayoutDesc.push_back({ "BONEDATA", i, DXGI_FORMAT_R32_SINT, 3, offset, D3D11_INPUT_PER_VERTEX_DATA, 0});
+            offset += sizeof(uint32_t);
+        }
 
-    hr = device->CreateInputLayout(vertexLayoutDesc, _countof(vertexLayoutDesc), vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), _inputLayout.GetAddressOf());
+        for (UINT i = 0; i < MAX_NUM_OF_BONES_PER_VERTEX; ++i)
+        {
+            vertexLayoutDesc.push_back({ "BONEDATA", (UINT)MAX_NUM_OF_BONES_PER_VERTEX + i, DXGI_FORMAT_R32_FLOAT, 3,  offset, D3D11_INPUT_PER_VERTEX_DATA, 0 });
+            offset += sizeof(float);
+        }
+
+        hr = device->CreateInputLayout(vertexLayoutDesc.data(), vertexLayoutDesc.size(), vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), _inputLayout.GetAddressOf());
+
+    }
+    else
+    { 
+        // Create the input layout for the vertex shader.
+        D3D11_INPUT_ELEMENT_DESC vertexLayoutDesc[] =
+        {
+            { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+            { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 1, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+            { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 2, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+        };
+        hr = device->CreateInputLayout(vertexLayoutDesc, _countof(vertexLayoutDesc), vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), _inputLayout.GetAddressOf());
+    }
+    
+
     if (FAILED(hr))
     {
         std::string msg;

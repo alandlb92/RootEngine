@@ -185,6 +185,7 @@ namespace Faia
 
                 _state = DONE;
             }
+
             void FBXImporter::ImportAnimationAsync()
             {
                 Assimp::Importer importer;

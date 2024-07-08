@@ -9,7 +9,7 @@ class MeshComponent : public BComponent
     typedef BComponent Super;
 
 public:
-    void AddMeshs(std::vector<Mesh> mesh);
+    void AddMeshs(std::vector< std::shared_ptr<Mesh>> meshs);
     std::vector<std::shared_ptr<Mesh>> GetMeshs();
 
 private:

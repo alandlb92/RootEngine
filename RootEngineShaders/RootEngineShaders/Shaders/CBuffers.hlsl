@@ -1,3 +1,4 @@
+#define MAX_NUM_OF_BONES_PER_VERTEX 4
 
 cbuffer PerApplication : register(b0)
 {

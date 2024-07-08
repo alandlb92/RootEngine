@@ -139,6 +139,7 @@ xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
     <ClInclude Include="Include\Graphics\MaterialManager.h" />
     <ClInclude Include="Include\Graphics\Mesh.h" />
     <ClInclude Include="Include\Graphics\Shader.h" />
+    <ClInclude Include="Include\Graphics\SkeletalMesh.h" />
     <ClInclude Include="Include\Graphics\Texture2D.h" />
   </ItemGroup>
   <ItemGroup>
@@ -162,6 +163,7 @@ xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
     <ClCompile Include="Source\Graphics\MaterialManager.cpp" />
     <ClCompile Include="Source\Graphics\Mesh.cpp" />
     <ClCompile Include="Source\Graphics\Shader.cpp" />
+    <ClCompile Include="Source\Graphics\SkeletalMesh.cpp" />
     <ClCompile Include="Source\Graphics\Texture2D.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

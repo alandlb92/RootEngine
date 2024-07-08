@@ -3,19 +3,19 @@
 #include <stdexcept>
 #include "Data/BitMeshData.h"
 
-std::vector<Mesh> Mesh::MakeFromFbxFile(const char* filePath)
+std::vector<std::shared_ptr<Mesh>>  Mesh::MakeFromFbxFile(const char* filePath)
 {
     RMeshData bmd;
-    std::vector<Mesh> meshs;
+    std::vector<std::shared_ptr<Mesh>> meshs;
     bmd.ReadFromPath(filePath);
     for (auto& bmesh: bmd._meshs)
     {
-        Mesh mesh;
-        mesh.SetIndices(bmesh._indices);
-        mesh.SetVertices(bmesh._vertices);
-        mesh.SetUV(bmesh._uv);
-        mesh.SetNormals(bmesh._normals);
-        mesh._materialIndex = bmesh._materialIndex;
+        std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>();
+        mesh->SetIndices(bmesh._indices);
+        mesh->SetVertices(bmesh._vertices);
+        mesh->SetUV(bmesh._uv);
+        mesh->SetNormals(bmesh._normals);
+        mesh->_materialIndex = bmesh._materialIndex;
         meshs.push_back(mesh);
     }    
 

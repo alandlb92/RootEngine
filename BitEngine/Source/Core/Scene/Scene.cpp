@@ -1,5 +1,6 @@
 #include "Core/Scene/Scene.h"
 #include "Graphics/Mesh.h"
+#include "Graphics/SkeletalMesh.h"
 #include "Graphics/Material.h"
 #include "Graphics/Camera.h"
 #include "Graphics/LightManager.h"
@@ -22,10 +23,10 @@ Scene* Scene::MakeDemoScene()
     MeshComponent* meshComponent2 = new MeshComponent();
     MeshComponent* meshComponent3 = new MeshComponent();
 
-   std::vector<Mesh> meshs = 
-        Mesh::MakeFromFbxFile("C:\\Users\\alan.bittencourt\\Documents\\Projects\\Personal\\BitEngine\\x64\\Debug\\Content\\Models\\HeroGoat.bitMesh");
+   std::vector<std::shared_ptr<Mesh>> meshs = 
+       SkeletalMesh::MakeSkeletonMeshFromFbxFile("C:\\Users\\alan.bittencourt\\Documents\\Projects\\Personal\\BitEngine\\x64\\Debug\\Content\\Models\\HeroGoat.bitMesh");
 
-    std::vector<Mesh> cubeMeshs =
+   std::vector<std::shared_ptr<Mesh>> cubeMeshs =
         Mesh::MakeFromFbxFile("C:\\Users\\alan.bittencourt\\Documents\\Projects\\Personal\\BitEngine\\x64\\Debug\\Content\\Models\\cube.bitMesh");
 
     meshComponent->AddMeshs(meshs);
@@ -33,19 +34,19 @@ Scene* Scene::MakeDemoScene()
     meshComponent3->AddMeshs(cubeMeshs);
 
     Material material0;
-    material0.SetShader("Simple");
+    material0.SetShader("SimpleSkeleton");
     material0.SetTexture("Content\\Textures\\HeroGoat\\Ch40_1001_Diffuse.png", 0);
     
     Material material1;
-    material1.SetShader("Simple");
+    material1.SetShader("SimpleSkeleton");
     material1.SetTexture("Content\\Textures\\HeroGoat\\Ch40_1002_Diffuse.png", 0);
     
     Material material2;
-    material2.SetShader("Simple");
+    material2.SetShader("SimpleSkeleton");
     material2.SetTexture("Content\\Textures\\HeroGoat\\Ch40_1002_Diffuse.png", 0);
     
     Material material3;
-    material3.SetShader("Simple");
+    material3.SetShader("SimpleSkeleton");
     material3.SetTexture("Content\\Textures\\HeroGoat\\Ch40_1003_Diffuse.png", 0);
 
     Material cubeMaterial;

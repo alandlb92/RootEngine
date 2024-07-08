@@ -6,6 +6,8 @@
 #include <DirectXColors.h>
 #include "Core/Scene/SceneManager.h";
 #include <numbers>
+#include "Graphics/SkeletalMesh.h"
+#include "Data/BitMeshData.h"
 
 using namespace DirectX;
 
@@ -308,7 +310,7 @@ void GraphicsMain::Renderer()
             const UINT uvStride = sizeof(Vector2D);
             const UINT normalStride = sizeof(Vector3D);
             UINT offset = 0;
-
+            
             ID3D11Buffer* vertexBuffer = mesh->GetVertexBuffer();
             ID3D11Buffer* uvBuffer = mesh->GetUvBuffer();
             ID3D11Buffer* normalBuffer = mesh->GetNormalBuffer();
@@ -316,7 +318,17 @@ void GraphicsMain::Renderer()
 
             _deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &vertexStride, &offset);
             _deviceContext->IASetVertexBuffers(1, 1, &uvBuffer, &uvStride, &offset);
-            _deviceContext->IASetVertexBuffers(2, 1, &normalBuffer, &normalStride, &offset);
+            _deviceContext->IASetVertexBuffers(2, 1, &normalBuffer, &normalStride, &offset);            
+
+            //TODO: Set Bones data
+            SkeletalMesh* sMesh = dynamic_cast<SkeletalMesh*>(mesh.get());
+            if (sMesh)
+            {
+                const UINT boneDataStride = sizeof(RVertexBoneData);
+                ID3D11Buffer* boneDataBuffer = sMesh->GetBonesDataBuffer();
+                _deviceContext->IASetVertexBuffers(3, 1, &boneDataBuffer, &boneDataStride, &offset);
+            }
+
             _deviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R16_UINT, 0);
 
 

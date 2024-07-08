@@ -1,12 +1,11 @@
 #include "Components/MeshComponent.h"
 #include "FaiaInputSystem.h"
 
-void MeshComponent::AddMeshs(std::vector<Mesh> meshs)
+void MeshComponent::AddMeshs(std::vector<std::shared_ptr<Mesh>> meshs)
 {
     for (const auto& mesh : meshs)
     {
-        std::shared_ptr<Mesh> meshPtr = std::make_shared<Mesh>(mesh);
-        _meshs.push_back(meshPtr);
+        _meshs.push_back(mesh);
     }
 }
 

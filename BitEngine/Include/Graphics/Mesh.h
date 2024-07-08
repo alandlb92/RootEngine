@@ -11,7 +11,9 @@ using namespace std;
 class Mesh
 {
 public:
-    static std::vector<Mesh> MakeFromFbxFile(const char* filePath);
+    static std::vector<std::shared_ptr<Mesh>>  MakeFromFbxFile(const char* filePath);
+
+    virtual ~Mesh() = default;
 
     void SetVertices(vector<Vector3D> verctices);
     void SetIndices(vector<uint16_t> indices);
@@ -29,7 +31,7 @@ public:
     size_t GetIndicesSize() { return _indices.size(); }
     uint16_t GetMaterialIndex() { return _materialIndex; }
 
-private:
+protected:
     Microsoft::WRL::ComPtr<ID3D11Buffer> _vertexBuffer = nullptr;
     Microsoft::WRL::ComPtr<ID3D11Buffer> _indexBuffer = nullptr;
     Microsoft::WRL::ComPtr<ID3D11Buffer> _uvBuffer = nullptr;

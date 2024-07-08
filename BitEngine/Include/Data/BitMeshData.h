@@ -6,7 +6,7 @@
 
 using namespace std;
 
-#define MAX_NUM_OF_BONES_PER_VERTEX (size_t) 10
+#define MAX_NUM_OF_BONES_PER_VERTEX (size_t) 4
 
 struct RVertexBoneData
 {
