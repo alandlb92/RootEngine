@@ -41,14 +41,14 @@ void Shader::Load(const char* shaderName)
 
     D3D11_INPUT_ELEMENT_DESC vertexLayoutDesc;
     //TODO: This is just temp for tests
-    if (shaderName == "SimpleSkeleton")
+    if (shaderName == "BonesWeightsVisualizer")
     {
         std::vector<D3D11_INPUT_ELEMENT_DESC> vertexLayoutDesc;
         vertexLayoutDesc.push_back({ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 });
         vertexLayoutDesc.push_back({ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 1, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 });
         vertexLayoutDesc.push_back({ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 2, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 });
         
-        UINT offset = 0;
+        UINT offset = 0; //We can use D3D11_APPEND_ALIGNED_ELEMENT instead offset. 
         for (UINT i = 0; i < MAX_NUM_OF_BONES_PER_VERTEX; ++i)
         {
             vertexLayoutDesc.push_back({ "BONEDATA", i, DXGI_FORMAT_R32_SINT, 3, offset, D3D11_INPUT_PER_VERTEX_DATA, 0});

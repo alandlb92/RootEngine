@@ -15,10 +15,10 @@
     <FxCompile Include="Shaders\SimpleVertexShader.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="Shaders\SimpleSkeletonVertexShader.hlsl">
+    <FxCompile Include="Shaders\BonesWeightsVisualizerVertexShader.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="Shaders\SimpleSkeletonPixelShader.hlsl">
+    <FxCompile Include="Shaders\BonesWeightsVisualizerPixelShader.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

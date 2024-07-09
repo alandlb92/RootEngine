@@ -47,6 +47,12 @@ public:
 	{
 		_instance->_deviceContext->UpdateSubresource(_instance->_constantBuffers[type], 0, nullptr, pSrcData, 0, 0);
 	}
+	
+	struct GlobalBuffer
+	{
+		int hasTexture;
+		int boneSelectedId;
+	};
 
 	float GetWidth() { return _clientWidth; }
 	float GetHeight() { return _clientHeight; }
@@ -56,6 +62,10 @@ public:
 	void Clear(const FLOAT clearColor[4], FLOAT clearDepth, UINT8 clearStencil);
 	void Present(bool vSync);
 	void Renderer();
+
+	//TODO: new functions in shaderManager to upload constant buffers, this is just a test
+	static int boneSelected;
+	GlobalBuffer tempGlobalBuffer = {0, 0};
 
 private:
 	static GraphicsMain* _instance;

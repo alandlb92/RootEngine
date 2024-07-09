@@ -18,6 +18,7 @@ cbuffer PerObject : register(b2)
 cbuffer Globals : register(b3)
 {
     int hasTexture;
+    int boneSelectedId;
 }
 
 cbuffer LightBuffer : register(b4)

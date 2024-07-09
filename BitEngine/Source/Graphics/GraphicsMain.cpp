@@ -25,6 +25,7 @@ inline void SafeRelease(T& ptr)
 
 
 GraphicsMain* GraphicsMain::_instance = nullptr;
+int GraphicsMain::boneSelected = 0;
 
 GraphicsMain::GraphicsMain(HWND windowHandler)
 {
@@ -345,7 +346,10 @@ void GraphicsMain::Renderer()
             }
 
             const UINT hasTexture = textureSRV == NULL ? 0 : 1;
-            UpdateConstantBuffer(ConstantBuffer::CB_Globals, &hasTexture);
+            tempGlobalBuffer.hasTexture = hasTexture;
+            tempGlobalBuffer.boneSelectedId = boneSelected;
+
+            UpdateConstantBuffer(ConstantBuffer::CB_Globals, &tempGlobalBuffer);
 
 
             _deviceContext->PSSetShaderResources(0, 1, &textureSRV);

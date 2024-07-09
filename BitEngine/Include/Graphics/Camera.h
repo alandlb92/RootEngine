@@ -19,6 +19,9 @@ public:
     void AddLocalPosition(Vector3D positionToAdd);
     void Rotate(float pitch, float yaw, float roll);
 private:
+    void ChangeBonePlusTest();
+    void ChangeBoneMinusTest();
+
     float cameraRotationVelocity = 500.0f;
     float cameraTranslationVelocity = 200.0f;
     void UpdateViewMatrix();

@@ -34,19 +34,19 @@ Scene* Scene::MakeDemoScene()
     meshComponent3->AddMeshs(cubeMeshs);
 
     Material material0;
-    material0.SetShader("SimpleSkeleton");
+    material0.SetShader("BonesWeightsVisualizer");
     material0.SetTexture("Content\\Textures\\HeroGoat\\Ch40_1001_Diffuse.png", 0);
     
     Material material1;
-    material1.SetShader("SimpleSkeleton");
+    material1.SetShader("BonesWeightsVisualizer");
     material1.SetTexture("Content\\Textures\\HeroGoat\\Ch40_1002_Diffuse.png", 0);
     
     Material material2;
-    material2.SetShader("SimpleSkeleton");
+    material2.SetShader("BonesWeightsVisualizer");
     material2.SetTexture("Content\\Textures\\HeroGoat\\Ch40_1002_Diffuse.png", 0);
     
     Material material3;
-    material3.SetShader("SimpleSkeleton");
+    material3.SetShader("BonesWeightsVisualizer");
     material3.SetTexture("Content\\Textures\\HeroGoat\\Ch40_1003_Diffuse.png", 0);
 
     Material cubeMaterial;
