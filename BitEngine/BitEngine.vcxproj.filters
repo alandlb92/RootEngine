@@ -83,7 +83,7 @@
     <ClInclude Include="Include\Graphics\Texture2D.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Data\Vector4D.h">
+    <ClInclude Include="Include\Data\Quaternion.h">
       <Filter>Header Files\Data</Filter>
     </ClInclude>
     <ClInclude Include="Include\Core\Scene\Scene.h">

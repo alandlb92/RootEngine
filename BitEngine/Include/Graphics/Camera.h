@@ -3,7 +3,7 @@
 #include "d3d11.h"
 #include "directxmath.h"
 #include "Data/Transform.h"
-#include "Data/Vector4D.h"
+#include "Data/Quaternion.h"
 
 using namespace DirectX;
 

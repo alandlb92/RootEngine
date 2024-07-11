@@ -23,14 +23,12 @@ void RMeshData::Write(const char* output)
         uint32_t numUV = mesh._uv.size();
         uint32_t numNormals = mesh._uv.size();
         uint32_t numBoneData = mesh._boneData.size();
-        uint32_t numBoneNameMap = mesh._boneNameToIdexMap.size();
 
         os.write(reinterpret_cast<char*>(&numIndices), sizeof(uint32_t));
         os.write(reinterpret_cast<char*>(&numVertices), sizeof(uint32_t));
         os.write(reinterpret_cast<char*>(&numNormals), sizeof(uint32_t));
         os.write(reinterpret_cast<char*>(&numUV), sizeof(uint32_t));
         os.write(reinterpret_cast<char*>(&numBoneData), sizeof(uint32_t));
-        os.write(reinterpret_cast<char*>(&numBoneNameMap), sizeof(uint32_t));
 
         os.write(reinterpret_cast<const char*>(mesh._indices.data()), numIndices * sizeof(uint16_t));
         os.write(reinterpret_cast<const char*>(mesh._vertices.data()), numVertices * sizeof(Vector3D));
@@ -46,20 +44,23 @@ void RMeshData::Write(const char* output)
             }
         }
 
-        if (numBoneNameMap)
-        {
-            for (std::map<std::string, uint32_t>::iterator it = mesh._boneNameToIdexMap.begin();
-                it != mesh._boneNameToIdexMap.end();
-                ++it)
-            {
-                uint32_t charSize = strlen((*it).first.c_str());
-                os.write(reinterpret_cast<char*>(&charSize), sizeof(uint32_t));
-                os.write((*it).first.c_str(), charSize);
-                os.write(reinterpret_cast<char*>(&(*it).second), sizeof(uint32_t));
-            }
-        }
-
         os.write(reinterpret_cast<const char*>(&mesh._materialIndex), sizeof(uint16_t));        
+    }
+
+    uint32_t numBoneNameMap = _boneNameToIdexMap.size();
+    os.write(reinterpret_cast<char*>(&numBoneNameMap), sizeof(uint32_t));
+
+    if (numBoneNameMap)
+    {
+        for (std::map<std::string, uint32_t>::iterator it = _boneNameToIdexMap.begin();
+            it != _boneNameToIdexMap.end();
+            ++it)
+        {
+            uint32_t charSize = strlen((*it).first.c_str());
+            os.write(reinterpret_cast<char*>(&charSize), sizeof(uint32_t));
+            os.write((*it).first.c_str(), charSize);
+            os.write(reinterpret_cast<char*>(&(*it).second), sizeof(uint32_t));
+        }
     }
 
     os.close();
@@ -81,13 +82,12 @@ void RMeshData::ReadFromPath(const char* filePath)
     for (uint32_t i = 0; i < numMeshs; ++i)
     {
         RMeshNode node;
-        uint32_t numIndices, numVertices, numUV, numNormals, numBoneData, numBoneNameMap;
+        uint32_t numIndices, numVertices, numUV, numNormals, numBoneData;
         is.read(reinterpret_cast<char*>(&numIndices), sizeof(uint32_t));
         is.read(reinterpret_cast<char*>(&numVertices), sizeof(uint32_t));
         is.read(reinterpret_cast<char*>(&numNormals), sizeof(uint32_t));
         is.read(reinterpret_cast<char*>(&numUV), sizeof(uint32_t));
         is.read(reinterpret_cast<char*>(&numBoneData), sizeof(uint32_t));
-        is.read(reinterpret_cast<char*>(&numBoneNameMap), sizeof(uint32_t));
 
         node._indices.resize(numIndices);
         node._vertices.resize(numVertices);
@@ -108,29 +108,31 @@ void RMeshData::ReadFromPath(const char* filePath)
                 is.read(reinterpret_cast<char*>(&node._boneData[i].weights), sizeof(float) * MAX_NUM_OF_BONES_PER_VERTEX);
             }
         }
-
-        if (numBoneNameMap)
-        {
-            for (uint32_t i = 0;i < numBoneNameMap; ++i)
-            {
-                uint32_t charSize;
-                is.read(reinterpret_cast<char*>(&charSize), sizeof(uint32_t));
-
-                char* boneName = new char[charSize];
-                is.read(boneName, charSize);
-                boneName[charSize] = '\0';
-
-                uint32_t boneId;
-                is.read(reinterpret_cast<char*>(&boneId), sizeof(uint32_t));
-
-                node._boneNameToIdexMap[boneName] = boneId;
-            }
-        }
-        
         
         is.read(reinterpret_cast<char*>(&node._materialIndex), sizeof(uint16_t));
         
         _meshs.push_back(node);
+    }
+
+    uint32_t numBoneNameMap;
+    is.read(reinterpret_cast<char*>(&numBoneNameMap), sizeof(uint32_t));
+
+    if (numBoneNameMap)
+    {
+        for (uint32_t i = 0; i < numBoneNameMap; ++i)
+        {
+            uint32_t charSize;
+            is.read(reinterpret_cast<char*>(&charSize), sizeof(uint32_t));
+
+            char* boneName = new char[charSize];
+            is.read(boneName, charSize);
+            boneName[charSize] = '\0';
+
+            uint32_t boneId;
+            is.read(reinterpret_cast<char*>(&boneId), sizeof(uint32_t));
+
+            _boneNameToIdexMap[boneName] = boneId;
+        }
     }
 
     is.close();

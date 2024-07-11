@@ -143,14 +143,14 @@ namespace Faia
                                 uint32_t boneId = 0;
                                 std::string boneName(aiBone->mName.C_Str());
 
-                                if (mesh._boneNameToIdexMap.find(boneName) == mesh._boneNameToIdexMap.end())
+                                if (rmd._boneNameToIdexMap.find(boneName) == rmd._boneNameToIdexMap.end())
                                 {
-                                    boneId = mesh._boneNameToIdexMap.size();
-                                    mesh._boneNameToIdexMap[boneName] = boneId;
+                                    boneId = rmd._boneNameToIdexMap.size();
+                                    rmd._boneNameToIdexMap[boneName] = boneId;
                                 }
                                 else
                                 {
-                                    boneId = mesh._boneNameToIdexMap[boneName];
+                                    boneId = rmd._boneNameToIdexMap[boneName];
                                 }
 
                                 bool moreThan4Bones = true;
@@ -177,9 +177,20 @@ namespace Faia
                         }
                     }
 
+
                     mesh._materialIndex = aiMesh->mMaterialIndex;
                     rmd._meshs.push_back(mesh);
                 }
+
+                //Import Animation
+                //TODO: This will just import the animation 0, we need to import all animation and do some editor in the future
+                if (aiScene->mNumAnimations > 0)
+                {
+                    aiAnimation* anim = aiScene->mAnimations[0];
+                    rmd.mAnimation.mName = std::string(anim->mName.C_Str());
+                }
+
+
 
                 rmd.Write(outputPath);
 

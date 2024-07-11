@@ -130,7 +130,7 @@ xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
     <ClInclude Include="Include\Data\Transform.h" />
     <ClInclude Include="Include\Data\Vector2D.h" />
     <ClInclude Include="Include\Data\Vector3D.h" />
-    <ClInclude Include="Include\Data\Vector4D.h" />
+    <ClInclude Include="Include\Data\Quaternion.h" />
     <ClInclude Include="Include\Graphics\Camera.h" />
     <ClInclude Include="Include\Graphics\DrawableObject.h" />
     <ClInclude Include="Include\Graphics\GraphicsMain.h" />
