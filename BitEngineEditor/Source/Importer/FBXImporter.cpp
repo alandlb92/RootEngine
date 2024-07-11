@@ -35,16 +35,16 @@ namespace Faia
 
                     switch (importerType)
                     {
-                        case MS:                        
-                            _asyncResult = std::async(std::launch::async, &FBXImporter::ImportMeshAsync, this);
-                            break;
-                        
-                        case ANIM:
-                            _asyncResult = std::async(std::launch::async, &FBXImporter::ImportAnimationAsync, this);
-                            break;
-                        default:
-                            error = true;
-                            break;
+                    case MS:
+                        _asyncResult = std::async(std::launch::async, &FBXImporter::ImportMeshAsync, this);
+                        break;
+
+                    case ANIM:
+                        _asyncResult = std::async(std::launch::async, &FBXImporter::ImportAnimationAsync, this);
+                        break;
+                    default:
+                        error = true;
+                        break;
                     }
                     _state = RUNNING;
                 }
@@ -55,7 +55,7 @@ namespace Faia
 
                 if (error)
                 {
-                    throw std::invalid_argument("inputPath and outputPath cant be empty");
+                    mErrorMsg = "inputPath and outputPath cant be empty";
                     _state = ERROR;
                 }
             }
@@ -63,6 +63,11 @@ namespace Faia
             FBXImporter::State FBXImporter::GetState()
             {
                 return _state;
+            }
+
+            std::string FBXImporter::GetErrorMsg()
+            {
+                return mErrorMsg;
             }
 
             void FBXImporter::ImportMeshAsync()
@@ -82,9 +87,9 @@ namespace Faia
                 {
                     //error to import
                     stringstream ss;
-                    ss << "error to import: " << inputPath << std::endl;
+                    ss << "error to import: " << inputPath;
                     _state = ERROR;
-                    throw std::invalid_argument(ss.str().c_str());
+                    mErrorMsg = ss.str();
                     return;
                 }
 
@@ -154,7 +159,7 @@ namespace Faia
                                 }
 
                                 bool moreThan4Bones = true;
-                                
+
                                 //Find the lowest value index
                                 float minValue = 2.0f;
                                 int minValueIndex = 0;
@@ -165,7 +170,7 @@ namespace Faia
                                     {
                                         minValue = boneData.weights[i];
                                         minValueIndex = i;
-                                    }                 
+                                    }
                                 }
 
                                 if (minValue < aiBone->mWeights[wightIndex].mWeight)
@@ -181,16 +186,6 @@ namespace Faia
                     mesh._materialIndex = aiMesh->mMaterialIndex;
                     rmd._meshs.push_back(mesh);
                 }
-
-                //Import Animation
-                //TODO: This will just import the animation 0, we need to import all animation and do some editor in the future
-                if (aiScene->mNumAnimations > 0)
-                {
-                    aiAnimation* anim = aiScene->mAnimations[0];
-                    rmd.mAnimation.mName = std::string(anim->mName.C_Str());
-                }
-
-
 
                 rmd.Write(outputPath);
 
@@ -213,11 +208,87 @@ namespace Faia
                 {
                     //error to import
                     stringstream ss;
-                    ss << "error to import: " << inputPath << std::endl;
+                    ss << "error to import: " << inputPath;
                     _state = ERROR;
-                    throw std::invalid_argument(ss.str().c_str());
+                    mErrorMsg = ss.str();
                     return;
                 }
+
+                if (inputRef == nullptr)
+                {
+                    stringstream ss;
+                    ss << "An argument is missing, to import animation you need to reference a mesh with bones";
+                    _state = ERROR;
+                    mErrorMsg = ss.str();
+                    return;
+                }
+
+                //Import Animation
+                //TODO: This will just import the animation 0, we need to import all animation and do some editor in the future
+                if (aiScene->mNumAnimations == 0)
+                {
+                    //error to import
+                    stringstream ss;
+                    ss << "There is no animations in this arquive: " << inputPath;
+                    _state = ERROR;
+                    mErrorMsg = ss.str();
+                    return;
+                }
+
+                RMeshData meshReference;
+                meshReference.ReadFromPath(inputRef);
+
+                aiAnimation* anim = aiScene->mAnimations[0];
+
+                RAnimationData rad;
+                rad.mName = std::string(anim->mName.C_Str());
+                rad.mDuration = static_cast<float>(anim->mDuration);
+                rad.mTicksPerSecond = static_cast<float>(anim->mTicksPerSecond);
+
+                for (int channelId = 0; channelId < anim->mNumChannels; ++channelId)
+                {
+                    RAnimationChannel ac;
+                    aiNodeAnim* nodeAnim = anim->mChannels[channelId];
+                    std::string nodeName = std::string(nodeAnim->mNodeName.C_Str());
+                    auto it = meshReference._boneNameToIdexMap.find(nodeName);
+
+                    if (it == meshReference._boneNameToIdexMap.end())
+                    {
+                        stringstream ss;
+                        ss << "The bone name " << nodeName << "was not found, this mesh reference dosent match with the animation chanells";
+                        _state = ERROR;
+                        mErrorMsg = ss.str();
+                        return;
+                    }
+                    else
+                    {
+                        ac.mBoneId = it->second;
+
+                        for (int keyIndex = 0; keyIndex < nodeAnim->mNumPositionKeys; ++keyIndex)
+                        {
+                            aiVectorKey& vectorKey = nodeAnim->mPositionKeys[keyIndex];
+                            ac.mPositions.push_back({ static_cast<float>(vectorKey.mTime), Vector3D(vectorKey.mValue.x, vectorKey.mValue.y, vectorKey.mValue.z) });
+                        }
+
+                        for (int keyIndex = 0; keyIndex < nodeAnim->mNumScalingKeys; ++keyIndex)
+                        {
+                            aiVectorKey& vectorKey = nodeAnim->mScalingKeys[keyIndex];
+                            ac.mScales.push_back({ static_cast<float>(vectorKey.mTime), Vector3D(vectorKey.mValue.x, vectorKey.mValue.y, vectorKey.mValue.z) });
+                        }
+
+                        for (int keyIndex = 0; keyIndex < nodeAnim->mNumRotationKeys; ++keyIndex)
+                        {
+                            aiQuatKey& quatKey = nodeAnim->mRotationKeys[keyIndex];
+                            ac.mRotations.push_back({ static_cast<float>(quatKey.mTime), Quaternion(quatKey.mValue.x, quatKey.mValue.y, quatKey.mValue.z, quatKey.mValue.w) });
+                        }
+                    }
+
+                    rad.mAnimChannels.push_back(ac);
+                }
+
+                rad.Write(outputPath);
+
+                _state = DONE;
             }
         }
     }

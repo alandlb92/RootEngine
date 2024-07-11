@@ -10,28 +10,14 @@ using namespace std;
 
 struct RVertexBoneData
 {
-    uint32_t boneId[MAX_NUM_OF_BONES_PER_VERTEX] = {0};
-    float weights[MAX_NUM_OF_BONES_PER_VERTEX] = {0.0f};
+    uint32_t boneId[MAX_NUM_OF_BONES_PER_VERTEX] = { 0 };
+    float weights[MAX_NUM_OF_BONES_PER_VERTEX] = { 0.0f };
 };
 
 struct RVertexWeightData
 {
     int vertexId;
     float weight;
-};
-
-struct RBone
-{
-    const char* _boneName; 
-    vector<RVertexWeightData> _weights;
-};
-
-struct RSkeletonData
-{
-    vector<RBone> _bones;
-    void Write(std::ofstream& os);
-    void Read(std::ifstream& is);
-    std::string ToString();
 };
 
 struct RMeshNode
@@ -47,18 +33,21 @@ struct RMeshNode
 struct RAnimationQuatKey
 {
     float mTime;
-    Vector3D mValue;
+    Quaternion mValue;
 };
 
 struct RAnimationVectorKey
 {
     float mTime;
-    Quaternion mValue;
+    Vector3D mValue;
 };
 
 struct RAnimationChannel
 {
-   // RAnimationVectorKey m
+    uint32_t mBoneId;
+    std::vector<RAnimationVectorKey> mPositions;
+    std::vector<RAnimationVectorKey> mScales;
+    std::vector<RAnimationQuatKey> mRotations;
 };
 
 struct RAnimationData
@@ -66,7 +55,9 @@ struct RAnimationData
     std::string mName;
     float mDuration;
     float mTicksPerSecond;
-    //std::vector
+    std::vector<RAnimationChannel> mAnimChannels;
+    void Write(const char* output);
+    void ReadFromPath(const char* filePath);
 };
 
 struct RMeshData
@@ -76,5 +67,4 @@ struct RMeshData
     void Write(const char* output);
     void ReadFromPath(const char* filePath);
     std::string ToString();
-    RAnimationData mAnimation;
 };

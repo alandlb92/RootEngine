@@ -32,6 +32,7 @@ int main(int argc, char* argv[])
 
     fbxImporter.inputPath = argv[3];
     fbxImporter.outputPath = argv[4];    
+    fbxImporter.inputRef = argv[5];
 
     std::cout << "Start command! " << command << "\n";
 
@@ -53,8 +54,12 @@ int main(int argc, char* argv[])
     }
 
     if (fbxImporter.GetState() == Faia::BitEngineEditor::Importer::FBXImporter::ERROR)
-        std::cout << "Import has encountered an \033[1;31mERROR!\033[0m when try to import: " << fbxImporter.inputPath << "\n";
+    {
+        std::cout << "Import has found an \033[1;31mERROR!" << "\n-> " << fbxImporter.GetErrorMsg() << "\033[0m\n" << "when try to import: " << fbxImporter.inputPath << "\n";
+    }
     else
+    {
         std::cout << "Import is DONE! result: " << fbxImporter.outputPath << "\n";
+    }
 
 }

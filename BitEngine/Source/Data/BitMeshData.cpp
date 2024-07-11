@@ -173,52 +173,135 @@ std::string RMeshData::ToString()
     return ss.str();
 }
 
-
-void RSkeletonData::Write(std::ofstream& os)
+void RAnimationData::Write(const char* output)
 {
-    uint32_t numBones = _bones.size();
-    os.write(reinterpret_cast<char*>(&numBones), sizeof(numBones));
-    for (auto& bone : _bones)
+    //std::string mName;
+    //float mDuration;
+    //float mTicksPerSecond;
+    //std::vector<RAnimationChanel> mAnimFrames;
+    //void Write(const char* output);
+    //void ReadFromPath(const char* filePath);
+    std::ofstream os(output, std::ios::binary);
+    if (!os) {
+        stringstream ss;
+        ss << "of stream cant open outPut path: " << output << std::endl;
+        throw std::invalid_argument(ss.str().c_str());
+    }
+
+    uint32_t nameSize = strlen(mName.c_str());
+    os.write(reinterpret_cast<char*>(&nameSize), sizeof(uint32_t));
+    os.write(mName.c_str(), nameSize);
+
+    os.write(reinterpret_cast<char*>(&mDuration), sizeof(float));
+    os.write(reinterpret_cast<char*>(&mTicksPerSecond), sizeof(float));
+
+    uint32_t numOfChannels = mAnimChannels.size();
+    os.write(reinterpret_cast<char*>(&numOfChannels), sizeof(uint32_t));
+
+    for (RAnimationChannel& channel : mAnimChannels)
     {
-        uint32_t namesize = std::strlen(bone._boneName);
+        os.write(reinterpret_cast<char*>(&channel.mBoneId), sizeof(uint32_t));
 
-        os.write(reinterpret_cast<char*>(&namesize), sizeof(uint32_t));
-        os.write(bone._boneName, namesize);
+        uint32_t mNumKeyPosition = channel.mPositions.size();
+        uint32_t mNumKeyScale = channel.mScales.size();
+        uint32_t mNumRotation = channel.mRotations.size();
 
-        uint32_t numOfWeights = bone._weights.size();
-        os.write(reinterpret_cast<char*>(&numOfWeights), sizeof(uint32_t));
+        os.write(reinterpret_cast<char*>(&mNumKeyPosition), sizeof(uint32_t));
+        os.write(reinterpret_cast<char*>(&mNumKeyScale), sizeof(uint32_t));
+        os.write(reinterpret_cast<char*>(&mNumRotation), sizeof(uint32_t));
 
-        os.write(reinterpret_cast<const char*>(bone._weights.data()), numOfWeights * sizeof(RVertexWeightData));
+        for (RAnimationVectorKey& vecKey : channel.mPositions)
+        {
+            os.write(reinterpret_cast<char*>(&vecKey.mTime), sizeof(float));
+            os.write(reinterpret_cast<char*>(&vecKey.mValue.X), sizeof(float));
+            os.write(reinterpret_cast<char*>(&vecKey.mValue.Y), sizeof(float));
+            os.write(reinterpret_cast<char*>(&vecKey.mValue.Z), sizeof(float));
+        }
+
+        for (RAnimationVectorKey& vecKey : channel.mScales)
+        {
+            os.write(reinterpret_cast<char*>(&vecKey.mTime), sizeof(float));
+            os.write(reinterpret_cast<char*>(&vecKey.mValue.X), sizeof(float));
+            os.write(reinterpret_cast<char*>(&vecKey.mValue.Y), sizeof(float));
+            os.write(reinterpret_cast<char*>(&vecKey.mValue.Z), sizeof(float));
+        }
+
+        for (RAnimationQuatKey& quatKey : channel.mRotations)
+        {
+            os.write(reinterpret_cast<char*>(&quatKey.mTime), sizeof(float));
+            os.write(reinterpret_cast<char*>(&quatKey.mValue.X), sizeof(float));
+            os.write(reinterpret_cast<char*>(&quatKey.mValue.Y), sizeof(float));
+            os.write(reinterpret_cast<char*>(&quatKey.mValue.Z), sizeof(float));
+            os.write(reinterpret_cast<char*>(&quatKey.mValue.W), sizeof(float));
+        }
     }
 }
 
-void RSkeletonData::Read(std::ifstream& is)
+void RAnimationData::ReadFromPath(const char* filePath)
 {
-    uint32_t numOfBones;
-    is.read(reinterpret_cast<char*>(&numOfBones), sizeof(numOfBones));
+    std::ifstream is(filePath, std::ios::binary);
 
-    for (uint32_t i = 0; i < numOfBones; ++i)
+    if (!is) {
+        stringstream ss;
+        ss << "if stream cant open filePath path: " << filePath << std::endl;
+        throw std::invalid_argument(ss.str().c_str());
+    }
+
+    uint32_t nameSize;
+    is.read(reinterpret_cast<char*>(& nameSize), sizeof(uint32_t));
+
+    char* name = new char[nameSize];
+    is.read(name, nameSize);
+    name[nameSize] = '\0';
+    mName = name;
+
+    is.read(reinterpret_cast<char*>(&mDuration), sizeof(float));
+    is.read(reinterpret_cast<char*>(&mTicksPerSecond), sizeof(float));
+    uint32_t numOfChannels;
+    is.read(reinterpret_cast<char*>(&numOfChannels), sizeof(uint32_t));
+
+    mAnimChannels = std::vector<RAnimationChannel>(numOfChannels);
+    for (RAnimationChannel& channel : mAnimChannels)
     {
-        RBone bone;
-
-        uint32_t namesize;
-        is.read(reinterpret_cast<char*>(&namesize), sizeof(namesize));
+        uint32_t boneId;
+        is.read(reinterpret_cast<char*>(&boneId), sizeof(uint32_t));
+        channel.mBoneId = boneId;
         
-        char* boneName = new char[namesize + 1];
-        is.read(boneName, namesize);
-        boneName[namesize] = '\0';
-        uint32_t numOfWeights;
-        is.read(reinterpret_cast<char*>(&numOfWeights), sizeof(numOfWeights));
-        bone._weights.resize(numOfWeights);
+        uint32_t mNumKeyPosition;
+        uint32_t mNumKeyScale;
+        uint32_t mNumRotation;
 
-        is.read(reinterpret_cast<char*>(bone._weights.data()), numOfWeights * sizeof(RVertexWeightData));
-        bone._boneName = boneName;
+        is.read(reinterpret_cast<char*>(&mNumKeyPosition), sizeof(uint32_t));
+        is.read(reinterpret_cast<char*>(&mNumKeyScale), sizeof(uint32_t));
+        is.read(reinterpret_cast<char*>(&mNumRotation), sizeof(uint32_t));
 
-        _bones.push_back(bone);
+        channel.mPositions = std::vector<RAnimationVectorKey>(mNumKeyPosition);
+        channel.mScales = std::vector<RAnimationVectorKey>(mNumKeyScale);
+        channel.mRotations = std::vector<RAnimationQuatKey>(mNumRotation);
+
+        for (RAnimationVectorKey& vecKey : channel.mPositions)
+        {
+            is.read(reinterpret_cast<char*>(&vecKey.mTime), sizeof(float));
+            is.read(reinterpret_cast<char*>(&vecKey.mValue.X), sizeof(float));
+            is.read(reinterpret_cast<char*>(&vecKey.mValue.Y), sizeof(float));
+            is.read(reinterpret_cast<char*>(&vecKey.mValue.Z), sizeof(float));
+        }
+        
+        for (RAnimationVectorKey& vecKey : channel.mScales)
+        {
+            is.read(reinterpret_cast<char*>(&vecKey.mTime), sizeof(float));
+            is.read(reinterpret_cast<char*>(&vecKey.mValue.X), sizeof(float));
+            is.read(reinterpret_cast<char*>(&vecKey.mValue.Y), sizeof(float));
+            is.read(reinterpret_cast<char*>(&vecKey.mValue.Z), sizeof(float));
+        }
+
+        for (RAnimationQuatKey& quatKey : channel.mRotations)
+        {
+            is.read(reinterpret_cast<char*>(&quatKey.mTime), sizeof(float));
+            is.read(reinterpret_cast<char*>(&quatKey.mValue.X), sizeof(float));
+            is.read(reinterpret_cast<char*>(&quatKey.mValue.Y), sizeof(float));
+            is.read(reinterpret_cast<char*>(&quatKey.mValue.Z), sizeof(float));
+            is.read(reinterpret_cast<char*>(&quatKey.mValue.W), sizeof(float));
+        }
     }
-}
-
-std::string RSkeletonData::ToString()
-{
-    return std::string();
 }

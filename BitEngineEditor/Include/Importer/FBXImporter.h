@@ -39,13 +39,16 @@ namespace Faia
                 FBXImporter();
                 const char* inputPath;
                 const char* outputPath;
+                const char* inputRef;
 
                 void Run(const std::string& commandType);
                 State GetState();
+                std::string GetErrorMsg();
             private:
                 std::future<void> _asyncResult;
                 void ImportMeshAsync();
                 void ImportAnimationAsync();
+                std::string mErrorMsg;
                 State _state;
             };
         }
