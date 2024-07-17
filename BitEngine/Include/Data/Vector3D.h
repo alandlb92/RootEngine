@@ -43,6 +43,16 @@ struct Vector3D  : public Vector2D
         return *this;
     }
 
+    //TODO: maibe change this to a Math lib
+    static Vector3D Lerp(Vector3D start, Vector3D end, float t)
+    {
+        return Vector3D(
+            start.X + t * (end.X - start.X),
+            start.Y + t * (end.Y - start.Y),
+            start.Z + t * (end.Z - start.Z)
+        );
+    }
+
     std::string ToString()
     {
         std::string s("X: ");

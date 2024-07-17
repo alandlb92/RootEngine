@@ -8,6 +8,7 @@
 #include "Components/MaterialComponent.h"
 #include "Components/TestComponent.h"
 #include "Components/PointLightComponent.h"
+#include "Components/AnimationComponent.h"
 
 Scene* Scene::MakeDemoScene()
 {
@@ -23,30 +24,33 @@ Scene* Scene::MakeDemoScene()
     MeshComponent* meshComponent2 = new MeshComponent();
     MeshComponent* meshComponent3 = new MeshComponent();
 
+    AnimationComponent* animationComponent = new AnimationComponent();
+    animationComponent->SetAnimation("C:\\Users\\alan.bittencourt\\Documents\\Projects\\Personal\\BitEngine\\x64\\Debug\\Content\\Animations\\TestAnimationBlender.ranim");
+
    std::vector<std::shared_ptr<Mesh>> meshs = 
-       SkeletalMesh::MakeSkeletonMeshFromFbxFile("C:\\Users\\alan.bittencourt\\Documents\\Projects\\Personal\\BitEngine\\x64\\Debug\\Content\\Models\\HeroGoat.bitMesh");
+       SkeletalMesh::MakeSkeletonMeshFromFbxFile("C:\\Users\\alan.bittencourt\\Documents\\Projects\\Personal\\BitEngine\\x64\\Debug\\Content\\Models\\TestAnimationBlender.rmesh");
 
    std::vector<std::shared_ptr<Mesh>> cubeMeshs =
-        Mesh::MakeFromFbxFile("C:\\Users\\alan.bittencourt\\Documents\\Projects\\Personal\\BitEngine\\x64\\Debug\\Content\\Models\\cube.bitMesh");
+        Mesh::MakeFromFbxFile("C:\\Users\\alan.bittencourt\\Documents\\Projects\\Personal\\BitEngine\\x64\\Debug\\Content\\Models\\cube.rmesh");
 
     meshComponent->AddMeshs(meshs);
     meshComponent2->AddMeshs(cubeMeshs);
     meshComponent3->AddMeshs(cubeMeshs);
 
     Material material0;
-    material0.SetShader("BonesWeightsVisualizer");
+    material0.SetShader("SimpleSkinned");
     material0.SetTexture("Content\\Textures\\HeroGoat\\Ch40_1001_Diffuse.png", 0);
     
     Material material1;
-    material1.SetShader("BonesWeightsVisualizer");
+    material1.SetShader("SimpleSkinned");
     material1.SetTexture("Content\\Textures\\HeroGoat\\Ch40_1002_Diffuse.png", 0);
     
     Material material2;
-    material2.SetShader("BonesWeightsVisualizer");
+    material2.SetShader("SimpleSkinned");
     material2.SetTexture("Content\\Textures\\HeroGoat\\Ch40_1002_Diffuse.png", 0);
     
     Material material3;
-    material3.SetShader("BonesWeightsVisualizer");
+    material3.SetShader("SimpleSkinned");
     material3.SetTexture("Content\\Textures\\HeroGoat\\Ch40_1003_Diffuse.png", 0);
 
     Material cubeMaterial;
@@ -66,6 +70,9 @@ Scene* Scene::MakeDemoScene()
 
     sceneObject->AddComponent(meshComponent);
     sceneObject->AddComponent(materialComponent);
+    sceneObject->AddComponent(animationComponent);
+    sceneObject->SetScale(Vector3D(20, 20, 20));
+    sceneObject->SetPosition(Vector3D(0, 50, 0));
 
     sceneObject2->AddComponent(meshComponent2);
     sceneObject2->AddComponent(materialComponent2);

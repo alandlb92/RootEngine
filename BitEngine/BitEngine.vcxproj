@@ -114,6 +114,7 @@ xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\Components\AnimationComponent.h" />
     <ClInclude Include="Include\Components\PointLightComponent.h" />
     <ClInclude Include="Include\Components\MaterialComponent.h" />
     <ClInclude Include="Include\Components\MeshComponent.h" />
@@ -127,10 +128,12 @@ xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
     <ClInclude Include="Include\Core\WindowsApplication.h" />
     <ClInclude Include="Include\Data\BitMeshData.h" />
     <ClInclude Include="Include\Data\RColor.h" />
+    <ClInclude Include="Include\Data\RMatrix4x4.h" />
     <ClInclude Include="Include\Data\Transform.h" />
     <ClInclude Include="Include\Data\Vector2D.h" />
     <ClInclude Include="Include\Data\Vector3D.h" />
     <ClInclude Include="Include\Data\Quaternion.h" />
+    <ClInclude Include="Include\Graphics\AnimationManager.h" />
     <ClInclude Include="Include\Graphics\Camera.h" />
     <ClInclude Include="Include\Graphics\DrawableObject.h" />
     <ClInclude Include="Include\Graphics\GraphicsMain.h" />
@@ -143,6 +146,7 @@ xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
     <ClInclude Include="Include\Graphics\Texture2D.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Components\AnimationComponent.cpp" />
     <ClCompile Include="Source\Components\PointLightComponent.cpp" />
     <ClCompile Include="Source\Components\MaterialComponent.cpp" />
     <ClCompile Include="Source\Components\MeshComponent.cpp" />
@@ -155,6 +159,7 @@ xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
     <ClCompile Include="Source\Core\WindowsApplication.cpp" />
     <ClCompile Include="Source\Data\BitMeshData.cpp" />
     <ClCompile Include="Source\Data\Transform.cpp" />
+    <ClCompile Include="Source\Graphics\AnimationManager.cpp" />
     <ClCompile Include="Source\Graphics\Camera.cpp" />
     <ClCompile Include="Source\Graphics\DrawableObject.cpp" />
     <ClCompile Include="Source\Graphics\GraphicsMain.cpp" />

@@ -27,12 +27,18 @@
     <ClInclude Include="Include\Faia\Debug.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Faia\HashUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Faia\Converter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Faia\Debug.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Faia\HashUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

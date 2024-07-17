@@ -1,12 +1,6 @@
 
 #include "CBuffers.hlsl"
 
-struct BoneData
-{
-    int boneId[MAX_NUM_OF_BONES_PER_VERTEX];
-    float weights[MAX_NUM_OF_BONES_PER_VERTEX];
-};
-
 struct AppData
 {
     float3 position : POSITION;

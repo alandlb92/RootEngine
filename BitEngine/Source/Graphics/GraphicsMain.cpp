@@ -8,6 +8,7 @@
 #include <numbers>
 #include "Graphics/SkeletalMesh.h"
 #include "Data/BitMeshData.h"
+#include "Components/AnimationComponent.h"
 
 using namespace DirectX;
 
@@ -22,6 +23,8 @@ inline void SafeRelease(T& ptr)
         ptr = NULL;
     }
 }
+
+GraphicsMain::PerObjectBufer GraphicsMain::tempPerObjectBuffer = {};
 
 
 GraphicsMain* GraphicsMain::_instance = nullptr;
@@ -204,16 +207,24 @@ void GraphicsMain::SetupDevice()
     {
         OutputDebugStringA("Failed to create Buffer CB_Frame\n");
     }
+
+    constantBufferDesc.ByteWidth = sizeof(XMMATRIX) + (sizeof(XMMATRIX) * MAX_NUM_OF_ANIMATION_CHANNELS);
+
     hr = _device->CreateBuffer(&constantBufferDesc, nullptr, &_constantBuffers[CB_Object]);
     if (FAILED(hr))
     {
         OutputDebugStringA("Failed to create Buffer CB_Object\n");
     }
+
+    //2 int32
+    constantBufferDesc.ByteWidth = 32 * 2;
     hr = _device->CreateBuffer(&constantBufferDesc, nullptr, &_constantBuffers[CB_Globals]);
     if (FAILED(hr))
     {
         OutputDebugStringA("Failed to create Buffer CB_Globals\n");
     }
+
+    constantBufferDesc.ByteWidth = sizeof(float) * 12;
     hr = _device->CreateBuffer(&constantBufferDesc, nullptr, &_constantBuffers[CB_Light]);
     if (FAILED(hr))
     {
@@ -278,6 +289,12 @@ void GraphicsMain::Renderer()
 
     for (auto& ro : SceneManager::GetInstance()->GetCurrentScene()->GetRenderablebleObjects())
     {
+        //Todo: avoid GetComponentOfType
+        if (auto anim = ro->GetComponentOfType<AnimationComponent>())
+        {
+             anim->GetAnimationChannelsMatrix(GraphicsMain::tempPerObjectBuffer.animTransformMatrix);
+        }
+
         for (auto& mesh : ro->GetMeshComponent()->GetMeshs())
         {
             uint32_t indexCount = 0;
@@ -303,7 +320,26 @@ void GraphicsMain::Renderer()
             DirectX::XMMATRIX scaleMatrix = DirectX::XMMatrixScalingFromVector(XMVObjSca);
 
             DirectX::XMMATRIX transformMatrix = scaleMatrix * rotationMatrix * translationMatrix;
-            UpdateConstantBuffer(ConstantBuffer::CB_Object, &transformMatrix);
+
+
+            GraphicsMain::tempPerObjectBuffer.worldMatrix.m00 = transformMatrix.r[0].m128_f32[0];
+            GraphicsMain::tempPerObjectBuffer.worldMatrix.m01 = transformMatrix.r[0].m128_f32[1];
+            GraphicsMain::tempPerObjectBuffer.worldMatrix.m02 = transformMatrix.r[0].m128_f32[2];
+            GraphicsMain::tempPerObjectBuffer.worldMatrix.m03 = transformMatrix.r[0].m128_f32[3];
+            GraphicsMain::tempPerObjectBuffer.worldMatrix.m10 = transformMatrix.r[1].m128_f32[0];
+            GraphicsMain::tempPerObjectBuffer.worldMatrix.m11 = transformMatrix.r[1].m128_f32[1];
+            GraphicsMain::tempPerObjectBuffer.worldMatrix.m12 = transformMatrix.r[1].m128_f32[2];
+            GraphicsMain::tempPerObjectBuffer.worldMatrix.m13 = transformMatrix.r[1].m128_f32[3];
+            GraphicsMain::tempPerObjectBuffer.worldMatrix.m20 = transformMatrix.r[2].m128_f32[0];
+            GraphicsMain::tempPerObjectBuffer.worldMatrix.m21 = transformMatrix.r[2].m128_f32[1];
+            GraphicsMain::tempPerObjectBuffer.worldMatrix.m22 = transformMatrix.r[2].m128_f32[2];
+            GraphicsMain::tempPerObjectBuffer.worldMatrix.m33 = transformMatrix.r[3].m128_f32[3];
+            GraphicsMain::tempPerObjectBuffer.worldMatrix.m30 = transformMatrix.r[3].m128_f32[0];
+            GraphicsMain::tempPerObjectBuffer.worldMatrix.m31 = transformMatrix.r[3].m128_f32[1];
+            GraphicsMain::tempPerObjectBuffer.worldMatrix.m32 = transformMatrix.r[3].m128_f32[2];
+            GraphicsMain::tempPerObjectBuffer.worldMatrix.m33 = transformMatrix.r[3].m128_f32[3];
+
+            UpdateConstantBuffer(ConstantBuffer::CB_Object, &GraphicsMain::tempPerObjectBuffer);
 
             _deviceContext->IASetInputLayout(material->GetShader()->GetInputLayout());
 

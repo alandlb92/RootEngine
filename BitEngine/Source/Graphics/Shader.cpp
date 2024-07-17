@@ -41,7 +41,7 @@ void Shader::Load(const char* shaderName)
 
     D3D11_INPUT_ELEMENT_DESC vertexLayoutDesc;
     //TODO: This is just temp for tests
-    if (shaderName == "BonesWeightsVisualizer")
+    if (shaderName == "BonesWeightsVisualizer" || shaderName == "SimpleSkinned")
     {
         std::vector<D3D11_INPUT_ELEMENT_DESC> vertexLayoutDesc;
         vertexLayoutDesc.push_back({ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 });

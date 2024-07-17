@@ -37,7 +37,29 @@ void Camera::Init()
     _nearPlane = 0.1f;
     _farPlane = 1000.0f;
     _projectionMatrix = XMMatrixPerspectiveFovLH(_fieldOfView, _aspectRatio, _nearPlane, _farPlane);
-    GraphicsMain::UpdateConstantBuffer(ConstantBuffer::CB_Object, &_worldMatrix);
+
+    GraphicsMain::tempPerObjectBuffer.worldMatrix.m00 = _worldMatrix.r[0].m128_f32[0];
+    GraphicsMain::tempPerObjectBuffer.worldMatrix.m01 = _worldMatrix.r[0].m128_f32[1];
+    GraphicsMain::tempPerObjectBuffer.worldMatrix.m02 = _worldMatrix.r[0].m128_f32[2];
+    GraphicsMain::tempPerObjectBuffer.worldMatrix.m03 = _worldMatrix.r[0].m128_f32[3];
+
+    GraphicsMain::tempPerObjectBuffer.worldMatrix.m10 = _worldMatrix.r[1].m128_f32[0];
+    GraphicsMain::tempPerObjectBuffer.worldMatrix.m11 = _worldMatrix.r[1].m128_f32[1];
+    GraphicsMain::tempPerObjectBuffer.worldMatrix.m12 = _worldMatrix.r[1].m128_f32[2];
+    GraphicsMain::tempPerObjectBuffer.worldMatrix.m13 = _worldMatrix.r[1].m128_f32[3];
+
+    GraphicsMain::tempPerObjectBuffer.worldMatrix.m20 = _worldMatrix.r[2].m128_f32[0];
+    GraphicsMain::tempPerObjectBuffer.worldMatrix.m21 = _worldMatrix.r[2].m128_f32[1];
+    GraphicsMain::tempPerObjectBuffer.worldMatrix.m22 = _worldMatrix.r[2].m128_f32[2];
+
+    GraphicsMain::tempPerObjectBuffer.worldMatrix.m33 = _worldMatrix.r[3].m128_f32[3];
+    GraphicsMain::tempPerObjectBuffer.worldMatrix.m30 = _worldMatrix.r[3].m128_f32[0];
+    GraphicsMain::tempPerObjectBuffer.worldMatrix.m31 = _worldMatrix.r[3].m128_f32[1];
+    GraphicsMain::tempPerObjectBuffer.worldMatrix.m32 = _worldMatrix.r[3].m128_f32[2];
+    GraphicsMain::tempPerObjectBuffer.worldMatrix.m33 = _worldMatrix.r[3].m128_f32[3];
+
+
+    GraphicsMain::UpdateConstantBuffer(ConstantBuffer::CB_Object, &GraphicsMain::tempPerObjectBuffer);
     GraphicsMain::UpdateConstantBuffer(ConstantBuffer::CB_Application, &_projectionMatrix);
 
     FaiaInputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::W, std::bind(&Camera::MoveCameraYFront, this, std::placeholders::_1));

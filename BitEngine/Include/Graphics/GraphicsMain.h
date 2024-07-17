@@ -10,6 +10,7 @@
 #include "Camera.h"
 #include <wrl/client.h>
 #include "Data/RColor.h"
+#include "Data/RMatrix4x4.h"
 
 
 // Shader resources
@@ -54,6 +55,12 @@ public:
 		int boneSelectedId;
 	};
 
+	struct PerObjectBufer
+	{
+		RMatrix4x4 worldMatrix;
+		RMatrix4x4 animTransformMatrix[MAX_NUM_OF_ANIMATION_CHANNELS];
+	};
+
 	float GetWidth() { return _clientWidth; }
 	float GetHeight() { return _clientHeight; }
 
@@ -66,6 +73,7 @@ public:
 	//TODO: new functions in shaderManager to upload constant buffers, this is just a test
 	static int boneSelected;
 	GlobalBuffer tempGlobalBuffer = {0, 0};
+	static PerObjectBufer tempPerObjectBuffer;
 
 private:
 	static GraphicsMain* _instance;

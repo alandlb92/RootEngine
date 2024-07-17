@@ -244,6 +244,8 @@ namespace Faia
                 rad.mName = std::string(anim->mName.C_Str());
                 rad.mDuration = static_cast<float>(anim->mDuration);
                 rad.mTicksPerSecond = static_cast<float>(anim->mTicksPerSecond);
+                
+                rad.mAnimChannels = std::vector<RAnimationChannel>(meshReference._boneNameToIdexMap.size());
 
                 for (int channelId = 0; channelId < anim->mNumChannels; ++channelId)
                 {
@@ -254,11 +256,12 @@ namespace Faia
 
                     if (it == meshReference._boneNameToIdexMap.end())
                     {
-                        stringstream ss;
+                      /*  stringstream ss;
                         ss << "The bone name " << nodeName << "was not found, this mesh reference dosent match with the animation chanells";
                         _state = ERROR;
-                        mErrorMsg = ss.str();
-                        return;
+                        mErrorMsg = ss.str();*/
+                        std::cout << "\033[1;33mWarning Bone: " << nodeName << " Not found in mesh reference!\033[0m" << std::endl;
+                        continue;
                     }
                     else
                     {
@@ -281,9 +284,10 @@ namespace Faia
                             aiQuatKey& quatKey = nodeAnim->mRotationKeys[keyIndex];
                             ac.mRotations.push_back({ static_cast<float>(quatKey.mTime), Quaternion(quatKey.mValue.x, quatKey.mValue.y, quatKey.mValue.z, quatKey.mValue.w) });
                         }
+
+                        rad.mAnimChannels[ac.mBoneId] = ac;
                     }
 
-                    rad.mAnimChannels.push_back(ac);
                 }
 
                 rad.Write(outputPath);

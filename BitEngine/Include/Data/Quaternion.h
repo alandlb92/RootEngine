@@ -30,6 +30,17 @@ struct Quaternion : public Vector3D
         return Quaternion(X + value.X, Y + value.Y, Z + value.Z, W + value.W);
     }
 
+    //TODO: maibe change this to a Math lib
+    static Quaternion Lerp(Quaternion start, Quaternion end, float t)
+    {
+        return Quaternion(
+            start.X + t * (end.X - start.X),
+            start.Y + t * (end.Y - start.Y),
+            start.Z + t * (end.Z - start.Z),
+            start.W + t * (end.W - start.W)
+        );
+    }
+
     Quaternion& operator += (const Quaternion value)
     {
         this->X += value.X;
