@@ -6,10 +6,20 @@
 #include <unordered_map>
 #include <string>
 
+struct aiNode;
+struct RMeshData;
+
 namespace Faia
 {
     namespace BitEngineEditor
     {
+        struct BoneNode
+        {
+            int boneId;
+            int parent;
+            std::vector<int> childs;
+        };
+
         namespace Importer
         {
             enum ImporterType
@@ -44,12 +54,14 @@ namespace Faia
                 void Run(const std::string& commandType);
                 State GetState();
                 std::string GetErrorMsg();
+
             private:
                 std::future<void> _asyncResult;
-                void ImportMeshAsync();
-                void ImportAnimationAsync();
                 std::string mErrorMsg;
                 State _state;
+
+                void ImportAnimationAsync();
+                void ImportMeshAsync();
             };
         }
     }

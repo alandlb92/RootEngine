@@ -81,15 +81,16 @@ namespace Faia
                     aiProcess_CalcTangentSpace |
                     aiProcess_Triangulate |
                     aiProcess_JoinIdenticalVertices |
-                    aiProcess_SortByPType);
+                    aiProcess_SortByPType | 
+                    aiProcess_PopulateArmatureData);
 
                 if (aiScene == nullptr)
                 {
                     //error to import
                     stringstream ss;
                     ss << "error to import: " << inputPath;
-                    _state = ERROR;
                     mErrorMsg = ss.str();
+                    _state = ERROR;
                     return;
                 }
 
@@ -137,16 +138,15 @@ namespace Faia
                     {
                         mesh._boneData.resize(aiMesh->mNumVertices);
 
-                        for (size_t j = 0; j < aiMesh->mNumBones; j++)
+                        for (int j = 0; j < aiMesh->mNumBones; j++)
                         {
                             aiBone* aiBone = aiMesh->mBones[j];
+                            std::string boneName(aiBone->mName.C_Str());
 
-
-                            for (rsize_t wightIndex = 0; wightIndex < aiBone->mNumWeights; ++wightIndex)
+                            for (int wightIndex = 0; wightIndex < aiBone->mNumWeights; ++wightIndex)
                             {
                                 RVertexBoneData& boneData = mesh._boneData[aiBone->mWeights[wightIndex].mVertexId];
                                 uint32_t boneId = 0;
-                                std::string boneName(aiBone->mName.C_Str());
 
                                 if (rmd._boneNameToIdexMap.find(boneName) == rmd._boneNameToIdexMap.end())
                                 {
@@ -180,6 +180,59 @@ namespace Faia
                                 }
                             }
                         }
+
+                        //Create bone infos
+                        bool alreadyHasRoot = false;
+                        for (auto& map : rmd._boneNameToIdexMap)
+                        {
+                            std::string boneName = map.first;
+                            uint32_t index = map.second;
+                            aiNode* boneNode = aiScene->mRootNode->FindNode(boneName.c_str());
+
+                            if (boneNode)
+                            {
+                                //-1 means there are no parent, is the root bone
+                                int32_t parentIndex = -1;
+                                if (boneNode->mParent)
+                                {
+                                    std::string assimpSeparator = "_$";
+                                    std::string parentName(boneNode->mParent->mName.C_Str());
+                                    
+                                    //find bone name, the parents have some sufix in the name so we need to found the original one
+                                    if (parentName.find(assimpSeparator) != std::string::npos)
+                                    {
+                                        parentName = parentName.substr(0, parentName.find(assimpSeparator));
+                                    }
+
+                                    if (rmd._boneNameToIdexMap.find(parentName) != rmd._boneNameToIdexMap.end())
+                                    {
+                                        parentIndex = rmd._boneNameToIdexMap[parentName];
+                                    }
+                                    else
+                                    {
+                                        if (alreadyHasRoot) //we just have one root
+                                        {
+                                            stringstream ss;
+                                            ss << "There are an error when trying to found the bone parente named " << parentName << ". The bone need to have just one root bone";
+                                            mErrorMsg = ss.str();
+                                            _state = ERROR;
+                                            return;
+                                        }
+                                        alreadyHasRoot = true;
+                                    }
+                                }
+
+                                rmd.mIndexToBoneInfo[index] = RBoneInfo{ boneName, index, parentIndex };
+                            }
+                            else
+                            {
+                                stringstream ss;
+                                ss << "Bone node of name: : " << boneName << " not found!";
+                                mErrorMsg = ss.str();
+                                _state = ERROR;
+                                return;
+                            }
+                        }
                     }
 
 
@@ -188,6 +241,8 @@ namespace Faia
                 }
 
                 rmd.Write(outputPath);
+                RMeshData rmdReadTest;
+                rmdReadTest.ReadFromPath(outputPath);
 
                 _state = DONE;
             }
@@ -289,6 +344,8 @@ namespace Faia
                     }
 
                 }
+                
+                std::vector<BoneNode> rootNode = std::vector<BoneNode>(meshReference._boneNameToIdexMap.size());
 
                 rad.Write(outputPath);
 

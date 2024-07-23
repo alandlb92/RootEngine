@@ -60,10 +60,18 @@ struct RAnimationData
     void ReadFromPath(const char* filePath);
 };
 
+struct RBoneInfo
+{
+    std::string mName;
+    uint32_t mIndex;
+    int32_t mParentIndex;
+};
+
 struct RMeshData
 {
     vector<RMeshNode> _meshs;
     map<std::string, uint32_t> _boneNameToIdexMap;
+    map<uint32_t, RBoneInfo> mIndexToBoneInfo;
     void Write(const char* output);
     void ReadFromPath(const char* filePath);
     std::string ToString();

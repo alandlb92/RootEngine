@@ -61,6 +61,22 @@ void RMeshData::Write(const char* output)
             os.write((*it).first.c_str(), charSize);
             os.write(reinterpret_cast<char*>(&(*it).second), sizeof(uint32_t));
         }
+
+
+        for (std::map<uint32_t, RBoneInfo>::iterator it = mIndexToBoneInfo.begin();
+            it != mIndexToBoneInfo.end();
+            ++it)
+        {
+            uint32_t mapId = (*it).first;
+            os.write(reinterpret_cast<char*>(&mapId), sizeof(uint32_t));
+
+            uint32_t charSize = strlen((*it).second.mName.c_str());
+            os.write(reinterpret_cast<char*>(&charSize), sizeof(uint32_t));
+            os.write((*it).second.mName.c_str(), charSize);
+
+            os.write(reinterpret_cast<char*>(&(*it).second.mIndex), sizeof(uint32_t));
+            os.write(reinterpret_cast<char*>(&(*it).second.mParentIndex), sizeof(int32_t));
+        }
     }
 
     os.close();
@@ -132,6 +148,25 @@ void RMeshData::ReadFromPath(const char* filePath)
             is.read(reinterpret_cast<char*>(&boneId), sizeof(uint32_t));
 
             _boneNameToIdexMap[boneName] = boneId;
+        }
+
+        for (uint32_t i = 0; i < numBoneNameMap; ++i)
+        {
+            uint32_t mapId, boneIndex;
+            int32_t parentIndex;
+            is.read(reinterpret_cast<char*>(&mapId), sizeof(uint32_t));
+
+            uint32_t charSize;
+            is.read(reinterpret_cast<char*>(&charSize), sizeof(uint32_t));
+            char* boneName = new char[charSize];
+            is.read(boneName, charSize);
+            boneName[charSize] = '\0';
+
+            is.read(reinterpret_cast<char*>(&boneIndex), sizeof(uint32_t));
+            is.read(reinterpret_cast<char*>(&parentIndex), sizeof(int32_t));
+            
+
+            mIndexToBoneInfo[mapId] = RBoneInfo{ std::string(boneName), boneIndex, parentIndex };
         }
     }
 

@@ -32,8 +32,14 @@ void AnimationComponent::Update(float deltaTime)
     mCurrentTime += (deltaTime * 30);    
 }
 
-float AnimationComponent::GetLoopTime(float maxTime)
+float AnimationComponent::GetAnimCurrentTime(float maxTime)
 {
+    //Todo: Loop animation
+    if (!mLoopAnim && mCurrentTime > maxTime)
+    {
+        return maxTime;
+    }
+
     int mult = mCurrentTime/maxTime;
     
     if (mult > 0)
@@ -48,20 +54,7 @@ float AnimationComponent::GetLoopTime(float maxTime)
 
 Vector3D AnimationComponent::GetVectorKeyAtCurrentTime(std::vector<RAnimationVectorKey>& vectorKeyList)
 {
-    //Todo: Loop animation
-    if (!mLoopAnim && mCurrentTime > vectorKeyList.back().mTime)
-    {
-        return vectorKeyList.back().mValue;
-    }
-    
-    float currentTime = mCurrentTime;
-    
-    if (mLoopAnim)
-    {
-        currentTime = GetLoopTime(vectorKeyList.back().mTime);
-    }
-
-
+    float currentTime = GetAnimCurrentTime(vectorKeyList.back().mTime);;
 
     int nextPosIdx = 0;
 
@@ -72,6 +65,11 @@ Vector3D AnimationComponent::GetVectorKeyAtCurrentTime(std::vector<RAnimationVec
             nextPosIdx = posIdx;
             break;
         }
+    }
+
+    if (nextPosIdx == 0)
+    {
+        return vectorKeyList.back().mValue;
     }
 
     float previousTime = vectorKeyList[nextPosIdx - 1].mTime;
@@ -91,20 +89,7 @@ Vector3D AnimationComponent::GetVectorKeyAtCurrentTime(std::vector<RAnimationVec
 
 Quaternion AnimationComponent::GetQuatKeyAtCurrentTime(std::vector<RAnimationQuatKey>& quatKeyList)
 {
-    //Todo: Loop animation
-    if (!mLoopAnim && mCurrentTime > quatKeyList.back().mTime)
-    {
-        return quatKeyList.back().mValue;
-    }
-
-    float currentTime = mCurrentTime;
-
-    if (mLoopAnim)
-    {
-        currentTime = GetLoopTime(quatKeyList.back().mTime);
-    }
-
-
+    float currentTime = GetAnimCurrentTime(quatKeyList.back().mTime);;
     int nextPosIdx = 0;
 
     for (size_t posIdx = 0; posIdx < quatKeyList.size(); ++posIdx)
@@ -114,6 +99,11 @@ Quaternion AnimationComponent::GetQuatKeyAtCurrentTime(std::vector<RAnimationQua
             nextPosIdx = posIdx;
             break;
         }
+    }
+
+    if (nextPosIdx == 0)
+    {
+        return quatKeyList.back().mValue;
     }
 
     float previousTime = quatKeyList[nextPosIdx - 1].mTime;

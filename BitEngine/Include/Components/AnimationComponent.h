@@ -20,7 +20,7 @@ private:
     float mCurrentTime = 0;
     bool mLoopAnim = true;
 
-    float GetLoopTime(float maxTime);
+    float GetAnimCurrentTime(float maxTime);
     std::weak_ptr<RAnimationData> pAnimationData;    
     Vector3D GetVectorKeyAtCurrentTime(std::vector<RAnimationVectorKey>& vectorKeyList);
     Quaternion GetQuatKeyAtCurrentTime(std::vector<RAnimationQuatKey>& quatKeyList);

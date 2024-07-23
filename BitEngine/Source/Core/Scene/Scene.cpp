@@ -25,10 +25,10 @@ Scene* Scene::MakeDemoScene()
     MeshComponent* meshComponent3 = new MeshComponent();
 
     AnimationComponent* animationComponent = new AnimationComponent();
-    animationComponent->SetAnimation("C:\\Users\\alan.bittencourt\\Documents\\Projects\\Personal\\BitEngine\\x64\\Debug\\Content\\Animations\\TestAnimationBlender.ranim");
+    animationComponent->SetAnimation("C:\\Users\\alan.bittencourt\\Documents\\Projects\\Personal\\BitEngine\\x64\\Debug\\Content\\Animations\\testAnimation.ranim");
 
    std::vector<std::shared_ptr<Mesh>> meshs = 
-       SkeletalMesh::MakeSkeletonMeshFromFbxFile("C:\\Users\\alan.bittencourt\\Documents\\Projects\\Personal\\BitEngine\\x64\\Debug\\Content\\Models\\TestAnimationBlender.rmesh");
+       SkeletalMesh::MakeSkeletonMeshFromFbxFile("C:\\Users\\alan.bittencourt\\Documents\\Projects\\Personal\\BitEngine\\x64\\Debug\\Content\\Models\\HeroGoat.rmesh");
 
    std::vector<std::shared_ptr<Mesh>> cubeMeshs =
         Mesh::MakeFromFbxFile("C:\\Users\\alan.bittencourt\\Documents\\Projects\\Personal\\BitEngine\\x64\\Debug\\Content\\Models\\cube.rmesh");
