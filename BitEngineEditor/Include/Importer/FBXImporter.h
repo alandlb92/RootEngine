@@ -5,9 +5,12 @@
 #include <chrono>
 #include <unordered_map>
 #include <string>
+#include "assimp/matrix4x4.h"
 
 struct aiNode;
 struct RMeshData;
+struct RAnimationData;
+struct RMatrix4x4;
 
 namespace Faia
 {
@@ -62,6 +65,7 @@ namespace Faia
 
                 void ImportAnimationAsync();
                 void ImportMeshAsync();
+                RMatrix4x4 AiMatrixToRMatrix(aiMatrix4x4 assimpMatrix);
             };
         }
     }

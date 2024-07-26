@@ -94,6 +94,8 @@ namespace Faia
                     return;
                 }
 
+                std::map<uint32_t, aiBone*> boneIndexToAiBone;
+
                 for (int meshIndex = 0; meshIndex < aiScene->mNumMeshes; meshIndex++)
                 {
                     aiMesh* aiMesh = aiScene->mMeshes[meshIndex];
@@ -152,6 +154,7 @@ namespace Faia
                                 {
                                     boneId = rmd._boneNameToIdexMap.size();
                                     rmd._boneNameToIdexMap[boneName] = boneId;
+                                    boneIndexToAiBone[boneId] = aiBone;
                                 }
                                 else
                                 {
@@ -179,60 +182,7 @@ namespace Faia
                                     boneData.weights[minValueIndex] = aiBone->mWeights[wightIndex].mWeight;
                                 }
                             }
-                        }
-
-                        //Create bone infos
-                        bool alreadyHasRoot = false;
-                        for (auto& map : rmd._boneNameToIdexMap)
-                        {
-                            std::string boneName = map.first;
-                            uint32_t index = map.second;
-                            aiNode* boneNode = aiScene->mRootNode->FindNode(boneName.c_str());
-
-                            if (boneNode)
-                            {
-                                //-1 means there are no parent, is the root bone
-                                int32_t parentIndex = -1;
-                                if (boneNode->mParent)
-                                {
-                                    std::string assimpSeparator = "_$";
-                                    std::string parentName(boneNode->mParent->mName.C_Str());
-                                    
-                                    //find bone name, the parents have some sufix in the name so we need to found the original one
-                                    if (parentName.find(assimpSeparator) != std::string::npos)
-                                    {
-                                        parentName = parentName.substr(0, parentName.find(assimpSeparator));
-                                    }
-
-                                    if (rmd._boneNameToIdexMap.find(parentName) != rmd._boneNameToIdexMap.end())
-                                    {
-                                        parentIndex = rmd._boneNameToIdexMap[parentName];
-                                    }
-                                    else
-                                    {
-                                        if (alreadyHasRoot) //we just have one root
-                                        {
-                                            stringstream ss;
-                                            ss << "There are an error when trying to found the bone parente named " << parentName << ". The bone need to have just one root bone";
-                                            mErrorMsg = ss.str();
-                                            _state = ERROR;
-                                            return;
-                                        }
-                                        alreadyHasRoot = true;
-                                    }
-                                }
-
-                                rmd.mIndexToBoneInfo[index] = RBoneInfo{ boneName, index, parentIndex };
-                            }
-                            else
-                            {
-                                stringstream ss;
-                                ss << "Bone node of name: : " << boneName << " not found!";
-                                mErrorMsg = ss.str();
-                                _state = ERROR;
-                                return;
-                            }
-                        }
+                        }                        
                     }
 
 
@@ -240,11 +190,77 @@ namespace Faia
                     rmd._meshs.push_back(mesh);
                 }
 
+                //Create bone infos
+                bool alreadyHasRoot = false;
+                for (auto& map : rmd._boneNameToIdexMap)
+                {
+                    std::string boneName = map.first;
+                    uint32_t index = map.second;
+                    aiNode* boneNode = aiScene->mRootNode->FindNode(boneName.c_str());
+
+                    if (boneNode)
+                    {
+                        //-1 means there are no parent, is the root bone
+                        int32_t parentIndex = -1;
+                        if (boneNode->mParent)
+                        {
+                            std::string assimpSeparator = "_$";
+                            std::string parentName(boneNode->mParent->mName.C_Str());
+
+                            //find bone name, the parents have some sufix in the name so we need to found the original one
+                            if (parentName.find(assimpSeparator) != std::string::npos)
+                            {
+                                parentName = parentName.substr(0, parentName.find(assimpSeparator));
+                            }
+
+                            if (rmd._boneNameToIdexMap.find(parentName) != rmd._boneNameToIdexMap.end())
+                            {
+                                parentIndex = rmd._boneNameToIdexMap[parentName];
+                            }
+                            else
+                            {
+                                if (alreadyHasRoot) //we just have one root
+                                {
+                                    stringstream ss;
+                                    ss << "There are an error when trying to found the bone parente named " << parentName << ". The bone need to have just one root bone";
+                                    mErrorMsg = ss.str();
+                                    _state = ERROR;
+                                    return;
+                                }
+                                alreadyHasRoot = true;
+                            }
+                        }
+                        aiMatrix4x4 aiOffsetMatrix = boneIndexToAiBone[index]->mOffsetMatrix;
+                        RMatrix4x4 offsetMatrix = AiMatrixToRMatrix(aiOffsetMatrix);
+                        rmd.mIndexToBoneInfo[index] = RBoneInfo{ boneName, index, parentIndex, offsetMatrix };
+                    }
+                    else
+                    {
+                        stringstream ss;
+                        ss << "Bone node of name: : " << boneName << " not found!";
+                        mErrorMsg = ss.str();
+                        _state = ERROR;
+                        return;
+                    }
+                }
+
                 rmd.Write(outputPath);
                 RMeshData rmdReadTest;
                 rmdReadTest.ReadFromPath(outputPath);
 
                 _state = DONE;
+            }
+
+            RMatrix4x4 FBXImporter::AiMatrixToRMatrix(aiMatrix4x4 assimpMatrix)
+            {
+                RMatrix4x4 result;
+
+                result.m00 = assimpMatrix.a1; result.m01 = assimpMatrix.a2; result.m02 = assimpMatrix.a3; result.m03 = assimpMatrix.a4;
+                result.m10 = assimpMatrix.b1; result.m11 = assimpMatrix.b2; result.m12 = assimpMatrix.b3; result.m13 = assimpMatrix.b4;
+                result.m20 = assimpMatrix.c1; result.m21 = assimpMatrix.c2; result.m22 = assimpMatrix.c3; result.m23 = assimpMatrix.c4;
+                result.m30 = assimpMatrix.d1; result.m31 = assimpMatrix.d2; result.m32 = assimpMatrix.d3; result.m33 = assimpMatrix.d4;
+
+                return result;
             }
 
             void FBXImporter::ImportAnimationAsync()
@@ -311,10 +327,6 @@ namespace Faia
 
                     if (it == meshReference._boneNameToIdexMap.end())
                     {
-                      /*  stringstream ss;
-                        ss << "The bone name " << nodeName << "was not found, this mesh reference dosent match with the animation chanells";
-                        _state = ERROR;
-                        mErrorMsg = ss.str();*/
                         std::cout << "\033[1;33mWarning Bone: " << nodeName << " Not found in mesh reference!\033[0m" << std::endl;
                         continue;
                     }
@@ -351,6 +363,9 @@ namespace Faia
 
                 _state = DONE;
             }
+
+
+           
         }
     }
 }

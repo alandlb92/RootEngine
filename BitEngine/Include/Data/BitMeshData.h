@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include <string>
-#include "Quaternion.h"
+#include "RMatrix4x4.h"
 #include <map>
 
 using namespace std;
@@ -65,6 +65,7 @@ struct RBoneInfo
     std::string mName;
     uint32_t mIndex;
     int32_t mParentIndex;
+    RMatrix4x4 mOffsetMatrix;
 };
 
 struct RMeshData

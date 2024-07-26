@@ -83,6 +83,9 @@ Vector3D AnimationComponent::GetVectorKeyAtCurrentTime(std::vector<RAnimationVec
     ss << "animCurTime: " << currentTime << " nextTime: " << nextTime << " previousTime: " << previousTime << " lerp: " << lerpValue;
     Faia::Debug::Log(ss.str().c_str());
 
+    Vector3D previousPos = vectorKeyList[nextPosIdx - 1].mValue;
+    Vector3D nextPos = vectorKeyList[nextPosIdx].mValue;
+
     return Vector3D::Lerp(vectorKeyList[nextPosIdx - 1].mValue,
         vectorKeyList[nextPosIdx].mValue, lerpValue);
 }

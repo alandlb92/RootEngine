@@ -13,6 +13,7 @@ class AnimationComponent : public BComponent
 public:
     void SetAnimation(const char* path);
     void GetAnimationChannelsMatrix(RMatrix4x4 (&animationMatrix)[MAX_NUM_OF_ANIMATION_CHANNELS]);
+
 protected:
     void Update(float deltaTime) override;
 
