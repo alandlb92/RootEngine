@@ -24,14 +24,15 @@ Scene* Scene::MakeDemoScene()
     MeshComponent* meshComponent2 = new MeshComponent();
     MeshComponent* meshComponent3 = new MeshComponent();
 
-    AnimationComponent* animationComponent = new AnimationComponent();
-    animationComponent->SetAnimation("C:\\Users\\alan.bittencourt\\Documents\\Projects\\Personal\\BitEngine\\x64\\Debug\\Content\\Animations\\testAnimation.ranim");
-
    std::vector<std::shared_ptr<Mesh>> meshs = 
        SkeletalMesh::MakeSkeletonMeshFromFbxFile("C:\\Users\\alan.bittencourt\\Documents\\Projects\\Personal\\BitEngine\\x64\\Debug\\Content\\Models\\HeroGoat.rmesh");
 
    std::vector<std::shared_ptr<Mesh>> cubeMeshs =
         Mesh::MakeFromFbxFile("C:\\Users\\alan.bittencourt\\Documents\\Projects\\Personal\\BitEngine\\x64\\Debug\\Content\\Models\\cube.rmesh");
+
+    AnimationComponent* animationComponent = new AnimationComponent();
+    animationComponent->SetAnimation("C:\\Users\\alan.bittencourt\\Documents\\Projects\\Personal\\BitEngine\\x64\\Debug\\Content\\Animations\\testAnimation.ranim");
+    animationComponent->SetBoneInfo("C:\\Users\\alan.bittencourt\\Documents\\Projects\\Personal\\BitEngine\\x64\\Debug\\Content\\Models\\HeroGoat.rmesh");
 
     meshComponent->AddMeshs(meshs);
     meshComponent2->AddMeshs(cubeMeshs);
@@ -71,8 +72,7 @@ Scene* Scene::MakeDemoScene()
     sceneObject->AddComponent(meshComponent);
     sceneObject->AddComponent(materialComponent);
     sceneObject->AddComponent(animationComponent);
-    sceneObject->SetScale(Vector3D(20, 20, 20));
-    sceneObject->SetPosition(Vector3D(0, 50, 0));
+    sceneObject->SetPosition(Vector3D(0, 0, 0));
 
     sceneObject2->AddComponent(meshComponent2);
     sceneObject2->AddComponent(materialComponent2);
@@ -87,7 +87,6 @@ Scene* Scene::MakeDemoScene()
     sceneObject3->AddComponent(materialComponent2);
     pointLight->SetColor(1, .5f, .2f);
     pointLight->SetStrength(1);
-
     
     scene->AddObject(sceneObject);
     scene->AddObject(sceneObject2);

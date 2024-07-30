@@ -18,7 +18,7 @@ public:
         return sInstance.get();
     };
 
-	std::weak_ptr<RAnimationData> LoadAnimationFromPath(const char* path);
+    RAnimationData* LoadAnimationFromPath(const char* path);
 
 private:
 	static std::unique_ptr<AnimationManager> sInstance;

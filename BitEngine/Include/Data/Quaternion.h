@@ -33,12 +33,23 @@ struct Quaternion : public Vector3D
     //TODO: maibe change this to a Math lib
     static Quaternion Lerp(Quaternion start, Quaternion end, float t)
     {
-        return Quaternion(
+        Quaternion result(
             start.X + t * (end.X - start.X),
             start.Y + t * (end.Y - start.Y),
             start.Z + t * (end.Z - start.Z),
             start.W + t * (end.W - start.W)
         );
+
+        // Normaliza o quaternion resultante para garantir que ele seja unitário
+        float magnitude = sqrt(result.X * result.X + result.Y * result.Y + result.Z * result.Z + result.W * result.W);
+        if (magnitude > 0.0f) {
+            result.X /= magnitude;
+            result.Y /= magnitude;
+            result.Z /= magnitude;
+            result.W /= magnitude;
+        }
+
+        return result;
     }
 
     Quaternion& operator += (const Quaternion value)

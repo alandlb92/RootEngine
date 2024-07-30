@@ -14,6 +14,7 @@ void RMeshData::Write(const char* output)
         throw std::invalid_argument(ss.str().c_str());
     }
 
+    os.write(reinterpret_cast<char*>(&mGlovalInverseTransform), sizeof(RMatrix4x4));
     uint32_t numMeshs = _meshs.size();
     os.write(reinterpret_cast<char*>(&numMeshs), sizeof(numMeshs));
     for (RMeshNode& mesh : _meshs)
@@ -72,10 +73,18 @@ void RMeshData::Write(const char* output)
 
             uint32_t charSize = strlen((*it).second.mName.c_str());
             os.write(reinterpret_cast<char*>(&charSize), sizeof(uint32_t));
-            os.write((*it).second.mName.c_str(), charSize);
+            os.write((*it).second.mName.c_str(), charSize);            
             os.write(reinterpret_cast<char*>(&(*it).second.mIndex), sizeof(uint32_t));
-            os.write(reinterpret_cast<char*>(&(*it).second.mParentIndex), sizeof(int32_t));
-            os.write(reinterpret_cast<char*>(&(*it).second.mOffsetMatrix), sizeof(RMatrix4x4));
+            
+            uint32_t numOfChilds = (*it).second.mChildsId.size();
+            os.write(reinterpret_cast<char*>(&numOfChilds), sizeof(uint32_t));
+            for (int childIndex = 0; childIndex < numOfChilds; ++childIndex)
+            {
+                os.write(reinterpret_cast<char*>(&(*it).second.mChildsId[childIndex]), sizeof(uint32_t));
+            }
+            
+            os.write(reinterpret_cast<char*>(&(*it).second.mBoneOffsetMatrix), sizeof(RMatrix4x4));
+            os.write(reinterpret_cast<char*>(&(*it).second.mNodeTransformationMatrix), sizeof(RMatrix4x4));
         }
     }
 
@@ -92,6 +101,7 @@ void RMeshData::ReadFromPath(const char* filePath)
         throw std::invalid_argument(ss.str().c_str());
     }
 
+    is.read(reinterpret_cast<char*>(&mGlovalInverseTransform), sizeof(RMatrix4x4));
     uint32_t numMeshs;
     is.read(reinterpret_cast<char*>(&numMeshs), sizeof(numMeshs));
 
@@ -159,14 +169,26 @@ void RMeshData::ReadFromPath(const char* filePath)
             is.read(reinterpret_cast<char*>(&charSize), sizeof(uint32_t));
             char* boneName = new char[charSize];
             RMatrix4x4 offsetMatrix;
+            RMatrix4x4 transformationMatrix;
 
             is.read(boneName, charSize);
             boneName[charSize] = '\0';
             is.read(reinterpret_cast<char*>(&boneIndex), sizeof(uint32_t));
-            is.read(reinterpret_cast<char*>(&parentIndex), sizeof(int32_t));            
-            is.read(reinterpret_cast<char*>(&offsetMatrix), sizeof(RMatrix4x4));
+            
+            uint32_t numOfChilds;
+            is.read(reinterpret_cast<char*>(&numOfChilds), sizeof(uint32_t));
 
-            mIndexToBoneInfo[mapId] = RBoneInfo{ std::string(boneName), boneIndex, parentIndex, offsetMatrix };
+
+            std::vector<uint32_t> childs(numOfChilds);
+            for (int childIndex = 0; childIndex < numOfChilds; ++childIndex)
+            {
+                is.read(reinterpret_cast<char*>(&childs[childIndex]), sizeof(uint32_t));
+            }               
+                
+            is.read(reinterpret_cast<char*>(&offsetMatrix), sizeof(RMatrix4x4));
+            is.read(reinterpret_cast<char*>(&transformationMatrix), sizeof(RMatrix4x4));
+
+            mIndexToBoneInfo[mapId] = RBoneInfo{ std::string(boneName), boneIndex, childs, offsetMatrix, transformationMatrix };
         }
     }
 

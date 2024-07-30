@@ -35,7 +35,7 @@ void Camera::Init()
     float h = GraphicsMain::GetInstace()->GetHeight();
     _aspectRatio = w / h;
     _nearPlane = 0.1f;
-    _farPlane = 1000.0f;
+    _farPlane = 100000.0f;
     _projectionMatrix = XMMatrixPerspectiveFovLH(_fieldOfView, _aspectRatio, _nearPlane, _farPlane);
 
     GraphicsMain::tempPerObjectBuffer.worldMatrix.m00 = _worldMatrix.r[0].m128_f32[0];

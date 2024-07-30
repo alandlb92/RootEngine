@@ -6,6 +6,8 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include <assimp/config.h>
+#include <assimp/cimport.h>
 
 namespace Faia
 {
@@ -76,13 +78,23 @@ namespace Faia
                 Assimp::Importer importer;
                 std::string pFile(inputPath);
 
+                unsigned flags = aiProcess_CalcTangentSpace |
+                                 aiProcess_Triangulate |
+                                 aiProcess_JoinIdenticalVertices |
+                                 aiProcess_SortByPType |
+                                 aiProcess_PopulateArmatureData;
+
+                aiPropertyStore* aiprops = aiCreatePropertyStore();
+                aiSetImportPropertyInteger(aiprops, AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, 0);
+                const aiScene* aiScene = aiImportFileExWithProperties(inputPath, flags, nullptr, aiprops);
+
                 //this is slow to load, we need to convert to a better file
-                const aiScene* aiScene = importer.ReadFile(pFile,
+               /* const aiScene* aiScene = importer.ReadFile(pFile,
                     aiProcess_CalcTangentSpace |
                     aiProcess_Triangulate |
                     aiProcess_JoinIdenticalVertices |
-                    aiProcess_SortByPType | 
-                    aiProcess_PopulateArmatureData);
+                    aiProcess_SortByPType |
+                    aiProcess_PopulateArmatureData);*/
 
                 if (aiScene == nullptr)
                 {
@@ -93,6 +105,8 @@ namespace Faia
                     _state = ERROR;
                     return;
                 }
+
+                rmd.mGlovalInverseTransform = AiMatrixToRMatrix(aiScene->mRootNode->mTransformation.Inverse());
 
                 std::map<uint32_t, aiBone*> boneIndexToAiBone;
 
@@ -182,7 +196,7 @@ namespace Faia
                                     boneData.weights[minValueIndex] = aiBone->mWeights[wightIndex].mWeight;
                                 }
                             }
-                        }                        
+                        }
                     }
 
 
@@ -196,43 +210,23 @@ namespace Faia
                 {
                     std::string boneName = map.first;
                     uint32_t index = map.second;
-                    aiNode* boneNode = aiScene->mRootNode->FindNode(boneName.c_str());
+                    aiNode* boneNode = boneIndexToAiBone[index]->mNode;
 
                     if (boneNode)
                     {
-                        //-1 means there are no parent, is the root bone
-                        int32_t parentIndex = -1;
-                        if (boneNode->mParent)
+                        std::vector<uint32_t> childs;
+                        std::string assimpSeparator = "_$";
+
+                        for (unsigned i = 0; i < boneNode->mNumChildren; ++i)
                         {
-                            std::string assimpSeparator = "_$";
-                            std::string parentName(boneNode->mParent->mName.C_Str());
-
-                            //find bone name, the parents have some sufix in the name so we need to found the original one
-                            if (parentName.find(assimpSeparator) != std::string::npos)
-                            {
-                                parentName = parentName.substr(0, parentName.find(assimpSeparator));
-                            }
-
-                            if (rmd._boneNameToIdexMap.find(parentName) != rmd._boneNameToIdexMap.end())
-                            {
-                                parentIndex = rmd._boneNameToIdexMap[parentName];
-                            }
-                            else
-                            {
-                                if (alreadyHasRoot) //we just have one root
-                                {
-                                    stringstream ss;
-                                    ss << "There are an error when trying to found the bone parente named " << parentName << ". The bone need to have just one root bone";
-                                    mErrorMsg = ss.str();
-                                    _state = ERROR;
-                                    return;
-                                }
-                                alreadyHasRoot = true;
-                            }
+                            std::string childName(boneNode->mChildren[i]->mName.C_Str());
+                            if(rmd._boneNameToIdexMap.find(childName) != rmd._boneNameToIdexMap.end())
+                                childs.push_back(rmd._boneNameToIdexMap[childName]);
                         }
-                        aiMatrix4x4 aiOffsetMatrix = boneIndexToAiBone[index]->mOffsetMatrix;
-                        RMatrix4x4 offsetMatrix = AiMatrixToRMatrix(aiOffsetMatrix);
-                        rmd.mIndexToBoneInfo[index] = RBoneInfo{ boneName, index, parentIndex, offsetMatrix };
+
+                        RMatrix4x4 offsetMatrix = AiMatrixToRMatrix(boneIndexToAiBone[index]->mOffsetMatrix);
+                        RMatrix4x4 transformMatrix = AiMatrixToRMatrix(boneNode->mTransformation);
+                        rmd.mIndexToBoneInfo[index] = RBoneInfo{ boneName, index, childs, offsetMatrix, transformMatrix };
                     }
                     else
                     {
@@ -268,12 +262,20 @@ namespace Faia
                 Assimp::Importer importer;
                 std::string pFile(inputPath);
 
-                //this is slow to load, we need to convert to a better file
-                const aiScene* aiScene = importer.ReadFile(pFile,
+                /*const aiScene* aiScene = importer.ReadFile(pFile,
                     aiProcess_CalcTangentSpace |
                     aiProcess_Triangulate |
                     aiProcess_JoinIdenticalVertices |
-                    aiProcess_SortByPType);
+                    aiProcess_SortByPType);*/
+                unsigned flags = aiProcess_CalcTangentSpace |
+                    aiProcess_Triangulate |
+                    aiProcess_JoinIdenticalVertices |
+                    aiProcess_SortByPType |
+                    aiProcess_PopulateArmatureData;
+
+                aiPropertyStore* aiprops = aiCreatePropertyStore();
+                aiSetImportPropertyInteger(aiprops, AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, 0);
+                const aiScene* aiScene = aiImportFileExWithProperties(inputPath, flags, nullptr, aiprops);
 
                 if (aiScene == nullptr)
                 {
@@ -315,8 +317,8 @@ namespace Faia
                 rad.mName = std::string(anim->mName.C_Str());
                 rad.mDuration = static_cast<float>(anim->mDuration);
                 rad.mTicksPerSecond = static_cast<float>(anim->mTicksPerSecond);
-                
-                rad.mAnimChannels = std::vector<RAnimationChannel>(meshReference._boneNameToIdexMap.size());
+
+                rad.mAnimChannels = std::vector<RAnimationChannel>(anim->mNumChannels);
 
                 for (int channelId = 0; channelId < anim->mNumChannels; ++channelId)
                 {
@@ -356,7 +358,7 @@ namespace Faia
                     }
 
                 }
-                
+
                 std::vector<BoneNode> rootNode = std::vector<BoneNode>(meshReference._boneNameToIdexMap.size());
 
                 rad.Write(outputPath);
@@ -365,7 +367,7 @@ namespace Faia
             }
 
 
-           
+
         }
     }
 }

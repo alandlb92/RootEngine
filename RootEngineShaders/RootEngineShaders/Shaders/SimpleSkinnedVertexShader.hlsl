@@ -41,9 +41,9 @@ VertexShaderOutput SimpleSkinnedVertexShader(AppData IN)
     //    }
     //}
     
-    mvp = mul(mvp, boneTransform);
+    //mvp = mul(mvp, boneTransform);
     
-    OUT.position = mul(mvp, float4(IN.position, 1.0f));
+    OUT.position = mul(mvp, mul(boneTransform, float4(IN.position, 1.0f)));
     OUT.color = float4(1.0f, 1.0f, 1.0f, 1.0f);
     OUT.texCoord = IN.texCoord;
     float3 normalTransformed = mul(worldMatrix, float4(IN.normal, 0.0));

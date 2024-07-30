@@ -64,13 +64,19 @@ struct RBoneInfo
 {
     std::string mName;
     uint32_t mIndex;
-    int32_t mParentIndex;
-    RMatrix4x4 mOffsetMatrix;
+    std::vector<uint32_t> mChildsId;
+    /// <summary>
+    /// It is sometimes called an inverse-bind matrix, or inverse bind pose matrix.
+    /// </summary>
+    RMatrix4x4 mBoneOffsetMatrix;
+    RMatrix4x4 mNodeTransformationMatrix;
 };
 
+//todo: bonesInfo need to go to a new data specific for bones so we don't need to import for when bones is the same
 struct RMeshData
 {
     vector<RMeshNode> _meshs;
+    RMatrix4x4 mGlovalInverseTransform;
     map<std::string, uint32_t> _boneNameToIdexMap;
     map<uint32_t, RBoneInfo> mIndexToBoneInfo;
     void Write(const char* output);

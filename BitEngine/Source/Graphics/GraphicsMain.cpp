@@ -289,7 +289,7 @@ void GraphicsMain::Renderer()
 
     for (auto& ro : SceneManager::GetInstance()->GetCurrentScene()->GetRenderablebleObjects())
     {
-        //Todo: avoid GetComponentOfType
+        //Todo: avoid GetComponentOfType        
         if (auto anim = ro->GetComponentOfType<AnimationComponent>())
         {
              anim->GetAnimationChannelsMatrix(GraphicsMain::tempPerObjectBuffer.animTransformMatrix);

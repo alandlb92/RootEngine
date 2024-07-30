@@ -5,6 +5,7 @@
 
 std::vector<std::shared_ptr<Mesh>>  SkeletalMesh::MakeSkeletonMeshFromFbxFile(const char* filePath)
 {
+    //todo: bmd need to be a pointer in a manager to apply flyweight
     RMeshData bmd;
     std::vector<std::shared_ptr<Mesh>>  meshs;
     bmd.ReadFromPath(filePath);

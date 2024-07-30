@@ -1,5 +1,7 @@
 #pragma once
 #include "Data/Quaternion.h"
+#include <sstream>
+#include "Faia/Debug.h"
 
 //Todo: found another place to this define
 #define MAX_NUM_OF_ANIMATION_CHANNELS 100
@@ -12,7 +14,10 @@ struct RMatrix4x4
 
     RMatrix4x4()
     {
-        *this = RMatrix4x4::Identity();
+        m00 = 0.0f; m01 = 0.0f; m02 = 0.0f; m03 = 0.0f;
+        m10 = 0.0f; m11 = 0.0f; m12 = 0.0f; m13 = 0.0f;
+        m20 = 0.0f; m21 = 0.0f; m22 = 0.0f; m23 = 0.0f;
+        m30 = 0.0f; m31 = 0.0f; m32 = 0.0f; m33 = 0.0f;
     };
 
     RMatrix4x4(float _m00, float _m01, float _m02, float _m03,
@@ -27,20 +32,44 @@ struct RMatrix4x4
 
     };
 
+    RMatrix4x4 Transpose()
+    {
+        return RMatrix4x4(m00, m10, m20, m30,
+                          m01, m11, m21, m31,
+                          m02, m12, m22, m32,
+                          m03, m13, m23, m33);
+    }
+
+    std::string ToPrintableMatrix()
+    {
+        std::stringstream ss;
+
+        ss   << m00 << " " << m01 << " " << m02 << " " << m03  << "\n"
+             << m10 << " " << m11 << " " << m12 << " " << m13  << "\n"
+             << m20 << " " << m21 << " " << m22 << " " << m23  << "\n"
+             << m30 << " " << m31 << " " << m32 << " " << m33  << "\n";
+
+
+        return ss.str();
+    }
+
     RMatrix4x4 operator* (const RMatrix4x4& value)
     {
         return RMatrix4x4 (m00 * value.m00 + m01 * value.m10 + m02 * value.m20 + m03 * value.m30,  
                            m00 * value.m01 + m01 * value.m11 + m02 * value.m21 + m03 * value.m31, 
                            m00 * value.m02 + m01 * value.m12 + m02 * value.m22 + m03 * value.m32, 
-                           m00 * value.m03 + m01 * value.m13 + m02 * value.m23 + m03 * value.m33,        
+                           m00 * value.m03 + m01 * value.m13 + m02 * value.m23 + m03 * value.m33,
+
                            m10* value.m00 + m11 * value.m10 + m12 * value.m20 + m13 * value.m30,
                            m10* value.m01 + m11 * value.m11 + m12 * value.m21 + m13 * value.m31,
                            m10* value.m02 + m11 * value.m12 + m12 * value.m22 + m13 * value.m32,
                            m10* value.m03 + m11 * value.m13 + m12 * value.m23 + m13 * value.m33,
+
                            m20* value.m00 + m21 * value.m10 + m22 * value.m20 + m23 * value.m30,
                            m20* value.m01 + m21 * value.m11 + m22 * value.m21 + m23 * value.m31,
                            m20* value.m02 + m21 * value.m12 + m22 * value.m22 + m23 * value.m32,
                            m20* value.m03 + m21 * value.m13 + m22 * value.m23 + m23 * value.m33,
+
                            m30* value.m00 + m31 * value.m10 + m32 * value.m20 + m33 * value.m30,
                            m30* value.m01 + m31 * value.m11 + m32 * value.m21 + m33 * value.m31,
                            m30* value.m02 + m31 * value.m12 + m32 * value.m22 + m33 * value.m32,
@@ -96,33 +125,43 @@ struct RMatrix4x4
         return m;
     }
 
-    static RMatrix4x4 CreateTransformationMatrix(Vector3D& scale, Quaternion& quaternion, Vector3D& position) {
-        RMatrix4x4 rotationMatrix = RMatrix4x4::CreateRotationMatrixFromQuaternion(quaternion);
+    static RMatrix4x4 CreateTransformationMatrix(Vector3D& position, Quaternion& quatRotation, Vector3D& scale) {
+        float scaleFactor = 1.0f;
+       RMatrix4x4 translationMatrix(1, 0, 0, position.X,
+                                 0, 1, 0, position.Y,
+                                 0, 0, 1, position.Z,
+                                 0, 0, 0, 1);
 
-        RMatrix4x4 transformationMatrix;
+        RMatrix4x4 rotationMatrix = RMatrix4x4::CreateRotationMatrixFromQuaternion(quatRotation);
+       
+        RMatrix4x4 scaleMatrix(scale.X, 0, 0, 0,
+                                0, scale.Y, 0, 0,
+                                0,0,scale.Z,0,
+                                0,0,0,1);
 
-        // Incorpora a escala
-        transformationMatrix.m00 = scale.X * rotationMatrix.m00;
-        transformationMatrix.m01 = scale.X * rotationMatrix.m01;
-        transformationMatrix.m02 = scale.X * rotationMatrix.m02;
-        transformationMatrix.m03 = 0.0f;
 
-        transformationMatrix.m10 = scale.Y * rotationMatrix.m10;
-        transformationMatrix.m11 = scale.Y * rotationMatrix.m11;
-        transformationMatrix.m12 = scale.Y * rotationMatrix.m12;
-        transformationMatrix.m13 = 0.0f;
+        //Faia::Debug::Log("translation");
+        //Faia::Debug::Log(translationMatrix.ToPrintableMatrix().c_str());
 
-        transformationMatrix.m20 = scale.Z * rotationMatrix.m20;
-        transformationMatrix.m21 = scale.Z * rotationMatrix.m21;
-        transformationMatrix.m22 = scale.Z * rotationMatrix.m22;
-        transformationMatrix.m23 = 0.0f;
+        //Faia::Debug::Log("rotation");
+        //Faia::Debug::Log(rotationMatrix.ToPrintableMatrix().c_str());
+        //
+        //Faia::Debug::Log("scale");
+        //Faia::Debug::Log(scaleMatrix.ToPrintableMatrix().c_str());
 
-        // Incorpora a posição
-        transformationMatrix.m30 = position.X;
-        transformationMatrix.m31 = position.Y;
-        transformationMatrix.m32 = position.Z;
-        transformationMatrix.m33 = 1.0f;
 
+        RMatrix4x4 sclPRot = scaleMatrix * rotationMatrix;
+        //Faia::Debug::Log("sclPRot");
+        //Faia::Debug::Log(sclPRot.ToPrintableMatrix().c_str());
+
+
+        RMatrix4x4 transformationMatrix = sclPRot;
+        transformationMatrix.m03 = translationMatrix.m03;
+        transformationMatrix.m13 = translationMatrix.m13;
+        transformationMatrix.m23 = translationMatrix.m23;
+
+      /*  Faia::Debug::Log("transformationMatrix");
+        Faia::Debug::Log(transformationMatrix.ToPrintableMatrix().c_str());*/
         return transformationMatrix;
     }
 };
