@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <string>
 #include "assimp/matrix4x4.h"
+#include <memory>
 
 struct aiNode;
 struct RMeshData;
@@ -16,56 +17,62 @@ namespace Faia
 {
     namespace BitEngineEditor
     {
-        struct BoneNode
-        {
-            int boneId;
-            int parent;
-            std::vector<int> childs;
-        };
-
         namespace Importer
         {
+            //todo: specific of bone
+            struct BoneNode
+            {
+                int boneId;
+                int parent;
+                std::vector<int> childs;
+            };
+
             enum ImporterType
             {
                 MS,
                 ANIM,
+                BONE,
                 NOT_FOUND
             };
 
-            static const std::unordered_map<std::string, ImporterType> s_typeMap
+            static const std::unordered_map<std::string, ImporterType> sImporterNameToType
             {
                 {"-ms", MS},
-                {"-anim", ANIM}
+                {"-anim", ANIM},
+                {"-bone", BONE}
+            };
+
+            enum ImporterState
+            {
+                WAITING_START,
+                RUNNING,
+                DONE,
+                ERROR
             };
 
             class FBXImporter
             {
             public:
-                enum State
-                {
-                    WAITING_START,
-                    RUNNING, 
-                    DONE, 
-                    ERROR
-                };
+                static std::unique_ptr<FBXImporter> GetImporter(int argc, char* argv[]);
 
                 FBXImporter();
-                const char* inputPath;
-                const char* outputPath;
-                const char* inputRef;
 
-                void Run(const std::string& commandType);
-                State GetState();
+                virtual void Run() = 0;
+
+                ImporterState GetState();
                 std::string GetErrorMsg();
 
-            private:
-                std::future<void> _asyncResult;
-                std::string mErrorMsg;
-                State _state;
+                std::vector<const char*> mArgs;
 
-                void ImportAnimationAsync();
-                void ImportMeshAsync();
+            protected:
                 RMatrix4x4 AiMatrixToRMatrix(aiMatrix4x4 assimpMatrix);
+
+                std::future<void> mAsyncResult;
+                std::string mErrorMsg;
+                ImporterState mState;
+
+            private:
+                static ImporterType GetImporterType(char* importerName);
             };
         }
     }

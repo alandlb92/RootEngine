@@ -20,10 +20,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\BitEngineEditor.cpp" />
+    <ClCompile Include="Source\Importer\FBXAnimationImporter.cpp" />
+    <ClCompile Include="Source\Importer\FBXBoneInfoImporter.cpp" />
     <ClCompile Include="Source\Importer\FBXImporter.cpp" />
+    <ClCompile Include="Source\Importer\FBXMeshImporter.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\Importer\FBXAnimationImporter.h" />
+    <ClInclude Include="Include\Importer\FBXBoneInfoImporter.h" />
     <ClInclude Include="Include\Importer\FBXImporter.h" />
+    <ClInclude Include="Include\Importer\FBXMeshImporter.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BitEngine\BitEngine.vcxproj">
@@ -127,6 +133,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Include\Importer;$(SolutionDir)DataShared\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

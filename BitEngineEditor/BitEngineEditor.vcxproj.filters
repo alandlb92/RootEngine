@@ -27,9 +27,27 @@
     <ClCompile Include="Source\Importer\FBXImporter.cpp">
       <Filter>Source Files\Importer</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Importer\FBXAnimationImporter.cpp">
+      <Filter>Source Files\Importer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Importer\FBXBoneInfoImporter.cpp">
+      <Filter>Source Files\Importer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Importer\FBXMeshImporter.cpp">
+      <Filter>Source Files\Importer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Importer\FBXImporter.h">
+      <Filter>Header Files\Importer</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Importer\FBXAnimationImporter.h">
+      <Filter>Header Files\Importer</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Importer\FBXBoneInfoImporter.h">
+      <Filter>Header Files\Importer</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Importer\FBXMeshImporter.h">
       <Filter>Header Files\Importer</Filter>
     </ClInclude>
   </ItemGroup>

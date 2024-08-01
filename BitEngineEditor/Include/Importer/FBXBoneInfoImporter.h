@@ -1,0 +1,18 @@
+#pragma once
+#include "FBXImporter.h"
+
+
+namespace Faia
+{
+    namespace BitEngineEditor
+    {
+        namespace Importer
+        {
+            class FBXBoneInfoImporter : public FBXImporter
+            {
+            public:
+                void Run() override;
+            };
+        }
+    }
+}

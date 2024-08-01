@@ -19,29 +19,33 @@ int main(int argc, char* argv[])
 {
     std::cout << "Start Root Engine Editor\n";
 
-    Faia::BitEngineEditor::Importer::FBXImporter fbxImporter;
-    
     if (argc < 3) {
-        std::cerr << "\033[1;31mError:\033[0m Input and output paths are required." << std::endl;
+        std::cerr << "\033[1;31mError:\033[0m Input and output paths are required.\n";
         return 1;
     }
 
+    std::unique_ptr<Faia::BitEngineEditor::Importer::FBXImporter> fbxImporter = Faia::BitEngineEditor::Importer::FBXImporter::GetImporter(argc, argv);
+    if (!fbxImporter)
+    {
+        std::cerr << "\033[1;31mError:\033[0m The argument " << argv[2] << " was not recognized\n";
+        std::cout << "Thes list of arguments are:\n";
+        
+        for (auto arg : Faia::BitEngineEditor::Importer::sImporterNameToType)
+        {
+            std::cout << "    " << arg.first << "\n";
+        }
+        
+        return 1;
+    }
 
-    const char* command = argv[1];
-    const char* commandType = argv[2];
-
-    fbxImporter.inputPath = argv[3];
-    fbxImporter.outputPath = argv[4];    
-    fbxImporter.inputRef = argv[5];
-
-    std::cout << "Start command! " << command << "\n";
+    std::cout << "Start command! " << argv[2] << "\n";
 
 
-    fbxImporter.Run(commandType);
+    fbxImporter->Run();
    
     
-    while (fbxImporter.GetState() == Faia::BitEngineEditor::Importer::FBXImporter::WAITING_START
-        || fbxImporter.GetState() == Faia::BitEngineEditor::Importer::FBXImporter::RUNNING)
+    while (fbxImporter->GetState() == Faia::BitEngineEditor::Importer::WAITING_START
+        || fbxImporter->GetState() == Faia::BitEngineEditor::Importer::RUNNING)
     {
         std::cout << "\\" << "\r";
         std::this_thread::sleep_for(std::chrono::milliseconds(250));
@@ -53,13 +57,12 @@ int main(int argc, char* argv[])
         std::this_thread::sleep_for(std::chrono::milliseconds(250));
     }
 
-    if (fbxImporter.GetState() == Faia::BitEngineEditor::Importer::FBXImporter::ERROR)
+    if (fbxImporter->GetState() == Faia::BitEngineEditor::Importer::ERROR)
     {
-        std::cout << "Import has found an \033[1;31mERROR!" << "\n-> " << fbxImporter.GetErrorMsg() << "\033[0m\n" << "when try to import: " << fbxImporter.inputPath << "\n";
+        std::cout << "Import has found an \033[1;31mERROR!" << "\n-> " << fbxImporter->GetErrorMsg() << "\n";
     }
     else
     {
-        std::cout << "Import is DONE! result: " << fbxImporter.outputPath << "\n";
+        std::cout << "Import is DONE!\n";
     }
-
 }

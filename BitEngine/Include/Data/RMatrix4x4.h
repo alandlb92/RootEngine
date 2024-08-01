@@ -1,7 +1,6 @@
 #pragma once
 #include "Data/Quaternion.h"
 #include <sstream>
-#include "Faia/Debug.h"
 
 //Todo: found another place to this define
 #define MAX_NUM_OF_ANIMATION_CHANNELS 100
