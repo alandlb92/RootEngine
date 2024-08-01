@@ -3,15 +3,21 @@
 #include "Core/BComponent.h"
 
 
-class PointLightComponent : public BComponent
+namespace Faia
 {
-	typedef BComponent Super;
+	namespace Root
+	{
+		class PointLightComponent : public BComponent
+		{
+			typedef BComponent Super;
 
-public:
-	void SetColor(float r, float g, float b);
-	void SetStrength(float s);
+		public:
+			void SetColor(float r, float g, float b);
+			void SetStrength(float s);
 
-protected:
-	void OnOwnerObjectChangePosition(Vector3D newPosition);
-	void Init() override;
-};
+		protected:
+			void OnOwnerObjectChangePosition(Vector3D newPosition);
+			void Init() override;
+		};
+	}
+}

@@ -10,7 +10,7 @@
 
 namespace Faia
 {
-    namespace BitEngineEditor
+    namespace Root
     {
         namespace Importer
         {
@@ -61,8 +61,7 @@ namespace Faia
                     return;
                 }
 
-                RMeshData meshReference;
-                meshReference.ReadFromPath(inputRef);
+                const RBoneInfoData boneInfoReference(inputRef);
 
                 aiAnimation* anim = aiScene->mAnimations[0];
 
@@ -78,9 +77,9 @@ namespace Faia
                     RAnimationChannel ac;
                     aiNodeAnim* nodeAnim = anim->mChannels[channelId];
                     std::string nodeName = std::string(nodeAnim->mNodeName.C_Str());
-                    auto it = meshReference._boneNameToIdexMap.find(nodeName);
+                    auto it = boneInfoReference.mBoneNameToIdexMap.find(nodeName);
 
-                    if (it == meshReference._boneNameToIdexMap.end())
+                    if (it == boneInfoReference.mBoneNameToIdexMap.end())
                     {
                         std::cout << "\033[1;33mWarning Bone: " << nodeName << " Not found in mesh reference!\033[0m" << std::endl;
                         continue;
@@ -112,9 +111,9 @@ namespace Faia
 
                 }
 
-                std::vector<BoneNode> rootNode = std::vector<BoneNode>(meshReference._boneNameToIdexMap.size());
-
                 rad.Write(outputPath);
+                RAnimationData radTest;
+                radTest.ReadFromPath(outputPath);
 
                 mState = DONE;
             }

@@ -3,25 +3,31 @@
 #include <unordered_map>
 #include <memory>
 
-struct RAnimationData;
-
-class AnimationManager
+namespace Faia 
 {
-public:
-    static AnimationManager* GetInstance()
+    namespace Root
     {
-        if (sInstance == nullptr)
+        struct RAnimationData;
+
+        class AnimationManager
         {
-            sInstance = std::make_unique<AnimationManager>();
-        }
+        public:
+            static AnimationManager* GetInstance()
+            {
+                if (sInstance == nullptr)
+                {
+                    sInstance = std::make_unique<AnimationManager>();
+                }
 
-        return sInstance.get();
-    };
+                return sInstance.get();
+            };
 
-    RAnimationData* LoadAnimationFromPath(const char* path);
+            RAnimationData* LoadAnimationFromPath(const char* path);
 
-private:
-	static std::unique_ptr<AnimationManager> sInstance;
-	std::unordered_map<uint32_t, std::shared_ptr<RAnimationData>> mAnimationMap;
+        private:
+	        static std::unique_ptr<AnimationManager> sInstance;
+	        std::unordered_map<uint32_t, std::shared_ptr<RAnimationData>> mAnimationMap;
 
-};
+        };
+    }
+}

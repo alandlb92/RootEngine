@@ -7,10 +7,9 @@
 #include <assimp/config.h>
 #include <assimp/cimport.h>
 
-
 namespace Faia
 {
-    namespace BitEngineEditor
+    namespace Root
     {
         namespace Importer
         {
@@ -19,6 +18,8 @@ namespace Faia
                 RMeshData rmd;
                 const char* inputPath = mArgs[0];
                 const char* outputPath = mArgs[1];
+                
+                bool importBoneData = mArgs.size() > 2;
 
                 unsigned flags = aiProcess_CalcTangentSpace |
                     aiProcess_Triangulate |
@@ -39,10 +40,6 @@ namespace Faia
                     mState = ERROR;
                     return;
                 }
-
-                rmd.mGlovalInverseTransform = AiMatrixToRMatrix(aiScene->mRootNode->mTransformation.Inverse());
-
-                std::map<uint32_t, aiBone*> boneIndexToAiBone;
 
                 for (int meshIndex = 0; meshIndex < aiScene->mNumMeshes; meshIndex++)
                 {
@@ -83,9 +80,13 @@ namespace Faia
                         }
                     }
 
-                    //Import Bone                    
-                    if (aiMesh->mNumBones > 0)
+                    //Import Bone data                    
+                    if (importBoneData)
                     {
+                        const char* boneInfoRefPath = mArgs[2];
+                        const RBoneInfoData rbid(boneInfoRefPath);
+                        
+
                         mesh._boneData.resize(aiMesh->mNumVertices);
 
                         for (int j = 0; j < aiMesh->mNumBones; j++)
@@ -97,21 +98,22 @@ namespace Faia
                             {
                                 RVertexBoneData& boneData = mesh._boneData[aiBone->mWeights[wightIndex].mVertexId];
                                 uint32_t boneId = 0;
+                                map<std::string, uint32_t>::const_iterator it = rbid.mBoneNameToIdexMap.find(boneName);
 
-                                if (rmd._boneNameToIdexMap.find(boneName) == rmd._boneNameToIdexMap.end())
+                                if (it != rbid.mBoneNameToIdexMap.end())
                                 {
-                                    boneId = rmd._boneNameToIdexMap.size();
-                                    rmd._boneNameToIdexMap[boneName] = boneId;
-                                    boneIndexToAiBone[boneId] = aiBone;
+                                    boneId = it->second;
                                 }
                                 else
                                 {
-                                    boneId = rmd._boneNameToIdexMap[boneName];
+                                    stringstream ss;
+                                    ss << "Bone index of name: " << boneName << " not found: verify if you are using the correct bone data reference";
+                                    mErrorMsg = ss.str();
+                                    mState = ERROR;
+                                    return;
                                 }
 
-                                bool moreThan4Bones = true;
-
-                                //Find the lowest value index
+                                //Find the lowest value index and override if is bigger
                                 float minValue = 2.0f;
                                 int minValueIndex = 0;
 
@@ -136,41 +138,7 @@ namespace Faia
 
                     mesh._materialIndex = aiMesh->mMaterialIndex;
                     rmd._meshs.push_back(mesh);
-                }
-
-                //Create bone infos
-                bool alreadyHasRoot = false;
-                for (auto& map : rmd._boneNameToIdexMap)
-                {
-                    std::string boneName = map.first;
-                    uint32_t index = map.second;
-                    aiNode* boneNode = boneIndexToAiBone[index]->mNode;
-
-                    if (boneNode)
-                    {
-                        std::vector<uint32_t> childs;
-                        std::string assimpSeparator = "_$";
-
-                        for (unsigned i = 0; i < boneNode->mNumChildren; ++i)
-                        {
-                            std::string childName(boneNode->mChildren[i]->mName.C_Str());
-                            if (rmd._boneNameToIdexMap.find(childName) != rmd._boneNameToIdexMap.end())
-                                childs.push_back(rmd._boneNameToIdexMap[childName]);
-                        }
-
-                        RMatrix4x4 offsetMatrix = AiMatrixToRMatrix(boneIndexToAiBone[index]->mOffsetMatrix);
-                        RMatrix4x4 transformMatrix = AiMatrixToRMatrix(boneNode->mTransformation);
-                        rmd.mIndexToBoneInfo[index] = RBoneInfo{ boneName, index, childs, offsetMatrix, transformMatrix };
-                    }
-                    else
-                    {
-                        stringstream ss;
-                        ss << "Bone node of name: : " << boneName << " not found!";
-                        mErrorMsg = ss.str();
-                        mState = ERROR;
-                        return;
-                    }
-                }
+                }                
 
                 rmd.Write(outputPath);
                 RMeshData rmdReadTest;

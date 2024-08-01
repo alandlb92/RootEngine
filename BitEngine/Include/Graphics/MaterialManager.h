@@ -4,24 +4,30 @@
 #include <map>
 #include <memory>
 
-class MaterialManager
+namespace Faia
 {
-public:
-    static MaterialManager* GetInstance()
+    namespace Root
     {
-        if (_instance == nullptr)
+        class MaterialManager
         {
-            _instance = std::make_unique<MaterialManager>();
-        }
+        public:
+            static MaterialManager* GetInstance()
+            {
+                if (_instance == nullptr)
+                {
+                    _instance = std::make_unique<MaterialManager>();
+                }
 
-        return _instance.get();
-    };
-    std::shared_ptr<Shader> LoadShader(const char* shaderName);
-    std::shared_ptr<Texture2D> LoadTexture2D(const char* texturePath);
+                return _instance.get();
+            };
+            std::shared_ptr<Shader> LoadShader(const char* shaderName);
+            std::shared_ptr<Texture2D> LoadTexture2D(const char* texturePath);
 
-private:
-    static std::unique_ptr<MaterialManager> _instance;
+        private:
+            static std::unique_ptr<MaterialManager> _instance;
 
-    std::map<const char*,  std::shared_ptr<Shader>> _shadersMap;
-    std::map<const char*, std::shared_ptr<Texture2D>> _texturesMap;
-};
+            std::map<const char*, std::shared_ptr<Shader>> _shadersMap;
+            std::map<const char*, std::shared_ptr<Texture2D>> _texturesMap;
+        };
+    }
+}

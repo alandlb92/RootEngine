@@ -1,30 +1,36 @@
 #include "Core/Scene/SceneManager.h"
 #include "Core/BComponent.h"
 
-SceneManager* SceneManager::_instance = nullptr;
-
-SceneManager::SceneManager()
+namespace Faia
 {
-    _instance = this;
-}
+    namespace Root
+    {
+        SceneManager* SceneManager::_instance = nullptr;
 
-void SceneManager::Init()
-{
-    _currentScene->Init();
-}
+        SceneManager::SceneManager()
+        {
+            _instance = this;
+        }
 
-void SceneManager::Update(float deltaTime)
-{
-    _currentScene->Update(deltaTime);
-}
+        void SceneManager::Init()
+        {
+            _currentScene->Init();
+        }
+
+        void SceneManager::Update(float deltaTime)
+        {
+            _currentScene->Update(deltaTime);
+        }
 
 
-void SceneManager::LoadScene(Scene* scene)
-{
-    _currentScene = scene;
-}
+        void SceneManager::LoadScene(Scene* scene)
+        {
+            _currentScene = scene;
+        }
 
-Scene* SceneManager::GetCurrentScene()
-{
-    return _currentScene;
+        Scene* SceneManager::GetCurrentScene()
+        {
+            return _currentScene;
+        }
+    }
 }

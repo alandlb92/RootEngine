@@ -5,18 +5,20 @@
 #include <chrono>
 #include <unordered_map>
 #include <string>
-#include "assimp/matrix4x4.h"
 #include <memory>
+
+#include "assimp/matrix4x4.h"
 
 struct aiNode;
 struct RMeshData;
-struct RAnimationData;
-struct RMatrix4x4;
 
 namespace Faia
 {
-    namespace BitEngineEditor
+    namespace Root
     {
+        struct RAnimationData;
+        struct RMatrix4x4;
+
         namespace Importer
         {
             //todo: specific of bone

@@ -3,42 +3,48 @@
 #include "timeapi.h"
 #include "FaiaInputSystem.h"
 
-const float BitEngine::targetFramerate = 30.0f;
-const float BitEngine::maxTimeStep = 1.0f / targetFramerate;
-
-using namespace Faia::InputSystem;
-
-BitEngine::BitEngine(HWND windowHandler) : _windowHandler(windowHandler)
+namespace Faia
 {
+    namespace Root
+    {
+        const float BitEngine::targetFramerate = 30.0f;
+        const float BitEngine::maxTimeStep = 1.0f / targetFramerate;
 
-}
+        using namespace Faia::InputSystem;
 
-void BitEngine::Init()
-{
-    _lightManager = std::make_unique<Graphics::Light::LightManager>();
+        BitEngine::BitEngine(HWND windowHandler) : _windowHandler(windowHandler)
+        {
 
-    _previousTime = timeGetTime();
-    _graphicsMain = std::make_unique<GraphicsMain>(_windowHandler);
-    _graphicsMain->SetupDevice();
+        }
 
-    _sceneManager = std::make_unique<SceneManager>();
-    _sceneManager->LoadScene(Scene::MakeDemoScene());
-    _sceneManager->Init();
+        void BitEngine::Init()
+        {
+            _lightManager = std::make_unique<Graphics::Light::LightManager>();
 
-}
+            _previousTime = timeGetTime();
+            _graphicsMain = std::make_unique<GraphicsMain>(_windowHandler);
+            _graphicsMain->SetupDevice();
+
+            _sceneManager = std::make_unique<SceneManager>();
+            _sceneManager->LoadScene(Scene::MakeDemoScene());
+            _sceneManager->Init();
+
+        }
 
 
-void BitEngine::Update()
-{
-    DWORD currentTime = timeGetTime();
-    float deltaTime = (currentTime - _previousTime) / 1000.0f;
-    _previousTime = currentTime;
-    //deltaTime = std::min<float>(deltaTime, maxTimeStep);
+        void BitEngine::Update()
+        {
+            DWORD currentTime = timeGetTime();
+            float deltaTime = (currentTime - _previousTime) / 1000.0f;
+            _previousTime = currentTime;
+            //deltaTime = std::min<float>(deltaTime, maxTimeStep);
 
-    //TODO: I need to make the render a separeted thread or the vsync will stop my application and i will have some problems with Input system events for exemple. 
-    //_graphicsMain->Update(deltaTime);
-    _sceneManager->Update(deltaTime);
-    _graphicsMain->Renderer();
+            //TODO: I need to make the render a separeted thread or the vsync will stop my application and i will have some problems with Input system events for exemple. 
+            //_graphicsMain->Update(deltaTime);
+            _sceneManager->Update(deltaTime);
+            _graphicsMain->Renderer();
 
-    FaiaInputSystem::GetInstance()->Update(deltaTime);
+            FaiaInputSystem::GetInstance()->Update(deltaTime);
+        }
+    }
 }

@@ -1,14 +1,21 @@
 #pragma once
-class BObject;
-struct Vector3D;
 
-class BComponent
+namespace Faia
 {
-    friend class Scene;
-    friend class BObject;
+    namespace Root
+    {
+        class BObject;
+        struct Vector3D;
 
-protected:
-    virtual void Init();
-    virtual void Update(float deltaTime);
-    BObject* _owner;
-};
+        class BComponent
+        {
+            friend class Scene;
+            friend class BObject;
+
+        protected:
+            virtual void Init();
+            virtual void Update(float deltaTime);
+            BObject* mOwner;
+        };
+    }
+}

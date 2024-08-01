@@ -15,7 +15,7 @@
 
 namespace Faia
 {
-    namespace BitEngineEditor
+    namespace Root
     {
         namespace Importer
         {

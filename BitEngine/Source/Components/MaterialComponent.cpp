@@ -1,18 +1,24 @@
 #include "Components/MaterialComponent.h"
 
-void MaterialComponent::AddMaterial(Material material)
+namespace Faia
 {
-    std::shared_ptr<Material> materialPtr = std::make_shared<Material>(material);
-    _materials.push_back(materialPtr);
-}
-
-Material* MaterialComponent::GetMaterialOfIndex(int index)
-{
-    if(index < _materials.size())
-        return _materials[index].get();
-    else
+    namespace Root
     {
-        OutputDebugStringA("Error when trying to get material");
-        return nullptr;
+        void MaterialComponent::AddMaterial(Material material)
+        {
+            std::shared_ptr<Material> materialPtr = std::make_shared<Material>(material);
+            _materials.push_back(materialPtr);
+        }
+
+        Material* MaterialComponent::GetMaterialOfIndex(int index)
+        {
+            if (index < _materials.size())
+                return _materials[index].get();
+            else
+            {
+                OutputDebugStringA("Error when trying to get material");
+                return nullptr;
+            }
+        }
     }
 }

@@ -2,23 +2,28 @@
 #include "Mesh.h"
 #include "Material.h"
 
-class DrawableObject
+namespace Faia
 {
-public:
-    DrawableObject(std::vector<Mesh> mesh, std::vector<Material> materials);
-
-    std::vector<Mesh> GetMeshs() { return _meshs; }
-    Material GetMaterial(unsigned int index)
+    namespace Root
     {
-        if (index >= _materials.size())
-            return _materials[0]; //TODO: instead return material index 0, return a dummy material, like in unity when you have a pink color
+        class DrawableObject
+        {
+        public:
+            DrawableObject(std::vector<Mesh> mesh, std::vector<Material> materials);
 
-        return _materials[index];
+            std::vector<Mesh> GetMeshs() { return _meshs; }
+            Material GetMaterial(unsigned int index)
+            {
+                if (index >= _materials.size())
+                    return _materials[0]; //TODO: instead return material index 0, return a dummy material, like in unity when you have a pink color
+
+                return _materials[index];
+            }
+
+        private:
+            std::vector<Mesh> _meshs;
+            std::vector<Material> _materials;
+
+        };
     }
-
-private:
-    std::vector<Mesh> _meshs;
-    std::vector<Material> _materials;
-
-};
-
+}

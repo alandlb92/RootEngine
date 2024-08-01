@@ -1,14 +1,20 @@
 #pragma once
 #include "Vector3D.h"
 
-class Transform
+namespace Faia
 {
-public:
-    Transform();
-    Vector3D GetPosition() const;
-    virtual void SetPosition(Vector3D newPosition);
-    virtual void AddPosition(Vector3D addValue);
+    namespace Root
+    {
+        class Transform
+        {
+        public:
+            Transform();
+            Vector3D GetPosition() const;
+            virtual void SetPosition(Vector3D newPosition);
+            virtual void AddPosition(Vector3D addValue);
 
-private:
-    Vector3D _position;
-};
+        private:
+            Vector3D _position;
+        };
+    }
+}

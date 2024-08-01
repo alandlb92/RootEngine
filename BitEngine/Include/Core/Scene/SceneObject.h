@@ -2,6 +2,12 @@
 #include "Core/BObject.h"
 
 
-class SceneObject : public BObject
-{    
-};
+namespace Faia
+{
+    namespace Root
+    {
+        class SceneObject : public BObject
+        {
+        };
+    }
+}

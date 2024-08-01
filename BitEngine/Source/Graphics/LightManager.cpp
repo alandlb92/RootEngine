@@ -1,51 +1,63 @@
 #include "Graphics/LightManager.h"
 #include "Graphics/GraphicsMain.h"
 
-Graphics::Light::LightManager* Graphics::Light::LightManager::_instance = nullptr;
-
-Graphics::Light::LightManager::LightManager()
+namespace Faia
 {
-    _lightData = new CB_LightData();
-    _instance = this;
-}
+    namespace Root
+    {
+        namespace Graphics
+        {
+            namespace Light
+            {
+                LightManager* LightManager::_instance = nullptr;
 
-Graphics::Light::LightManager::~LightManager()
-{
-    delete _lightData;
-    _lightData = nullptr;
-}
+                LightManager::LightManager()
+                {
+                    _lightData = new CB_LightData();
+                    _instance = this;
+                }
 
-void Graphics::Light::LightManager::UploadLightBuffer()
-{
-    GraphicsMain::UpdateConstantBuffer(ConstantBuffer::CB_Light, _lightData);
-}
+                LightManager::~LightManager()
+                {
+                    delete _lightData;
+                    _lightData = nullptr;
+                }
 
-void Graphics::Light::LightManager::SetAmbientLightColor(RColorRGB color)
-{
-    _lightData->ambientLightColor = color;
-    UploadLightBuffer();
-}
+                void LightManager::UploadLightBuffer()
+                {
+                    GraphicsMain::UpdateConstantBuffer(ConstantBuffer::CB_Light, _lightData);
+                }
 
-void Graphics::Light::LightManager::SetAmbientLightStrength(float strength)
-{
-    _lightData->ambientLightStrength = strength;
-    UploadLightBuffer();
-}
+                void LightManager::SetAmbientLightColor(RColorRGB color)
+                {
+                    _lightData->ambientLightColor = color;
+                    UploadLightBuffer();
+                }
 
-void Graphics::Light::LightManager::SetPointLightColor(RColorRGB color)
-{
-    _lightData->pointLightColor = color;
-    UploadLightBuffer();
-}
+                void LightManager::SetAmbientLightStrength(float strength)
+                {
+                    _lightData->ambientLightStrength = strength;
+                    UploadLightBuffer();
+                }
 
-void Graphics::Light::LightManager::SetPointLightPosition(Vector3D position)
-{
-    _lightData->pointLightPosition = position;
-    UploadLightBuffer();
-}
+                void LightManager::SetPointLightColor(RColorRGB color)
+                {
+                    _lightData->pointLightColor = color;
+                    UploadLightBuffer();
+                }
 
-void Graphics::Light::LightManager::SetPointLightStrength(float strength)
-{
-    _lightData->pointLightStrength = strength;
-    UploadLightBuffer();
+                void LightManager::SetPointLightPosition(Vector3D position)
+                {
+                    _lightData->pointLightPosition = position;
+                    UploadLightBuffer();
+                }
+
+                void LightManager::SetPointLightStrength(float strength)
+                {
+                    _lightData->pointLightStrength = strength;
+                    UploadLightBuffer();
+                }
+            }
+        }
+    }
 }

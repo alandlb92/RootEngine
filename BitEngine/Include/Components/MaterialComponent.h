@@ -4,13 +4,19 @@
 #include <vector>
 #include <memory>
 
-class MaterialComponent : public BComponent
+namespace Faia
 {
-public:
-    void AddMaterial(Material material);
-    Material* GetMaterialOfIndex(int index);
+    namespace Root
+    {
+        class MaterialComponent : public BComponent
+        {
+        public:
+            void AddMaterial(Material material);
+            Material* GetMaterialOfIndex(int index);
 
-private:
-    std::vector<std::shared_ptr<Material>> _materials;
+        private:
+            std::vector<std::shared_ptr<Material>> _materials;
 
-};
+        };
+    }
+}

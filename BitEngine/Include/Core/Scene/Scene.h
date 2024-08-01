@@ -3,23 +3,29 @@
 #include <list>
 #include <memory>
 
-class Scene : public BObject
+namespace Faia
 {
-    friend class SceneManager;
-    typedef BObject Super;
+    namespace Root
+    {
+        class Scene : public BObject
+        {
+            friend class SceneManager;
+            typedef BObject Super;
 
-public:
-    static Scene* MakeDemoScene();
-    std::list<SceneObject*> GetRenderablebleObjects();
-    void AddObject(SceneObject* obj);
+        public:
+            static Scene* MakeDemoScene();
+            std::list<SceneObject*> GetRenderablebleObjects();
+            void AddObject(SceneObject* obj);
 
-protected:
-    virtual void Init();
-    virtual void Update(float deltaTime);
+        protected:
+            virtual void Init();
+            virtual void Update(float deltaTime);
 
-private:
-    std::list<SceneObject*> _sceneObjects;
-    std::list<SceneObject*> _renderablebleObjects;
+        private:
+            std::list<SceneObject*> _sceneObjects;
+            std::list<SceneObject*> _renderablebleObjects;
 
-    void NotifyComponentAdded(BObject* obj, BComponent* component);
-};
+            void NotifyComponentAdded(BObject* obj, BComponent* component);
+        };
+    }
+}

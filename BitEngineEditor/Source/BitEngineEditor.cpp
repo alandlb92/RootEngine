@@ -1,8 +1,6 @@
-// BitEngineEditor.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include <iostream>
 #include "Importer/FBXImporter.h"
+#include <string>
 
 
 // params:
@@ -23,14 +21,22 @@ int main(int argc, char* argv[])
         std::cerr << "\033[1;31mError:\033[0m Input and output paths are required.\n";
         return 1;
     }
+    
+    
+    if (std::strcmp(argv[1], "fbximport") != 0)
+    {
+        std::cerr << "\033[1;31mError:\033[0m" << argv[1] << " Not recognized" << "\n";
+        return 1;
+    }
 
-    std::unique_ptr<Faia::BitEngineEditor::Importer::FBXImporter> fbxImporter = Faia::BitEngineEditor::Importer::FBXImporter::GetImporter(argc, argv);
+
+    std::unique_ptr<Faia::Root::Importer::FBXImporter> fbxImporter = Faia::Root::Importer::FBXImporter::GetImporter(argc, argv);
     if (!fbxImporter)
     {
         std::cerr << "\033[1;31mError:\033[0m The argument " << argv[2] << " was not recognized\n";
         std::cout << "Thes list of arguments are:\n";
         
-        for (auto arg : Faia::BitEngineEditor::Importer::sImporterNameToType)
+        for (auto arg : Faia::Root::Importer::sImporterNameToType)
         {
             std::cout << "    " << arg.first << "\n";
         }
@@ -44,8 +50,8 @@ int main(int argc, char* argv[])
     fbxImporter->Run();
    
     
-    while (fbxImporter->GetState() == Faia::BitEngineEditor::Importer::WAITING_START
-        || fbxImporter->GetState() == Faia::BitEngineEditor::Importer::RUNNING)
+    while (fbxImporter->GetState() == Faia::Root::Importer::WAITING_START
+        || fbxImporter->GetState() == Faia::Root::Importer::RUNNING)
     {
         std::cout << "\\" << "\r";
         std::this_thread::sleep_for(std::chrono::milliseconds(250));
@@ -57,7 +63,7 @@ int main(int argc, char* argv[])
         std::this_thread::sleep_for(std::chrono::milliseconds(250));
     }
 
-    if (fbxImporter->GetState() == Faia::BitEngineEditor::Importer::ERROR)
+    if (fbxImporter->GetState() == Faia::Root::Importer::ERROR)
     {
         std::cout << "Import has found an \033[1;31mERROR!" << "\n-> " << fbxImporter->GetErrorMsg() << "\n";
     }

@@ -1,23 +1,27 @@
 #include "Data/Transform.h"
 
-
-Transform::Transform()
+namespace Faia
 {
-    _position = Vector3D(0);
-}
+    namespace Root
+    {
+        Transform::Transform()
+        {
+            _position = Vector3D(0);
+        }
 
-Vector3D Transform::GetPosition() const
-{
-    return _position;
-}
+        Vector3D Transform::GetPosition() const
+        {
+            return _position;
+        }
 
-void Transform::SetPosition(Vector3D newPosition)
-{
-    _position = newPosition;
-}
+        void Transform::SetPosition(Vector3D newPosition)
+        {
+            _position = newPosition;
+        }
 
-void Transform::AddPosition(Vector3D addValue)
-{
-    _position += addValue;
+        void Transform::AddPosition(Vector3D addValue)
+        {
+            _position += addValue;
+        }
+    }
 }
-

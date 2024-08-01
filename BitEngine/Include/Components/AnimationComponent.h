@@ -4,33 +4,39 @@
 #include "Data/RMatrix4x4.h";
 #include <vector>
 
-struct RAnimationData;
-struct RAnimationVectorKey;
-struct RAnimationQuatKey;
-struct RMeshData;
-struct RBoneInfo;
-
-class AnimationComponent : public BComponent
+namespace Faia
 {
-public:
-    void SetAnimation(const char* path);
-    void GetAnimationChannelsMatrix(RMatrix4x4 (&animationMatrix)[MAX_NUM_OF_ANIMATION_CHANNELS]);
-    //Todo: separete the bone info from RMeshData, this is low down the file and will be better for implementation
-    void SetBoneInfo(const char* meshDataReferencePath);
+    namespace Root
+    {
+        struct RAnimationData;
+        struct RAnimationVectorKey;
+        struct RAnimationQuatKey;
+        struct RBoneInfoData;
+        struct RBoneInfo;
 
-protected:
-    void Update(float deltaTime) override;
+        class AnimationComponent : public BComponent
+        {
+        public:
+            void SetAnimation(const char* path);
+            void GetAnimationChannelsMatrix(RMatrix4x4(&animationMatrix)[MAX_NUM_OF_ANIMATION_CHANNELS]);
+            //Todo: separete the bone info from RMeshData, this is low down the file and will be better for implementation
+            void SetBoneInfo(const char* meshDataReferencePath);
 
-private:
-    float mCurrentTime = 0;
-    bool mLoopAnim = true;
+        protected:
+            void Update(float deltaTime) override;
 
-    float GetAnimCurrentTime(float maxTime);
-    RAnimationData* pAnimationData;
-    //Todo: use smart pointers
-    RMeshData* pMeshDataReference;
-    Vector3D GetVectorKeyAtCurrentTime(std::vector<RAnimationVectorKey>& vectorKeyList);
-    Quaternion GetQuatKeyAtCurrentTime(std::vector<RAnimationQuatKey>& quatKeyList);
+        private:
+            float mCurrentTime = 0;
+            bool mLoopAnim = true;
 
-    void ProcessBoneHierarchy(RBoneInfo& bone, RMatrix4x4 parentTransform, RMatrix4x4(&animationMatrix)[MAX_NUM_OF_ANIMATION_CHANNELS]);
-};
+            float GetAnimCurrentTime(float maxTime);
+            RAnimationData* pAnimationData;
+            //Todo: use smart pointers
+            RBoneInfoData* pMeshDataReference;
+            Vector3D GetVectorKeyAtCurrentTime(std::vector<RAnimationVectorKey>& vectorKeyList);
+            Quaternion GetQuatKeyAtCurrentTime(std::vector<RAnimationQuatKey>& quatKeyList);
+
+            void ProcessBoneHierarchy(RBoneInfo& bone, RMatrix4x4 parentTransform, RMatrix4x4(&animationMatrix)[MAX_NUM_OF_ANIMATION_CHANNELS]);
+        };
+    }
+}
