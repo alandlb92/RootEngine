@@ -17,6 +17,25 @@ const char* heroGoatRboneInfoRelativePath = "\\TestContent\\ImporterTest\\RFiles
 const char* heroGoatRmeshRelativePath = "\\TestContent\\ImporterTest\\RFiles\\HeroGoat.rmesh";
 const char* heroGoatRanimRelativePath = "\\TestContent\\ImporterTest\\RFiles\\HeroGoatTestAnimation.ranim";
 
+namespace ImporterTest
+{
+    bool IsTheNeededFilesExists()
+    {
+        std::filesystem::path cubeFBXPath = std::filesystem::current_path();
+        cubeFBXPath += cubeFbxRelativePath;
+        std::filesystem::path goatFBXPath = std::filesystem::current_path();
+        goatFBXPath += heroGoatFbxRelativePath;
+        std::filesystem::path goatAnimFBXPath = std::filesystem::current_path();
+        goatAnimFBXPath += heroGoatFbxAnimRelativePath;
+
+        bool existsCubeFBX = std::filesystem::exists(cubeFBXPath);
+        bool existsGoatFBX = std::filesystem::exists(goatFBXPath);
+        bool existsGoatAnimFBX = std::filesystem::exists(goatAnimFBXPath);
+
+        return existsCubeFBX && existsGoatFBX && existsGoatAnimFBX;
+    }
+}
+
 //Test reach: Read and write .rmeshs (only meshs)
 TEST(FBXImporter, ImportJustMesh) 
 {

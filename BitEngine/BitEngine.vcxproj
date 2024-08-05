@@ -86,8 +86,7 @@
       </Command>
     </CustomBuildStep>
     <PreBuildEvent>
-      <Command>if not exist "$(OutDirFullPath)Content" mkdir "$(OutDirFullPath)Content"
-xcopy /E /Y $(SolutionDir)Content $(OutDirFullPath)Content</Command>
+      <Command>if not exist "$(OutDirFullPath)Content" mkdir "$(OutDirFullPath)Content" &amp;&amp; xcopy /E /Y $(SolutionDir)Content $(OutDirFullPath)Content</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='GTest|x64'">
