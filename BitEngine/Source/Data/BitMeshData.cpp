@@ -21,11 +21,11 @@ namespace Faia
             os.write(reinterpret_cast<char*>(&numMeshs), sizeof(numMeshs));
             for (RMeshNode& mesh : _meshs)
             {
-                uint32_t numIndices = mesh._indices.size();
-                uint32_t numVertices = mesh._vertices.size();
-                uint32_t numUV = mesh._uv.size();
-                uint32_t numNormals = mesh._uv.size();
-                uint32_t numBoneData = mesh._boneData.size();
+                uint32_t numIndices = mesh.mIndices.size();
+                uint32_t numVertices = mesh.mVertices.size();
+                uint32_t numUV = mesh.mUV.size();
+                uint32_t numNormals = mesh.mUV.size();
+                uint32_t numBoneData = mesh.mBoneData.size();
 
                 os.write(reinterpret_cast<char*>(&numIndices), sizeof(uint32_t));
                 os.write(reinterpret_cast<char*>(&numVertices), sizeof(uint32_t));
@@ -33,21 +33,21 @@ namespace Faia
                 os.write(reinterpret_cast<char*>(&numUV), sizeof(uint32_t));
                 os.write(reinterpret_cast<char*>(&numBoneData), sizeof(uint32_t));
 
-                os.write(reinterpret_cast<const char*>(mesh._indices.data()), numIndices * sizeof(uint16_t));
-                os.write(reinterpret_cast<const char*>(mesh._vertices.data()), numVertices * sizeof(Vector3D));
-                os.write(reinterpret_cast<const char*>(mesh._normals.data()), numNormals * sizeof(Vector3D));
-                os.write(reinterpret_cast<const char*>(mesh._uv.data()), numUV * sizeof(Vector2D));
+                os.write(reinterpret_cast<const char*>(mesh.mIndices.data()), numIndices * sizeof(uint16_t));
+                os.write(reinterpret_cast<const char*>(mesh.mVertices.data()), numVertices * sizeof(Vector3D));
+                os.write(reinterpret_cast<const char*>(mesh.mNormals.data()), numNormals * sizeof(Vector3D));
+                os.write(reinterpret_cast<const char*>(mesh.mUV.data()), numUV * sizeof(Vector2D));
 
                 if (numBoneData > 0)
                 {
                     for (int i = 0; i < numBoneData; i++)
                     {
-                        os.write(reinterpret_cast<const char*>(&mesh._boneData[i].boneId), sizeof(uint32_t) * MAX_NUM_OF_BONES_PER_VERTEX);
-                        os.write(reinterpret_cast<const char*>(&mesh._boneData[i].weights), sizeof(float) * MAX_NUM_OF_BONES_PER_VERTEX);
+                        os.write(reinterpret_cast<const char*>(&mesh.mBoneData[i].boneId), sizeof(uint32_t) * MAX_NUM_OF_BONES_PER_VERTEX);
+                        os.write(reinterpret_cast<const char*>(&mesh.mBoneData[i].weights), sizeof(float) * MAX_NUM_OF_BONES_PER_VERTEX);
                     }
                 }
 
-                os.write(reinterpret_cast<const char*>(&mesh._materialIndex), sizeof(uint16_t));
+                os.write(reinterpret_cast<const char*>(&mesh.mMaterialIndex), sizeof(uint16_t));
             }
 
             os.close();
@@ -76,27 +76,27 @@ namespace Faia
                 is.read(reinterpret_cast<char*>(&numUV), sizeof(uint32_t));
                 is.read(reinterpret_cast<char*>(&numBoneData), sizeof(uint32_t));
 
-                node._indices.resize(numIndices);
-                node._vertices.resize(numVertices);
-                node._uv.resize(numUV);
-                node._normals.resize(numNormals);
+                node.mIndices.resize(numIndices);
+                node.mVertices.resize(numVertices);
+                node.mUV.resize(numUV);
+                node.mNormals.resize(numNormals);
 
-                is.read(reinterpret_cast<char*>(node._indices.data()), numIndices * sizeof(uint16_t));
-                is.read(reinterpret_cast<char*>(node._vertices.data()), numVertices * sizeof(Vector3D));
-                is.read(reinterpret_cast<char*>(node._normals.data()), numNormals * sizeof(Vector3D));
-                is.read(reinterpret_cast<char*>(node._uv.data()), numUV * sizeof(Vector2D));
+                is.read(reinterpret_cast<char*>(node.mIndices.data()), numIndices * sizeof(uint16_t));
+                is.read(reinterpret_cast<char*>(node.mVertices.data()), numVertices * sizeof(Vector3D));
+                is.read(reinterpret_cast<char*>(node.mNormals.data()), numNormals * sizeof(Vector3D));
+                is.read(reinterpret_cast<char*>(node.mUV.data()), numUV * sizeof(Vector2D));
 
                 if (numBoneData > 0)
                 {
-                    node._boneData.resize(numBoneData);
+                    node.mBoneData.resize(numBoneData);
                     for (int i = 0; i < numBoneData; i++)
                     {
-                        is.read(reinterpret_cast<char*>(&node._boneData[i].boneId), sizeof(uint32_t) * MAX_NUM_OF_BONES_PER_VERTEX);
-                        is.read(reinterpret_cast<char*>(&node._boneData[i].weights), sizeof(float) * MAX_NUM_OF_BONES_PER_VERTEX);
+                        is.read(reinterpret_cast<char*>(&node.mBoneData[i].boneId), sizeof(uint32_t) * MAX_NUM_OF_BONES_PER_VERTEX);
+                        is.read(reinterpret_cast<char*>(&node.mBoneData[i].weights), sizeof(float) * MAX_NUM_OF_BONES_PER_VERTEX);
                     }
                 }
 
-                is.read(reinterpret_cast<char*>(&node._materialIndex), sizeof(uint16_t));
+                is.read(reinterpret_cast<char*>(&node.mMaterialIndex), sizeof(uint16_t));
 
                 _meshs.push_back(node);
             }          
@@ -110,9 +110,9 @@ namespace Faia
             ss << "Mesh count: " << _meshs.size() << "\n";
             for (auto m : _meshs)
             {
-                ss << "MaterialIndex: " << m._materialIndex << "\n";
+                ss << "MaterialIndex: " << m.mMaterialIndex << "\n";
                 ss << "Vetices:\n{\n";
-                for (auto v : m._vertices)
+                for (auto v : m.mVertices)
                 {
                     ss << "x: " << v.X << "\n";
                     ss << "y: " << v.Y << "\n";
@@ -121,14 +121,14 @@ namespace Faia
                 ss << "\n}\n";
 
                 ss << "Indices:\n{ ";
-                for (auto i : m._indices)
+                for (auto i : m.mIndices)
                 {
                     ss << i << ", ";
                 }
                 ss << " }\n";
 
                 ss << "UV:\n{\n";
-                for (auto uv : m._uv)
+                for (auto uv : m.mUV)
                 {
                     ss << "x: " << uv.X << "\n";
                     ss << "y: " << uv.Y << "\n";
@@ -281,7 +281,7 @@ namespace Faia
                 throw std::invalid_argument(ss.str().c_str());
             }
 
-            os.write(reinterpret_cast<char*>(&mGlovalInverseTransform), sizeof(RMatrix4x4)); 
+            os.write(reinterpret_cast<char*>(&mGlobalInverseTransform), sizeof(RMatrix4x4)); 
 
             uint32_t numBoneNameMap = mBoneNameToIdexMap.size();
             os.write(reinterpret_cast<char*>(&numBoneNameMap), sizeof(uint32_t));
@@ -331,7 +331,7 @@ namespace Faia
                 throw std::invalid_argument(ss.str().c_str());
             }
 
-            is.read(reinterpret_cast<char*>(&mGlovalInverseTransform), sizeof(RMatrix4x4));  uint32_t numBoneNameMap;
+            is.read(reinterpret_cast<char*>(&mGlobalInverseTransform), sizeof(RMatrix4x4));  uint32_t numBoneNameMap;
 
             is.read(reinterpret_cast<char*>(&numBoneNameMap), sizeof(uint32_t));
 

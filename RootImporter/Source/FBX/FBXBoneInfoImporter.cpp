@@ -1,4 +1,4 @@
-#include "FBXBoneInfoImporter.h"
+#include "FBX/FBXBoneInfoImporter.h"
 
 #include "Data/BitMeshData.h"
 
@@ -39,7 +39,7 @@ namespace Faia
                     return;
                 }
 
-                rbid.mGlovalInverseTransform = AiMatrixToRMatrix(aiScene->mRootNode->mTransformation.Inverse());
+                rbid.mGlobalInverseTransform = AiMatrixToRMatrix(aiScene->mRootNode->mTransformation.Inverse());
                 std::map<uint32_t, aiBone*> boneIndexToAiBone;
 
                 for (int meshIndex = 0; meshIndex < aiScene->mNumMeshes; meshIndex++)

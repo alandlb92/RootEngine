@@ -16,12 +16,12 @@ namespace Faia
             for (auto& bmesh : bmd._meshs)
             {
                 shared_ptr<SkeletalMesh> mesh = std::make_shared<SkeletalMesh>();
-                mesh->SetIndices(bmesh._indices);
-                mesh->SetVertices(bmesh._vertices);
-                mesh->SetUV(bmesh._uv);
-                mesh->SetNormals(bmesh._normals);
-                mesh->SetBoneData(bmesh._boneData);
-                mesh->_materialIndex = bmesh._materialIndex;
+                mesh->SetIndices(bmesh.mIndices);
+                mesh->SetVertices(bmesh.mVertices);
+                mesh->SetUV(bmesh.mUV);
+                mesh->SetNormals(bmesh.mNormals);
+                mesh->SetBoneData(bmesh.mBoneData);
+                mesh->_materialIndex = bmesh.mMaterialIndex;
                 meshs.push_back(mesh);
             }
 

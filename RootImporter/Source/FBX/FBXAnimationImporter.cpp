@@ -1,4 +1,5 @@
-#include "FBXAnimationImporter.h"
+
+#include "FBX/FBXAnimationImporter.h"
 
 #include "Data/BitMeshData.h"
 #include "Data/RMatrix4x4.h"

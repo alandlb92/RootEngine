@@ -47,6 +47,11 @@ namespace Faia
                 return *this;
             }
 
+            bool operator==(const Vector3D& value) const
+            {
+                return X == value.X && Y == value.Y && Z == value.Z;
+            }
+
             //TODO: maibe change this to a Math lib
             static Vector3D Lerp(Vector3D start, Vector3D end, float t)
             {

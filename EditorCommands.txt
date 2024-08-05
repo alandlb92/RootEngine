@@ -1,9 +1,9 @@
 --Import cube---
 
-C:\Users\alan.bittencourt\Documents\Projects\Personal\BitEngine\x64\Debug\BitEngineEditor.exe import C:\Users\alan.bittencourt\OneDrive\Faia\Projetos\WIP\BitEngine\Content\Models\cube.fbx C:\Users\alan.bittencourt\Documents\Projects\Personal\BitEngine\x64\Debug\Content\Models\cube.bitMesh
+C:\Users\alan.bittencourt\Documents\Projects\Personal\BitEngine\x64\Debug\RootCmdTools.exe import C:\Users\alan.bittencourt\OneDrive\Faia\Projetos\WIP\BitEngine\Content\Models\cube.fbx C:\Users\alan.bittencourt\Documents\Projects\Personal\BitEngine\x64\Debug\Content\Models\cube.bitMesh
 
 
 --Import hero---
 
 
-C:\Users\alan.bittencourt\Documents\Projects\Personal\BitEngine\x64\Debug\BitEngineEditor.exe import C:\Users\alan.bittencourt\OneDrive\Faia\Projetos\WIP\BitEngine\Content\Models\HeroGoat.fbx C:\Users\alan.bittencourt\Documents\Projects\Personal\BitEngine\x64\Debug\Content\Models\HeroGoat.bitMesh
+C:\Users\alan.bittencourt\Documents\Projects\Personal\BitEngine\x64\Debug\RootCmdTools.exe import C:\Users\alan.bittencourt\OneDrive\Faia\Projetos\WIP\BitEngine\Content\Models\HeroGoat.fbx C:\Users\alan.bittencourt\Documents\Projects\Personal\BitEngine\x64\Debug\Content\Models\HeroGoat.bitMesh

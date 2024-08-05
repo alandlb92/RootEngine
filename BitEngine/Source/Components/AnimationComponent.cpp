@@ -143,7 +143,7 @@ namespace Faia
 
             RMatrix4x4 globalTransformationMatrix = parentTransform * animPoseMatrix;
 
-            animationMatrix[bone.mIndex] = (pMeshDataReference->mGlovalInverseTransform * globalTransformationMatrix * bone.mBoneOffsetMatrix).Transpose();
+            animationMatrix[bone.mIndex] = (pMeshDataReference->mGlobalInverseTransform * globalTransformationMatrix * bone.mBoneOffsetMatrix).Transpose();
 
             /* Faia::Debug::Log(bone.mName.c_str());
              Faia::Debug::Log("mGlovalInverseTransform");

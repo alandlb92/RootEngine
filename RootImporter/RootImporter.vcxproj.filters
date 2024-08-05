@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{735861f9-7ce5-4a0b-95a3-bf29c9e4511b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\FBX">
+      <UniqueIdentifier>{bdb0a463-b717-4545-8aa8-69b05a677718}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\FBX">
+      <UniqueIdentifier>{94ab8388-7a64-4046-aac8-2ea71a8aafd7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Include\FBX\FBXAnimationImporter.h">
+      <Filter>Header Files\FBX</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\FBX\FBXBoneInfoImporter.h">
+      <Filter>Header Files\FBX</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\FBX\FBXImporter.h">
+      <Filter>Header Files\FBX</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\FBX\FBXMeshImporter.h">
+      <Filter>Header Files\FBX</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\FBX\FBXAnimationImporter.cpp">
+      <Filter>Source Files\FBX</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\FBX\FBXBoneInfoImporter.cpp">
+      <Filter>Source Files\FBX</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\FBX\FBXImporter.cpp">
+      <Filter>Source Files\FBX</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\FBX\FBXMeshImporter.cpp">
+      <Filter>Source Files\FBX</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

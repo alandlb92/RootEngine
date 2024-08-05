@@ -1,4 +1,4 @@
-#include "FBXImporter.h"
+#include "FBX/FBXImporter.h"
 #include "Data/BitMeshData.h"
 #include <iostream>
 #include <sstream>
@@ -9,9 +9,9 @@
 #include <assimp/config.h>
 #include <assimp/cimport.h>
 
-#include "FBXMeshImporter.h"
-#include "FBXBoneInfoImporter.h"
-#include "FBXAnimationImporter.h"
+#include "FBX/FBXMeshImporter.h"
+#include "FBX/FBXBoneInfoImporter.h"
+#include "FBX/FBXAnimationImporter.h"
 
 namespace Faia
 {

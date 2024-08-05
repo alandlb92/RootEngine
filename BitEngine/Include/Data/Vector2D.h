@@ -1,53 +1,65 @@
 #pragma once
 #include <string>
 
-struct Vector2D
+namespace Faia
 {
-    float X, Y;
-
-    Vector2D()
+    namespace Root
     {
-        X = 0;
-        Y = 0;
-    }
+        struct Vector2D
+        {
+            float X, Y;
 
-    Vector2D(float f)
-    {
-        X = f;
-        Y = f;
-    }
+            Vector2D()
+            {
+                X = 0;
+                Y = 0;
+            }
 
-    Vector2D(float x, float y)
-    {
-        X = x;
-        Y = y;
-    }
+            Vector2D(float f)
+            {
+                X = f;
+                Y = f;
+            }
 
-    Vector2D operator* (const float value)
-    {
-        return Vector2D(X * value, Y * value);
-    }
+            Vector2D(float x, float y)
+            {
+                X = x;
+                Y = y;
+            }
 
-    Vector2D operator+ (const float value)
-    {
-        return Vector2D(X + value, Y + value);
-    }
+            Vector2D operator* (const float value)
+            {
+                return Vector2D(X * value, Y * value);
+            }
 
-    Vector2D& operator += (const Vector2D value)
-    {
-        this->X += value.X;
-        this->Y += value.Y;
-        return *this;
-    }
+            Vector2D operator+ (const float value)
+            {
+                return Vector2D(X + value, Y + value);
+            }
 
-    std::string ToString()
-    {
-        std::string s("X: ");
-        s.append(std::to_string(X));
-        s.append("\n");
-        s.append("Y: ");
-        s.append(std::to_string(Y));
-        s.append("\n");
-        return s;
+
+            bool operator==(const Vector2D& value) const 
+            {
+                return X == value.X && Y == value.Y;
+            }
+
+            Vector2D& operator += (const Vector2D value)
+            {
+                this->X += value.X;
+                this->Y += value.Y;
+                return *this;
+            }
+
+            std::string ToString()
+            {
+                std::string s("X: ");
+                s.append(std::to_string(X));
+                s.append("\n");
+                s.append("Y: ");
+                s.append(std::to_string(Y));
+                s.append("\n");
+                return s;
+            }
+        };
     }
-};
+}

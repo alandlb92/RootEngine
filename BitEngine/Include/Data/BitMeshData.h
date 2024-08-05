@@ -26,12 +26,12 @@ namespace Faia
 
         struct RMeshNode
         {
-            vector<uint16_t> _indices;
-            vector<Vector3D> _vertices;
-            vector<Vector3D> _normals;
-            vector<Vector2D> _uv;
-            vector<RVertexBoneData> _boneData;
-            uint16_t _materialIndex;
+            vector<uint16_t> mIndices;
+            vector<Vector3D> mVertices;
+            vector<Vector3D> mNormals;
+            vector<Vector2D> mUV;
+            vector<RVertexBoneData> mBoneData;
+            uint16_t mMaterialIndex;
         };
 
         struct RAnimationQuatKey
@@ -80,7 +80,7 @@ namespace Faia
         //todo: bonesInfo need to go to a new data specific for bones so we don't need to import for when bones is the same
         struct RBoneInfoData
         {
-            RMatrix4x4 mGlovalInverseTransform;
+            RMatrix4x4 mGlobalInverseTransform;
             map<std::string, uint32_t> mBoneNameToIdexMap;
             map<uint32_t, RBoneInfo> mIndexToBoneInfo;
 

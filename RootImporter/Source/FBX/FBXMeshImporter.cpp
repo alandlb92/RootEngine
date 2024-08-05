@@ -1,4 +1,4 @@
-#include "FBXMeshImporter.h"
+#include "FBX/FBXMeshImporter.h"
 #include "Data/BitMeshData.h"
 #include "Data/RMatrix4x4.h"
 
@@ -51,11 +51,11 @@ namespace Faia
                     {
                         aiVector3D& vertex = aiMesh->mVertices[j];
                         Vector3D vert(vertex.x, vertex.y, vertex.z);
-                        mesh._vertices.push_back(vert);
+                        mesh.mVertices.push_back(vert);
 
                         aiVector3D& normal = aiMesh->mNormals[j];
                         Vector3D rnorm(normal.x, normal.y, normal.z);
-                        mesh._normals.push_back(rnorm);
+                        mesh.mNormals.push_back(rnorm);
                     }
 
                     //Import faces
@@ -65,7 +65,7 @@ namespace Faia
                         for (unsigned int k = 0; k < face.mNumIndices; ++k)
                         {
                             uint16_t index = face.mIndices[k];
-                            mesh._indices.push_back(index);
+                            mesh.mIndices.push_back(index);
                         }
                     }
 
@@ -76,7 +76,7 @@ namespace Faia
                         {
                             aiVector3D& uv = aiMesh->mTextureCoords[0][j];
                             Vector2D uvCoord(uv.x, -uv.y);
-                            mesh._uv.push_back(uvCoord);
+                            mesh.mUV.push_back(uvCoord);
                         }
                     }
 
@@ -87,7 +87,7 @@ namespace Faia
                         const RBoneInfoData rbid(boneInfoRefPath);
                         
 
-                        mesh._boneData.resize(aiMesh->mNumVertices);
+                        mesh.mBoneData.resize(aiMesh->mNumVertices);
 
                         for (int j = 0; j < aiMesh->mNumBones; j++)
                         {
@@ -96,7 +96,7 @@ namespace Faia
 
                             for (int wightIndex = 0; wightIndex < aiBone->mNumWeights; ++wightIndex)
                             {
-                                RVertexBoneData& boneData = mesh._boneData[aiBone->mWeights[wightIndex].mVertexId];
+                                RVertexBoneData& boneData = mesh.mBoneData[aiBone->mWeights[wightIndex].mVertexId];
                                 uint32_t boneId = 0;
                                 map<std::string, uint32_t>::const_iterator it = rbid.mBoneNameToIdexMap.find(boneName);
 
@@ -136,7 +136,7 @@ namespace Faia
                     }
 
 
-                    mesh._materialIndex = aiMesh->mMaterialIndex;
+                    mesh.mMaterialIndex = aiMesh->mMaterialIndex;
                     rmd._meshs.push_back(mesh);
                 }                
 

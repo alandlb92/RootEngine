@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Importer/FBXImporter.h"
+#include "FBX/FBXImporter.h"
 #include <string>
 
 

@@ -15,11 +15,11 @@ namespace Faia
             for (auto& bmesh : bmd._meshs)
             {
                 std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>();
-                mesh->SetIndices(bmesh._indices);
-                mesh->SetVertices(bmesh._vertices);
-                mesh->SetUV(bmesh._uv);
-                mesh->SetNormals(bmesh._normals);
-                mesh->_materialIndex = bmesh._materialIndex;
+                mesh->SetIndices(bmesh.mIndices);
+                mesh->SetVertices(bmesh.mVertices);
+                mesh->SetUV(bmesh.mUV);
+                mesh->SetNormals(bmesh.mNormals);
+                mesh->_materialIndex = bmesh.mMaterialIndex;
                 meshs.push_back(mesh);
             }
 

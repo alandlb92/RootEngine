@@ -24,6 +24,11 @@ namespace Faia
                 W = w;
             }
 
+            bool operator==(const Quaternion& value) const
+            {
+                return X == value.X && Y == value.Y && Z == value.Z && W == value.W;
+            }
+
             Quaternion operator* (const float value)
             {
                 return Quaternion(X * value, Y * value, Z * value, W * value);

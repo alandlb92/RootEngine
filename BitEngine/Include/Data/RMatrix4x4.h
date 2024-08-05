@@ -36,6 +36,14 @@ namespace Faia
 
             };
 
+            bool operator==(const RMatrix4x4& value) const
+            {
+                return  m00 == value.m00 && m01 == value.m01 && m02 == value.m02 && m03 == value.m03 &&
+                        m10 == value.m10 && m11 == value.m11 && m12 == value.m12 && m13 == value.m13 &&
+                        m20 == value.m20 && m21 == value.m21 && m22 == value.m22 && m23 == value.m23 &&
+                        m30 == value.m30 && m31 == value.m31 && m32 == value.m32 && m33 == value.m33;
+            }
+
             RMatrix4x4 Transpose()
             {
                 return RMatrix4x4(m00, m10, m20, m30,
