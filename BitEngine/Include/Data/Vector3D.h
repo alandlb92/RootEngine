@@ -52,7 +52,7 @@ namespace Faia
                 return X == value.X && Y == value.Y && Z == value.Z;
             }
 
-            //TODO: maibe change this to a Math lib
+            //TODO: maibe change this to a Math lib and add to Math lib to Vec operations
             static Vector3D Lerp(Vector3D start, Vector3D end, float t)
             {
                 return Vector3D(

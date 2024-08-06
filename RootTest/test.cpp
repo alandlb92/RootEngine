@@ -3,6 +3,9 @@
 #include "FaiaUtilsTest.h"
 #include "ImporterTests.h"
 #include "Vector2DTest.h"
+#include "Vector3DTest.h"
+#include "QuaternionTest.h"
+#include "RMatrix4x4Test.h"
 
 int main(int argc, char** argv) 
 {

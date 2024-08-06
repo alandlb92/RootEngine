@@ -100,6 +100,14 @@ namespace Faia
                 return m;
             }
 
+            static RMatrix4x4 CreateTransitionMatrix(Vector3D& position)
+            {
+                return  RMatrix4x4 (1, 0, 0, position.X,
+                                    0, 1, 0, position.Y,
+                                    0, 0, 1, position.Z,
+                                    0, 0, 0, 1);
+            }
+
             static RMatrix4x4 CreateRotationMatrixFromQuaternion(Quaternion& quaternion)
             {
                 RMatrix4x4 m;
@@ -137,43 +145,24 @@ namespace Faia
                 return m;
             }
 
+            static RMatrix4x4 CreateScaleMatrix(Vector3D& scale)
+            {
+                return RMatrix4x4(scale.X, 0, 0, 0,
+                                  0, scale.Y, 0, 0,
+                                  0, 0, scale.Z, 0,
+                                  0, 0, 0, 1);
+            }
+
             static RMatrix4x4 CreateTransformationMatrix(Vector3D& position, Quaternion& quatRotation, Vector3D& scale) {
                 float scaleFactor = 1.0f;
-                RMatrix4x4 translationMatrix(1, 0, 0, position.X,
-                    0, 1, 0, position.Y,
-                    0, 0, 1, position.Z,
-                    0, 0, 0, 1);
-
+                RMatrix4x4 translationMatrix = RMatrix4x4::CreateTransitionMatrix(position);
                 RMatrix4x4 rotationMatrix = RMatrix4x4::CreateRotationMatrixFromQuaternion(quatRotation);
-
-                RMatrix4x4 scaleMatrix(scale.X, 0, 0, 0,
-                    0, scale.Y, 0, 0,
-                    0, 0, scale.Z, 0,
-                    0, 0, 0, 1);
-
-
-                //Faia::Debug::Log("translation");
-                //Faia::Debug::Log(translationMatrix.ToPrintableMatrix().c_str());
-
-                //Faia::Debug::Log("rotation");
-                //Faia::Debug::Log(rotationMatrix.ToPrintableMatrix().c_str());
-                //
-                //Faia::Debug::Log("scale");
-                //Faia::Debug::Log(scaleMatrix.ToPrintableMatrix().c_str());
-
-
+                RMatrix4x4 scaleMatrix = RMatrix4x4::CreateScaleMatrix(scale);
                 RMatrix4x4 sclPRot = scaleMatrix * rotationMatrix;
-                //Faia::Debug::Log("sclPRot");
-                //Faia::Debug::Log(sclPRot.ToPrintableMatrix().c_str());
-
-
                 RMatrix4x4 transformationMatrix = sclPRot;
                 transformationMatrix.m03 = translationMatrix.m03;
                 transformationMatrix.m13 = translationMatrix.m13;
                 transformationMatrix.m23 = translationMatrix.m23;
-
-                /*  Faia::Debug::Log("transformationMatrix");
-                  Faia::Debug::Log(transformationMatrix.ToPrintableMatrix().c_str());*/
                 return transformationMatrix;
             }
         };

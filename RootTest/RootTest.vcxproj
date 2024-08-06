@@ -160,7 +160,10 @@
     <ClInclude Include="FaiaUtilsTest.h" />
     <ClInclude Include="ImporterTests.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="QuaternionTest.h" />
+    <ClInclude Include="RMatrix4x4Test.h" />
     <ClInclude Include="Vector2DTest.h" />
+    <ClInclude Include="Vector3DTest.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test.cpp" />

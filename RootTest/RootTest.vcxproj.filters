@@ -15,6 +15,15 @@
     <ClInclude Include="Vector2DTest.h">
       <Filter>Tests</Filter>
     </ClInclude>
+    <ClInclude Include="Vector3DTest.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="QuaternionTest.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="RMatrix4x4Test.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

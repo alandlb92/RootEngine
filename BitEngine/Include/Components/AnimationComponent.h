@@ -19,8 +19,7 @@ namespace Faia
         public:
             void SetAnimation(const char* path);
             void GetAnimationChannelsMatrix(RMatrix4x4(&animationMatrix)[MAX_NUM_OF_ANIMATION_CHANNELS]);
-            //Todo: separete the bone info from RMeshData, this is low down the file and will be better for implementation
-            void SetBoneInfo(const char* meshDataReferencePath);
+            void SetBoneInfo(const char* boneInfoDataReferencePath);
 
         protected:
             void Update(float deltaTime) override;

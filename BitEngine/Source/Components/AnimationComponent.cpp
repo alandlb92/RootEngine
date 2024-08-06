@@ -13,11 +13,11 @@ namespace Faia
             pAnimationData = AnimationManager::GetInstance()->LoadAnimationFromPath(path);
         }
 
-        void AnimationComponent::SetBoneInfo(const char* meshDataReferencePath)
+        void AnimationComponent::SetBoneInfo(const char* boneInfoDataReferencePath)
         {
             //todo: this must load from a manager to apply flyweight
             pMeshDataReference = new RBoneInfoData();
-            pMeshDataReference->ReadFromPath(meshDataReferencePath);
+            pMeshDataReference->ReadFromPath(boneInfoDataReferencePath);
         }
 
         void AnimationComponent::GetAnimationChannelsMatrix(RMatrix4x4(&animationMatrix)[MAX_NUM_OF_ANIMATION_CHANNELS])
@@ -25,12 +25,6 @@ namespace Faia
             //Todo: review the necessity of weak ptr
             //auto pa = pAnimationData.lock();
             ProcessBoneHierarchy(pMeshDataReference->mIndexToBoneInfo[0], RMatrix4x4::Identity(), animationMatrix);
-            /*  for (int i = 0; i < pMeshDataReference->mIndexToBoneInfo.size(); i++)
-              {
-                  Faia::Debug::Log(pMeshDataReference->mIndexToBoneInfo[i].mName.c_str());
-                  Faia::Debug::Log(animationMatrix[i].ToPrintableMatrix().c_str());
-              }*/
-              //Faia::Debug::Log("---------------------------One pose------------------------------");
         }
 
         void AnimationComponent::Update(float deltaTime)

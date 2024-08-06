@@ -39,7 +39,7 @@ namespace Faia
                 return Quaternion(X + value.X, Y + value.Y, Z + value.Z, W + value.W);
             }
 
-            //TODO: maibe change this to a Math lib
+            //TODO: maibe change this to a Math lib and do a test
             static Quaternion Lerp(Quaternion start, Quaternion end, float t)
             {
                 Quaternion result(
