@@ -17,7 +17,7 @@ namespace Faia
         class AnimationComponent : public BComponent
         {
         public:
-            void SetAnimation(const char* path);
+            void SetAnimation(const char* animationDataPath);
             void GetAnimationChannelsMatrix(RMatrix4x4(&animationMatrix)[MAX_NUM_OF_ANIMATION_CHANNELS]);
             void SetBoneInfo(const char* boneInfoDataReferencePath);
 
@@ -29,9 +29,9 @@ namespace Faia
             bool mLoopAnim = true;
 
             float GetAnimCurrentTime(float maxTime);
-            RAnimationData* pAnimationData;
+            std::shared_ptr<RAnimationData> pAnimationData;
             //Todo: use smart pointers
-            RBoneInfoData* pMeshDataReference;
+            std::shared_ptr<RBoneInfoData> pMeshDataReference;
             Vector3D GetVectorKeyAtCurrentTime(std::vector<RAnimationVectorKey>& vectorKeyList);
             Quaternion GetQuatKeyAtCurrentTime(std::vector<RAnimationQuatKey>& quatKeyList);
 

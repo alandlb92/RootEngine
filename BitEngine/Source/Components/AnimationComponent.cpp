@@ -1,23 +1,21 @@
 #include "Components/AnimationComponent.h"
-#include "Graphics/AnimationManager.h"
 #include "Data/BitMeshData.h"
 #include "Faia/Debug.h"
+#include "Core/ResourcesManager.h"
 #include <sstream>
 
 namespace Faia
 {
     namespace Root
     {
-        void AnimationComponent::SetAnimation(const char* path)
+        void AnimationComponent::SetAnimation(const char* animationDataPath)
         {
-            pAnimationData = AnimationManager::GetInstance()->LoadAnimationFromPath(path);
+            pAnimationData = GetResourcesManager()->LoadBoneData<RAnimationData>(animationDataPath);
         }
 
         void AnimationComponent::SetBoneInfo(const char* boneInfoDataReferencePath)
         {
-            //todo: this must load from a manager to apply flyweight
-            pMeshDataReference = new RBoneInfoData();
-            pMeshDataReference->ReadFromPath(boneInfoDataReferencePath);
+            pMeshDataReference = GetResourcesManager()->LoadBoneData<RBoneInfoData>(boneInfoDataReferencePath);
         }
 
         void AnimationComponent::GetAnimationChannelsMatrix(RMatrix4x4(&animationMatrix)[MAX_NUM_OF_ANIMATION_CHANNELS])

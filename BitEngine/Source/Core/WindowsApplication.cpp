@@ -1,6 +1,6 @@
 ﻿#include "Core/WindowsApplication.h"
 #include "Core/BitEngine.h"
-
+#include "Core/ResourcesManager.h"
 
 namespace Faia
 {
@@ -28,7 +28,7 @@ namespace Faia
         if (!InitInstance(nCmdShow)) {
             return FALSE;
         }
-
+        
         HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(_idcGame));
 
         MSG msg = { 0 };

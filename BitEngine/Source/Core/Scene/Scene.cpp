@@ -35,8 +35,8 @@ namespace Faia
                 Mesh::MakeFromFbxFile("C:\\Users\\alan.bittencourt\\Documents\\Projects\\Personal\\BitEngine\\x64\\Debug\\Content\\Models\\cube.rmesh");
 
             AnimationComponent* animationComponent = new AnimationComponent();
-            animationComponent->SetAnimation("C:\\Users\\alan.bittencourt\\Documents\\Projects\\Personal\\BitEngine\\x64\\Debug\\Content\\Animations\\testAnimation.ranim");
-            animationComponent->SetBoneInfo("C:\\Users\\alan.bittencourt\\Documents\\Projects\\Personal\\BitEngine\\x64\\Debug\\Content\\Models\\HeroGoat.rboneinfo");
+            animationComponent->SetAnimation("Animations\\testAnimation.ranim");
+            animationComponent->SetBoneInfo("Models\\HeroGoat.rboneinfo");
 
             meshComponent->AddMeshs(meshs);
             meshComponent2->AddMeshs(cubeMeshs);

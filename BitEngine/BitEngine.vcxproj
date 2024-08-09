@@ -75,6 +75,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -160,6 +161,8 @@ xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
     <ClInclude Include="Include\Core\BComponent.h" />
     <ClInclude Include="Include\Core\BitEngine.h" />
     <ClInclude Include="Include\Core\BObject.h" />
+    <ClInclude Include="Include\Core\ResourceContainer.h" />
+    <ClInclude Include="Include\Core\ResourcesManager.h" />
     <ClInclude Include="Include\Core\Scene\Scene.h" />
     <ClInclude Include="Include\Core\Scene\SceneManager.h" />
     <ClInclude Include="Include\Core\Scene\SceneObject.h" />
@@ -171,7 +174,6 @@ xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
     <ClInclude Include="Include\Data\Vector2D.h" />
     <ClInclude Include="Include\Data\Vector3D.h" />
     <ClInclude Include="Include\Data\Quaternion.h" />
-    <ClInclude Include="Include\Graphics\AnimationManager.h" />
     <ClInclude Include="Include\Graphics\Camera.h" />
     <ClInclude Include="Include\Graphics\DrawableObject.h" />
     <ClInclude Include="Include\Graphics\GraphicsMain.h" />
@@ -191,13 +193,14 @@ xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
     <ClCompile Include="Source\Core\BComponent.cpp" />
     <ClCompile Include="Source\Core\BitEngine.cpp" />
     <ClCompile Include="Source\Core\BObject.cpp" />
+    <ClCompile Include="Source\Core\ResourceContainer.cpp" />
+    <ClCompile Include="Source\Core\ResourcesManager.cpp" />
     <ClCompile Include="Source\Core\Scene\Scene.cpp" />
     <ClCompile Include="Source\Core\Scene\SceneManager.cpp" />
     <ClCompile Include="Source\Core\Scene\SceneObject.cpp" />
     <ClCompile Include="Source\Core\WindowsApplication.cpp" />
     <ClCompile Include="Source\Data\BitMeshData.cpp" />
     <ClCompile Include="Source\Data\Transform.cpp" />
-    <ClCompile Include="Source\Graphics\AnimationManager.cpp" />
     <ClCompile Include="Source\Graphics\Camera.cpp" />
     <ClCompile Include="Source\Graphics\DrawableObject.cpp" />
     <ClCompile Include="Source\Graphics\GraphicsMain.cpp" />
