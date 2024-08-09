@@ -7,7 +7,7 @@
 #include "Core/Scene/SceneManager.h";
 #include <numbers>
 #include "Graphics/SkeletalMesh.h"
-#include "Data/BitMeshData.h"
+#include "Data/RMeshData.h"
 #include "Components/AnimationComponent.h"
 
 using namespace DirectX;
@@ -299,10 +299,10 @@ namespace Faia
                     anim->GetAnimationChannelsMatrix(GraphicsMain::tempPerObjectBuffer.animTransformMatrix);
                 }
 
-                for (auto& mesh : ro->GetMeshComponent()->GetMeshs())
+                for (RMesh& mesh : ro->GetMeshComponent()->GetMeshs())
                 {
                     uint32_t indexCount = 0;
-                    int materialIndex = mesh->GetMaterialIndex();
+                    int materialIndex = mesh.GetMaterialIndex();
                     Material* material = ro->GetMaterialComponent()->GetMaterialOfIndex(materialIndex);
 
                     XMFLOAT3 XMFObjPos = XMFLOAT3(ro->GetPosition().X, ro->GetPosition().Y, ro->GetPosition().Z);
@@ -352,28 +352,28 @@ namespace Faia
                     const UINT normalStride = sizeof(Vector3D);
                     UINT offset = 0;
 
-                    ID3D11Buffer* vertexBuffer = mesh->GetVertexBuffer();
-                    ID3D11Buffer* uvBuffer = mesh->GetUvBuffer();
-                    ID3D11Buffer* normalBuffer = mesh->GetNormalBuffer();
-                    ID3D11Buffer* indexBuffer = mesh->GetIndexBuffer();
+                    ID3D11Buffer* vertexBuffer = mesh.GetVertexBuffer();
+                    ID3D11Buffer* uvBuffer = mesh.GetUvBuffer();
+                    ID3D11Buffer* normalBuffer = mesh.GetNormalBuffer();
+                    ID3D11Buffer* indexBuffer = mesh.GetIndexBuffer();
 
                     _deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &vertexStride, &offset);
                     _deviceContext->IASetVertexBuffers(1, 1, &uvBuffer, &uvStride, &offset);
                     _deviceContext->IASetVertexBuffers(2, 1, &normalBuffer, &normalStride, &offset);
 
                     //TODO: Set Bones data
-                    SkeletalMesh* sMesh = dynamic_cast<SkeletalMesh*>(mesh.get());
+                 /*   SkeletalMesh sMesh = dynamic_cast<SkeletalMesh>(mesh);
                     if (sMesh)
                     {
                         const UINT boneDataStride = sizeof(RVertexBoneData);
                         ID3D11Buffer* boneDataBuffer = sMesh->GetBonesDataBuffer();
                         _deviceContext->IASetVertexBuffers(3, 1, &boneDataBuffer, &boneDataStride, &offset);
-                    }
+                    }*/
 
                     _deviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R16_UINT, 0);
 
 
-                    indexCount += mesh->GetIndicesSize();
+                    indexCount += mesh.GetIndicesSize();
                     _deviceContext->VSSetShader(material->GetShader()->GetVertexShader(), nullptr, 0);
                     _deviceContext->PSSetShader(material->GetShader()->GetPixelShader(), nullptr, 0);
 

@@ -1,8 +1,10 @@
 #pragma once
 #include "Core/BComponent.h"
-#include <memory>
 #include "Data/RMatrix4x4.h";
+
 #include <vector>
+#include <memory>
+
 
 namespace Faia
 {
@@ -17,9 +19,9 @@ namespace Faia
         class AnimationComponent : public BComponent
         {
         public:
-            void SetAnimation(const char* animationDataPath);
+            void LoadAnimation(const char* animationDataPath);
             void GetAnimationChannelsMatrix(RMatrix4x4(&animationMatrix)[MAX_NUM_OF_ANIMATION_CHANNELS]);
-            void SetBoneInfo(const char* boneInfoDataReferencePath);
+            void LoadBoneInfo(const char* boneInfoDataReferencePath);
 
         protected:
             void Update(float deltaTime) override;

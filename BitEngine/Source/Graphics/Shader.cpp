@@ -5,7 +5,7 @@
 #include "Graphics/GraphicsMain.h"
 #include "Faia/Memory.h"
 #include "Faia/Converter.h"
-#include "Data/BitMeshData.h"
+#include "Data/RMeshData.h"
 
 //todo: All directx references must be in files with _DX11 sufix
 using namespace DirectX;

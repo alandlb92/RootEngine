@@ -1,9 +1,10 @@
 #pragma once
 #include "Core/Scene/SceneObject.h"
-#include "d3d11.h"
-#include "directxmath.h"
 #include "Data/Transform.h"
 #include "Data/Quaternion.h"
+
+#include "d3d11.h"
+#include "directxmath.h"
 
 //Todo: remove direcx dependency, found the matrix formula for perpective camera and use RMatrix4x4
 using namespace DirectX;

@@ -11,7 +11,7 @@ namespace Faia
 
             Quaternion() : Vector3D()
             {
-                W = 1;
+                W = 1.f;
             }
 
             Quaternion(float f) : Vector3D(f)

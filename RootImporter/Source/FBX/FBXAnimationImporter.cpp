@@ -1,7 +1,7 @@
 
 #include "FBX/FBXAnimationImporter.h"
 
-#include "Data/BitMeshData.h"
+#include "Data/RMeshData.h"
 #include "Data/RMatrix4x4.h"
 
 #include <assimp/scene.h>

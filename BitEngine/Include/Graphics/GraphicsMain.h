@@ -2,15 +2,16 @@
 //See about how to compile shader, to create a shader compiler in RUNTIME COMPILED SHADER session in the link below
 //https://www.3dgep.com/introduction-to-directx-11/#Create_Device_and_Swap_Chain
 
-#include "Windows.h"
-#include "d3d11.h"
-#include <cassert>
-#include <vector>
 #include "DrawableObject.h"
 #include "Camera.h"
-#include <wrl/client.h>
 #include "Data/RColor.h"
 #include "Data/RMatrix4x4.h"
+
+#include "Windows.h"
+#include "d3d11.h"
+
+#include <cassert>
+#include <vector>
 
 
 namespace Faia

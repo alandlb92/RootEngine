@@ -1,5 +1,5 @@
 #include "FBX/FBXMeshImporter.h"
-#include "Data/BitMeshData.h"
+#include "Data/RMeshData.h"
 #include "Data/RMatrix4x4.h"
 
 #include <assimp/scene.h>
@@ -137,7 +137,7 @@ namespace Faia
 
 
                     mesh.mMaterialIndex = aiMesh->mMaterialIndex;
-                    rmd._meshs.push_back(mesh);
+                    rmd.mRMeshNodes.push_back(mesh);
                 }                
 
                 rmd.Write(outputPath);

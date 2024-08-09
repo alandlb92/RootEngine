@@ -17,11 +17,11 @@ namespace Faia
 
         void BObject::AddComponent(BComponent* component)
         {
-            if (typeid(*component) == typeid(MeshComponent) && _meshComponent == nullptr)
+            if (typeid(*component) == typeid(RMeshComponent) && _meshComponent == nullptr)
             {
-                _meshComponent = dynamic_cast<MeshComponent*>(component);
+                _meshComponent = dynamic_cast<RMeshComponent*>(component);
             }
-            else if (typeid(*component) == typeid(MeshComponent))
+            else if (typeid(*component) == typeid(RMeshComponent))
             {
                 PopError("You cant have more than 1 MeshComponent in the sabe Object");
             }

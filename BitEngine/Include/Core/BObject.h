@@ -3,7 +3,7 @@
 #include "Core/BComponent.h"
 
 #include "Components/MaterialComponent.h"
-#include "Components/MeshComponent.h"
+#include "Components/RMeshComponent.h"
 
 #include <list>
 #include <functional>
@@ -40,7 +40,7 @@ namespace Faia
                 return nullptr;
             }
 
-            MeshComponent* GetMeshComponent() const { return _meshComponent; }
+            RMeshComponent* GetMeshComponent() const { return _meshComponent; }
             MaterialComponent* GetMaterialComponent() const { return _materialComponent; }
 
             void SetPosition(Vector3D newPosition);
@@ -66,7 +66,7 @@ namespace Faia
             std::list<NotifyTrasnformChange> _onNotifyPositionChange;
             std::list<NotifyTrasnformChange> _onNotifyRotationChange;
             std::list<NotifyTrasnformChange> _onNotifyScaleChange;
-            MeshComponent* _meshComponent;
+            RMeshComponent* _meshComponent;
             MaterialComponent* _materialComponent;
         };         
     }
