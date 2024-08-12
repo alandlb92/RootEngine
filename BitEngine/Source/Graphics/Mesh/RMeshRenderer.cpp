@@ -1,6 +1,6 @@
 #include "Graphics/Mesh/RMeshRenderer.h"
-#include "Data/RMeshData.h"
 #include "Graphics/Mesh/RMesh.h"
+#include "Data/RMeshData.h"
 
 namespace Faia
 {
