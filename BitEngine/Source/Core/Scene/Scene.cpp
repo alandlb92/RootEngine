@@ -1,6 +1,6 @@
 #include "Core/Scene/Scene.h"
 #include "Graphics/Mesh/RMesh.h"
-#include "Graphics/SkeletalMesh.h"
+#include "Graphics/Mesh/RSkeletalMesh.h"
 #include "Graphics/Material.h"
 #include "Graphics/Camera.h"
 #include "Graphics/LightManager.h"

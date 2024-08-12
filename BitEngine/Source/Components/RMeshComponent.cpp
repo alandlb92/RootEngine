@@ -1,7 +1,8 @@
 #include "Components/RMeshComponent.h"
-#include "FaiaInputSystem.h"
-#include "Core/ResourcesManager.h"
+
+#include "Graphics/Mesh/RMeshRenderer.h"
 #include "Graphics/Mesh/RMesh.h"
+#include "Core/ResourcesManager.h"
 
 namespace Faia
 {

@@ -8,21 +8,21 @@ namespace Faia
     {
         void RMeshRenderer::ReadFromPath(const char* filePath)
         {
-            RMeshData bmd;
-            bmd.ReadFromPath(filePath);
-            for (auto& rmesh : bmd.mRMeshNodes)
-            {                
-                RMesh& mesh = mRMeshs.emplace_back();
-                mesh.SetIndices(rmesh.mIndices);
-                mesh.SetVertices(rmesh.mVertices);
-                mesh.SetUV(rmesh.mUV);
-                mesh.SetNormals(rmesh.mNormals);
-                mesh.SetMaterialIndex(rmesh.mMaterialIndex);
-            }
+            ReadFromPath<RMesh>(filePath);
         }
+
         std::vector<RMesh> RMeshRenderer::GetMeshs()
         {
             return mRMeshs;
+        }
+
+        void RMeshRenderer::SetBuffers(RMesh& mesh, RMeshNode& rmeshNode)
+        {
+            mesh.SetIndices(rmeshNode.mIndices);
+            mesh.SetVertices(rmeshNode.mVertices);
+            mesh.SetUV(rmeshNode.mUV);
+            mesh.SetNormals(rmeshNode.mNormals);
+            mesh.SetMaterialIndex(rmeshNode.mMaterialIndex);
         }
     }
 }

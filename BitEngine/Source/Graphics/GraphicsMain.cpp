@@ -6,7 +6,7 @@
 #include <DirectXColors.h>
 #include "Core/Scene/SceneManager.h";
 #include <numbers>
-#include "Graphics/SkeletalMesh.h"
+#include "Graphics/Mesh/RSkeletalMesh.h"
 #include "Data/RMeshData.h"
 #include "Components/AnimationComponent.h"
 

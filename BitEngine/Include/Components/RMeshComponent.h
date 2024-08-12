@@ -1,5 +1,4 @@
 #pragma once
-#include "Graphics/Mesh/RMeshRenderer.h"
 #include "Core/BComponent.h"
 
 #include <vector>
@@ -9,6 +8,7 @@ namespace Faia
 {
     namespace Root
     {
+        class RMeshRenderer;
         class RMesh;
 
         class RMeshComponent : public BComponent
@@ -16,10 +16,10 @@ namespace Faia
             typedef BComponent Super;            
 
         public:
-            void LoadMesh(const char* meshDataPath);
+            virtual void LoadMesh(const char* meshDataPath);
             std::vector<RMesh> GetMeshs();
 
-        private:
+        protected:
             std::shared_ptr<RMeshRenderer> mRMeshRenderer;
 
         };

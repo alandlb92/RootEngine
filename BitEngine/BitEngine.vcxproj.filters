@@ -122,9 +122,6 @@
     <ClInclude Include="Include\Graphics\LightManager.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Graphics\SkeletalMesh.h">
-      <Filter>Header Files\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Components\AnimationComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
@@ -142,6 +139,15 @@
     </ClInclude>
     <ClInclude Include="Include\Graphics\Mesh\RMeshRenderer.h">
       <Filter>Header Files\Graphics\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\Mesh\RSkeletalMesh.h">
+      <Filter>Header Files\Graphics\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\Mesh\RSkeletalMeshRenderer.h">
+      <Filter>Header Files\Graphics\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Components\RSkeletalMeshComponent.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -205,9 +211,6 @@
     <ClCompile Include="Source\Graphics\LightManager.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\SkeletalMesh.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Components\AnimationComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
@@ -222,6 +225,15 @@
     </ClCompile>
     <ClCompile Include="Source\Graphics\Mesh\RMeshRenderer.cpp">
       <Filter>Source Files\Graphics\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\Mesh\RSkeletalMesh.cpp">
+      <Filter>Source Files\Graphics\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\Mesh\RSkeletalMeshRenderer.cpp">
+      <Filter>Source Files\Graphics\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Components\RSkeletalMeshComponent.cpp">
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
