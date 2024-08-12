@@ -6,14 +6,15 @@ namespace Faia
 {
     namespace Root
     {
-        std::vector<std::shared_ptr<Mesh>>  SkeletalMesh::MakeSkeletonMeshFromFbxFile(const char* filePath)
+        //Change to SkeletalMeshRenderer
+        std::vector<std::shared_ptr<RMesh>>  SkeletalMesh::MakeSkeletonMeshFromFbxFile(const char* filePath)
         {
             //todo: bmd need to be a pointer in a manager to apply flyweight
             RMeshData bmd;
-            std::vector<std::shared_ptr<Mesh>>  meshs;
+            std::vector<std::shared_ptr<RMesh>>  meshs;
 
             bmd.ReadFromPath(filePath);
-            for (auto& bmesh : bmd._meshs)
+            for (auto& bmesh : bmd.mRMeshNodes)
             {
                 shared_ptr<SkeletalMesh> mesh = std::make_shared<SkeletalMesh>();
                 mesh->SetIndices(bmesh.mIndices);
@@ -21,7 +22,7 @@ namespace Faia
                 mesh->SetUV(bmesh.mUV);
                 mesh->SetNormals(bmesh.mNormals);
                 mesh->SetBoneData(bmesh.mBoneData);
-                mesh->_materialIndex = bmesh.mMaterialIndex;
+                mesh->SetMaterialIndex(bmesh.mMaterialIndex);
                 meshs.push_back(mesh);
             }
 

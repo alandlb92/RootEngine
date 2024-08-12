@@ -8,6 +8,7 @@ namespace Faia
 {
     namespace Paths
     {
+        //Todo: Delete we can uste filepath system
         std::wstring GetApplicationFolderPath()
         {
             WCHAR path[MAX_PATH];

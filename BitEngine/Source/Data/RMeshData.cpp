@@ -1,4 +1,4 @@
-#include "Data/BitMeshData.h"
+#include "Data/RMeshData.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -17,9 +17,9 @@ namespace Faia
                 throw std::invalid_argument(ss.str().c_str());
             }
 
-            uint32_t numMeshs = _meshs.size();
+            uint32_t numMeshs = mRMeshNodes.size();
             os.write(reinterpret_cast<char*>(&numMeshs), sizeof(numMeshs));
-            for (RMeshNode& mesh : _meshs)
+            for (RMeshNode& mesh : mRMeshNodes)
             {
                 uint32_t numIndices = mesh.mIndices.size();
                 uint32_t numVertices = mesh.mVertices.size();
@@ -98,7 +98,7 @@ namespace Faia
 
                 is.read(reinterpret_cast<char*>(&node.mMaterialIndex), sizeof(uint16_t));
 
-                _meshs.push_back(node);
+                mRMeshNodes.push_back(node);
             }          
 
             is.close();
@@ -107,8 +107,8 @@ namespace Faia
         std::string RMeshData::ToString()
         {
             stringstream ss;
-            ss << "Mesh count: " << _meshs.size() << "\n";
-            for (auto m : _meshs)
+            ss << "Mesh count: " << mRMeshNodes.size() << "\n";
+            for (auto m : mRMeshNodes)
             {
                 ss << "MaterialIndex: " << m.mMaterialIndex << "\n";
                 ss << "Vetices:\n{\n";

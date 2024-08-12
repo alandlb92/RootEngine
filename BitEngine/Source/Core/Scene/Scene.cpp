@@ -1,10 +1,10 @@
 #include "Core/Scene/Scene.h"
-#include "Graphics/Mesh.h"
+#include "Graphics/Mesh/RMesh.h"
 #include "Graphics/SkeletalMesh.h"
 #include "Graphics/Material.h"
 #include "Graphics/Camera.h"
 #include "Graphics/LightManager.h"
-#include "Components/MeshComponent.h"
+#include "Components/RMeshComponent.h"
 #include "Components/MaterialComponent.h"
 #include "Components/TestComponent.h"
 #include "Components/PointLightComponent.h"
@@ -24,23 +24,17 @@ namespace Faia
 
             MaterialComponent* materialComponent = new MaterialComponent();
             MaterialComponent* materialComponent2 = new MaterialComponent();
-            MeshComponent* meshComponent = new MeshComponent();
-            MeshComponent* meshComponent2 = new MeshComponent();
-            MeshComponent* meshComponent3 = new MeshComponent();
 
-            std::vector<std::shared_ptr<Mesh>> meshs =
-                SkeletalMesh::MakeSkeletonMeshFromFbxFile("C:\\Users\\alan.bittencourt\\Documents\\Projects\\Personal\\BitEngine\\x64\\Debug\\Content\\Models\\HeroGoat.rmesh");
-
-            std::vector<std::shared_ptr<Mesh>> cubeMeshs =
-                Mesh::MakeFromFbxFile("C:\\Users\\alan.bittencourt\\Documents\\Projects\\Personal\\BitEngine\\x64\\Debug\\Content\\Models\\cube.rmesh");
+            RMeshComponent* meshComponent = new RMeshComponent();
+            meshComponent->LoadMesh("Models\\HeroGoat.rmesh");
+            RMeshComponent* meshComponent2 = new RMeshComponent();
+            meshComponent2->LoadMesh("Models\\cube.rmesh");
+            RMeshComponent* meshComponent3 = new RMeshComponent();
+            meshComponent3->LoadMesh("Models\\cube.rmesh");
 
             AnimationComponent* animationComponent = new AnimationComponent();
-            animationComponent->SetAnimation("Animations\\testAnimation.ranim");
-            animationComponent->SetBoneInfo("Models\\HeroGoat.rboneinfo");
-
-            meshComponent->AddMeshs(meshs);
-            meshComponent2->AddMeshs(cubeMeshs);
-            meshComponent3->AddMeshs(cubeMeshs);
+            animationComponent->LoadAnimation("Animations\\testAnimation.ranim");
+            animationComponent->LoadBoneInfo("Models\\HeroGoat.rboneinfo");
 
             Material material0;
             material0.SetShader("SimpleSkinned");
@@ -112,7 +106,7 @@ namespace Faia
         {
             obj->RegisterOnNotifyComponentAddedEvent(bind(&Scene::NotifyComponentAdded, this, std::placeholders::_1, std::placeholders::_2));
             _sceneObjects.push_back(obj);
-            if (obj->GetComponentOfType<MeshComponent>() != nullptr)
+            if (obj->GetComponentOfType<RMeshComponent>() != nullptr)
             {
                 _renderablebleObjects.push_back(obj);
             }
@@ -149,7 +143,7 @@ namespace Faia
 
         void Scene::NotifyComponentAdded(BObject* obj, BComponent* component)
         {
-            if (typeid(*component) == typeid(MeshComponent))
+            if (typeid(*component) == typeid(RMeshComponent))
             {
                 _renderablebleObjects.push_back(dynamic_cast<SceneObject*>(obj));
             }

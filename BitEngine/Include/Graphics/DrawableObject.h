@@ -1,17 +1,18 @@
 #pragma once
-#include "Mesh.h"
+#include "Mesh/RMesh.h"
 #include "Material.h"
 
 namespace Faia
 {
     namespace Root
     {
+        //Todo: delete this class?
         class DrawableObject
         {
         public:
-            DrawableObject(std::vector<Mesh> mesh, std::vector<Material> materials);
+            DrawableObject(std::vector<RMesh> mesh, std::vector<Material> materials);
 
-            std::vector<Mesh> GetMeshs() { return _meshs; }
+            std::vector<RMesh> GetMeshs() { return _meshs; }
             Material GetMaterial(unsigned int index)
             {
                 if (index >= _materials.size())
@@ -21,7 +22,7 @@ namespace Faia
             }
 
         private:
-            std::vector<Mesh> _meshs;
+            std::vector<RMesh> _meshs;
             std::vector<Material> _materials;
 
         };

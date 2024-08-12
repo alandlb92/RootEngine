@@ -1,8 +1,9 @@
 #pragma once
 #include <vector>
 #include <string>
-#include "RMatrix4x4.h"
 #include <map>
+
+#include "RMatrix4x4.h"
 
 using namespace std;
 
@@ -96,7 +97,7 @@ namespace Faia
 
         struct RMeshData
         {
-            vector<RMeshNode> _meshs;
+            vector<RMeshNode> mRMeshNodes;
             void Write(const char* output);
             void ReadFromPath(const char* filePath);
             std::string ToString();

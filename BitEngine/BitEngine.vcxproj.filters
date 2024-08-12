@@ -39,6 +39,12 @@
     <Filter Include="Source Files\Components">
       <UniqueIdentifier>{0cb35c93-8b0c-419c-b82f-b29e94d8422c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Graphics\Mesh">
+      <UniqueIdentifier>{9c512046-cdd0-4c77-8a66-72eeef932ee3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\Mesh">
+      <UniqueIdentifier>{02327794-07de-4d3e-acc5-28938b95dc30}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Core\BitEngine.h">
@@ -47,7 +53,7 @@
     <ClInclude Include="Include\Core\WindowsApplication.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Data\BitMeshData.h">
+    <ClInclude Include="Include\Data\RMeshData.h">
       <Filter>Header Files\Data</Filter>
     </ClInclude>
     <ClInclude Include="Include\Data\Transform.h">
@@ -72,9 +78,6 @@
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Include\Graphics\MaterialManager.h">
-      <Filter>Header Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\Mesh.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Include\Graphics\Shader.h">
@@ -104,7 +107,7 @@
     <ClInclude Include="Include\Components\MaterialComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Components\MeshComponent.h">
+    <ClInclude Include="Include\Components\RMeshComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="Include\Components\TestComponent.h">
@@ -134,6 +137,12 @@
     <ClInclude Include="Include\Core\ResourceContainer.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Graphics\Mesh\RMesh.h">
+      <Filter>Header Files\Graphics\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\Mesh\RMeshRenderer.h">
+      <Filter>Header Files\Graphics\Mesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\BitEngine.cpp">
@@ -142,7 +151,7 @@
     <ClCompile Include="Source\Core\WindowsApplication.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Data\BitMeshData.cpp">
+    <ClCompile Include="Source\Data\RMeshData.cpp">
       <Filter>Source Files\Data</Filter>
     </ClCompile>
     <ClCompile Include="Source\Data\Transform.cpp">
@@ -161,9 +170,6 @@
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Source\Graphics\MaterialManager.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\Mesh.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Source\Graphics\Shader.cpp">
@@ -190,7 +196,7 @@
     <ClCompile Include="Source\Components\MaterialComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Components\MeshComponent.cpp">
+    <ClCompile Include="Source\Components\RMeshComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="Source\Components\PointLightComponent.cpp">
@@ -210,6 +216,12 @@
     </ClCompile>
     <ClCompile Include="Source\Core\ResourceContainer.cpp">
       <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\Mesh\RMesh.cpp">
+      <Filter>Source Files\Graphics\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\Mesh\RMeshRenderer.cpp">
+      <Filter>Source Files\Graphics\Mesh</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

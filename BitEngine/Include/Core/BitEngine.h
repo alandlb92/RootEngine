@@ -1,10 +1,10 @@
 #pragma once
 
-#include <memory>
 #include "Windows.h"
 #include "Graphics/GraphicsMain.h"
 #include "Core/Scene/SceneManager.h"
 #include "Graphics/LightManager.h"
+#include <memory>
 
 namespace Faia
 {

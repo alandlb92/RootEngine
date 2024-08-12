@@ -1,27 +1,23 @@
 #include "Components/AnimationComponent.h"
-#include "Data/BitMeshData.h"
 #include "Faia/Debug.h"
 #include "Core/ResourcesManager.h"
-#include <sstream>
 
 namespace Faia
 {
     namespace Root
     {
-        void AnimationComponent::SetAnimation(const char* animationDataPath)
+        void AnimationComponent::LoadAnimation(const char* animationDataPath)
         {
-            pAnimationData = GetResourcesManager()->LoadBoneData<RAnimationData>(animationDataPath);
+            pAnimationData = GetResourcesManager()->Load<RAnimationData>(animationDataPath);
         }
 
-        void AnimationComponent::SetBoneInfo(const char* boneInfoDataReferencePath)
+        void AnimationComponent::LoadBoneInfo(const char* boneInfoDataReferencePath)
         {
-            pMeshDataReference = GetResourcesManager()->LoadBoneData<RBoneInfoData>(boneInfoDataReferencePath);
+            pMeshDataReference = GetResourcesManager()->Load<RBoneInfoData>(boneInfoDataReferencePath);
         }
 
         void AnimationComponent::GetAnimationChannelsMatrix(RMatrix4x4(&animationMatrix)[MAX_NUM_OF_ANIMATION_CHANNELS])
         {
-            //Todo: review the necessity of weak ptr
-            //auto pa = pAnimationData.lock();
             ProcessBoneHierarchy(pMeshDataReference->mIndexToBoneInfo[0], RMatrix4x4::Identity(), animationMatrix);
         }
 
@@ -78,10 +74,6 @@ namespace Faia
             float lerpValue = currTimeNormalize / timeBetwen;
 
 
-            std::stringstream ss;
-            ss << "animCurTime: " << currentTime << " nextTime: " << nextTime << " previousTime: " << previousTime << " lerp: " << lerpValue;
-            Faia::Debug::Log(ss.str().c_str());
-
             Vector3D previousPos = vectorKeyList[nextPosIdx - 1].mValue;
             Vector3D nextPos = vectorKeyList[nextPosIdx].mValue;
 
@@ -136,14 +128,6 @@ namespace Faia
             RMatrix4x4 globalTransformationMatrix = parentTransform * animPoseMatrix;
 
             animationMatrix[bone.mIndex] = (pMeshDataReference->mGlobalInverseTransform * globalTransformationMatrix * bone.mBoneOffsetMatrix).Transpose();
-
-            /* Faia::Debug::Log(bone.mName.c_str());
-             Faia::Debug::Log("mGlovalInverseTransform");
-             Faia::Debug::Log(pMeshDataReference->mGlovalInverseTransform.ToPrintableMatrix().c_str());
-             Faia::Debug::Log("animPoseMatrix");
-             Faia::Debug::Log(animPoseMatrix.ToPrintableMatrix().c_str());
-             Faia::Debug::Log("mBoneOffsetMatrix");
-             Faia::Debug::Log(bone.mBoneOffsetMatrix.ToPrintableMatrix().c_str());*/
 
             for (int i = 0; i < bone.mChildsId.size(); ++i)
             {

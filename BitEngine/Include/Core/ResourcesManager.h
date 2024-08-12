@@ -1,11 +1,10 @@
 #pragma once
-#include <memory>
-#include <filesystem>
-#include <unordered_map>
-
-#include "Data/BitMeshData.h"
+#include "Data/RMeshData.h"
 #include "Core/ResourceContainer.h"
 #include "Faia/HashUtils.h"
+
+#include <filesystem>
+#include <unordered_map>
 
 namespace Faia 
 {
@@ -19,7 +18,7 @@ namespace Faia
 		{
         public:
             template<typename T>
-            std::shared_ptr<T> LoadBoneData(const char* relativePath)
+            std::shared_ptr<T> Load(const char* relativePath)
             {
                 uint32_t hash = HashUtils::CharToHashFnv1a(relativePath);
 
