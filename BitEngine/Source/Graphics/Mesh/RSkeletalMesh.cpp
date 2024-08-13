@@ -7,8 +7,6 @@ namespace Faia
     {
         void RSkeletalMesh::SetBoneData(std::vector<RVertexBoneData> boneData)
         {
-            mMeshType = RMeshType::Skeletal;
-
             _boneData = boneData;
 
             //Create and initialize the normals buffer

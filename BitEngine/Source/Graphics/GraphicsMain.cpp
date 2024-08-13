@@ -362,9 +362,8 @@ namespace Faia
                     _deviceContext->IASetVertexBuffers(2, 1, &normalBuffer, &normalStride, &offset);
 
                     //TODO: Set Bones data
-                    if(mesh->GetType() == RMeshType::Skeletal)
+                    if(std::shared_ptr<RSkeletalMesh> sMesh = std::dynamic_pointer_cast<RSkeletalMesh>(mesh))
                     {
-                        std::shared_ptr<RSkeletalMesh> sMesh = std::dynamic_pointer_cast<RSkeletalMesh>(mesh);
                         const UINT boneDataStride = sizeof(RVertexBoneData);
                         ID3D11Buffer* boneDataBuffer = sMesh->GetBonesDataBuffer();
                         if (boneDataBuffer)
