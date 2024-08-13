@@ -176,7 +176,6 @@ xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
     <ClInclude Include="Include\Data\Vector3D.h" />
     <ClInclude Include="Include\Data\Quaternion.h" />
     <ClInclude Include="Include\Graphics\Camera.h" />
-    <ClInclude Include="Include\Graphics\DrawableObject.h" />
     <ClInclude Include="Include\Graphics\GraphicsMain.h" />
     <ClInclude Include="Include\Graphics\LightManager.h" />
     <ClInclude Include="Include\Graphics\Material.h" />
@@ -206,7 +205,6 @@ xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
     <ClCompile Include="Source\Data\RMeshData.cpp" />
     <ClCompile Include="Source\Data\Transform.cpp" />
     <ClCompile Include="Source\Graphics\Camera.cpp" />
-    <ClCompile Include="Source\Graphics\DrawableObject.cpp" />
     <ClCompile Include="Source\Graphics\GraphicsMain.cpp" />
     <ClCompile Include="Source\Graphics\LightManager.cpp" />
     <ClCompile Include="Source\Graphics\Material.cpp" />

@@ -32,7 +32,6 @@ namespace Faia
 
             float GetAnimCurrentTime(float maxTime);
             std::shared_ptr<RAnimationData> pAnimationData;
-            //Todo: use smart pointers
             std::shared_ptr<RBoneInfoData> pMeshDataReference;
             Vector3D GetVectorKeyAtCurrentTime(std::vector<RAnimationVectorKey>& vectorKeyList);
             Quaternion GetQuatKeyAtCurrentTime(std::vector<RAnimationQuatKey>& quatKeyList);

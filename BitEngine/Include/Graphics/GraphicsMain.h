@@ -2,7 +2,6 @@
 //See about how to compile shader, to create a shader compiler in RUNTIME COMPILED SHADER session in the link below
 //https://www.3dgep.com/introduction-to-directx-11/#Create_Device_and_Swap_Chain
 
-#include "DrawableObject.h"
 #include "Camera.h"
 #include "Data/RColor.h"
 #include "Data/RMatrix4x4.h"

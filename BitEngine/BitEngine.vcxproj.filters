@@ -68,9 +68,6 @@
     <ClInclude Include="Include\Graphics\Camera.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Graphics\DrawableObject.h">
-      <Filter>Header Files\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Graphics\GraphicsMain.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
@@ -164,9 +161,6 @@
       <Filter>Source Files\Data</Filter>
     </ClCompile>
     <ClCompile Include="Source\Graphics\Camera.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DrawableObject.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Source\Graphics\GraphicsMain.cpp">
