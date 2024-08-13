@@ -13,7 +13,7 @@ namespace Faia
             mRMeshRenderer = GetResourcesManager()->Load<RMeshRenderer>(meshDataPath);
         }
 
-        std::vector<RMesh> RMeshComponent::GetMeshs()
+        std::vector<std::shared_ptr<RMesh>> RMeshComponent::GetMeshs()
         {
             return mRMeshRenderer->GetMeshs();
         }

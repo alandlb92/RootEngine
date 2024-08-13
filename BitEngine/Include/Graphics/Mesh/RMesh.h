@@ -11,7 +11,14 @@
 namespace Faia
 {
     namespace Root
-    {           
+    {   
+        //Todo: remove this 
+        enum RMeshType 
+        {
+            Static,
+            Skeletal
+        };
+
         class RMesh
         {
         public:
@@ -27,6 +34,8 @@ namespace Faia
             ID3D11Buffer* GetIndexBuffer() { return mIndexBuffer.Get(); }
             ID3D11Buffer* GetUvBuffer() { return mUvBuffer.Get(); }
             ID3D11Buffer* GetNormalBuffer() { return mNormalBuffer.Get(); }
+
+            RMeshType GetType() { return mMeshType; }
 
             std::vector<Vector3D> GetVertices() { return mVertices; }
             std::vector<Vector3D> GetNormals() { return mNormals; }
@@ -45,6 +54,7 @@ namespace Faia
             std::vector<Vector2D> mUv;
             std::vector<Vector3D> mNormals;
             uint16_t mMaterialIndex;
+            RMeshType mMeshType = RMeshType::Static;
 
         };
     }

@@ -4,7 +4,7 @@
 #include "Graphics/Material.h"
 #include "Graphics/Camera.h"
 #include "Graphics/LightManager.h"
-#include "Components/RMeshComponent.h"
+#include "Components/RSkeletalMeshComponent.h"
 #include "Components/MaterialComponent.h"
 #include "Components/TestComponent.h"
 #include "Components/PointLightComponent.h"
@@ -25,7 +25,7 @@ namespace Faia
             MaterialComponent* materialComponent = new MaterialComponent();
             MaterialComponent* materialComponent2 = new MaterialComponent();
 
-            RMeshComponent* meshComponent = new RMeshComponent();
+            RSkeletalMeshComponent* meshComponent = new RSkeletalMeshComponent();
             meshComponent->LoadMesh("Models\\HeroGoat.rmesh");
             RMeshComponent* meshComponent2 = new RMeshComponent();
             meshComponent2->LoadMesh("Models\\cube.rmesh");
@@ -106,7 +106,7 @@ namespace Faia
         {
             obj->RegisterOnNotifyComponentAddedEvent(bind(&Scene::NotifyComponentAdded, this, std::placeholders::_1, std::placeholders::_2));
             _sceneObjects.push_back(obj);
-            if (obj->GetComponentOfType<RMeshComponent>() != nullptr)
+            if (obj->GetComponentOfType<RMeshComponent>() != nullptr || obj->GetComponentOfType<RSkeletalMeshComponent>() != nullptr)
             {
                 _renderablebleObjects.push_back(obj);
             }
@@ -143,7 +143,7 @@ namespace Faia
 
         void Scene::NotifyComponentAdded(BObject* obj, BComponent* component)
         {
-            if (typeid(*component) == typeid(RMeshComponent))
+            if (typeid(*component) == typeid(RMeshComponent) || typeid(*component) == typeid(RSkeletalMeshComponent))
             {
                 _renderablebleObjects.push_back(dynamic_cast<SceneObject*>(obj));
             }

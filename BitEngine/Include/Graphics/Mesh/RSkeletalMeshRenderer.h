@@ -11,7 +11,7 @@ namespace Faia
         public:
             void ReadFromPath(const char* filePath) override;
         protected:
-            void SetBuffers(RMesh& mesh, RMeshNode& rmeshNode) override;
+            void SetBuffers(std::shared_ptr<RMesh> mesh, RMeshNode& rmeshNode) override;
         };
     }
 }

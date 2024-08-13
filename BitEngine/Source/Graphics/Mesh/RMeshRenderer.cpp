@@ -11,18 +11,18 @@ namespace Faia
             ReadFromPath<RMesh>(filePath);
         }
 
-        std::vector<RMesh> RMeshRenderer::GetMeshs()
+        std::vector<std::shared_ptr<RMesh>> RMeshRenderer::GetMeshs()
         {
             return mRMeshs;
         }
 
-        void RMeshRenderer::SetBuffers(RMesh& mesh, RMeshNode& rmeshNode)
+        void RMeshRenderer::SetBuffers(std::shared_ptr<RMesh> mesh, RMeshNode& rmeshNode)
         {
-            mesh.SetIndices(rmeshNode.mIndices);
-            mesh.SetVertices(rmeshNode.mVertices);
-            mesh.SetUV(rmeshNode.mUV);
-            mesh.SetNormals(rmeshNode.mNormals);
-            mesh.SetMaterialIndex(rmeshNode.mMaterialIndex);
+            mesh->SetIndices(rmeshNode.mIndices);
+            mesh->SetVertices(rmeshNode.mVertices);
+            mesh->SetUV(rmeshNode.mUV);
+            mesh->SetNormals(rmeshNode.mNormals);
+            mesh->SetMaterialIndex(rmeshNode.mMaterialIndex);
         }
     }
 }

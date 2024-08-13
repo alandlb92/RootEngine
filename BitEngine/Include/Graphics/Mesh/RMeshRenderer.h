@@ -1,12 +1,12 @@
 #pragma once
 #include <vector>
+#include "Graphics/Mesh/RSkeletalMesh.h"
 
 namespace Faia
 {
     namespace Root
     {
         class RMeshData;
-        class RMesh;
         struct RMeshNode;
 
         class RMeshRenderer
@@ -20,17 +20,17 @@ namespace Faia
                 bmd.ReadFromPath(filePath);
                 for (RMeshNode& rmeshNode : bmd.mRMeshNodes)
                 {
-                    Mesh mesh;
+                    std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>();
                     SetBuffers(mesh, rmeshNode);
                     mRMeshs.push_back(mesh);
                 }
             }
 
             virtual void ReadFromPath(const char* filePath);
-            std::vector<RMesh> GetMeshs();
+            std::vector<std::shared_ptr<RMesh>> GetMeshs();
         protected:
-            virtual void SetBuffers(RMesh& mesh, RMeshNode& rmeshNode);
-            std::vector<RMesh> mRMeshs;
+            virtual void SetBuffers(std::shared_ptr<RMesh> mesh, RMeshNode& rmeshNode);
+            std::vector<std::shared_ptr<RMesh>> mRMeshs;
         };
     }
 }

@@ -17,7 +17,7 @@ namespace Faia
 
         public:
             virtual void LoadMesh(const char* meshDataPath);
-            std::vector<RMesh> GetMeshs();
+            std::vector<std::shared_ptr<RMesh>> GetMeshs();
 
         protected:
             std::shared_ptr<RMeshRenderer> mRMeshRenderer;

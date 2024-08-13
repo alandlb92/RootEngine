@@ -15,8 +15,8 @@ namespace Faia
     {
         struct RVertexBoneData
         {
-            uint32_t boneId[MAX_NUM_OF_BONES_PER_VERTEX] = { 0 };
-            float weights[MAX_NUM_OF_BONES_PER_VERTEX] = { 0.0f };
+            uint32_t boneId[MAX_NUM_OF_BONES_PER_VERTEX];
+            float weights[MAX_NUM_OF_BONES_PER_VERTEX];
         };
 
         struct RVertexWeightData

@@ -17,7 +17,7 @@ namespace Faia
 
         void BObject::AddComponent(BComponent* component)
         {
-            if (typeid(*component) == typeid(RMeshComponent) && _meshComponent == nullptr)
+            if ((typeid(*component) == typeid(RMeshComponent) || typeid(*component) == typeid(RSkeletalMeshComponent)) && _meshComponent == nullptr)
             {
                 _meshComponent = dynamic_cast<RMeshComponent*>(component);
             }

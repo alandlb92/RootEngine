@@ -5,12 +5,10 @@ namespace Faia
 {
     namespace Root
     {
-        class RMesh;
-
         class RSkeletalMeshComponent : public RMeshComponent
         {
-       /* public:
-            void LoadMesh(const char* meshDataPath) override;*/
+         public:
+            void LoadMesh(const char* meshDataPath) override;
         };
     }
 }

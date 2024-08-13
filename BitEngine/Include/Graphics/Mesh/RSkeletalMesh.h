@@ -10,12 +10,12 @@ namespace Faia
         class RSkeletalMesh : public RMesh
         {
         public:
-            ID3D11Buffer* GetBonesDataBuffer() { return _boneDataBuffer.Get(); }
+            ID3D11Buffer* GetBonesDataBuffer() { return mBoneDataBuffer.Get(); }
             void SetBoneData(std::vector<RVertexBoneData> boneData);
 
 
         protected:
-            Microsoft::WRL::ComPtr<ID3D11Buffer> _boneDataBuffer = nullptr;
+            Microsoft::WRL::ComPtr<ID3D11Buffer> mBoneDataBuffer = nullptr;
             std::vector<RVertexBoneData> _boneData;
 
         };

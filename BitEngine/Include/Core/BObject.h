@@ -3,7 +3,7 @@
 #include "Core/BComponent.h"
 
 #include "Components/MaterialComponent.h"
-#include "Components/RMeshComponent.h"
+#include "Components/RSkeletalMeshComponent.h"
 
 #include <list>
 #include <functional>

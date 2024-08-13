@@ -10,11 +10,11 @@ namespace Faia
             super::ReadFromPath<RSkeletalMesh>(filePath);
         }
 
-        void RSkeletalMeshRenderer::SetBuffers(RMesh& mesh, RMeshNode& rmeshNode)
+        void RSkeletalMeshRenderer::SetBuffers(std::shared_ptr<RMesh> mesh, RMeshNode& rmeshNode)
         {
             super::SetBuffers(mesh, rmeshNode);
-            RSkeletalMesh& sm = static_cast<RSkeletalMesh&>(mesh);
-            sm.SetBoneData(rmeshNode.mBoneData);
+            std::shared_ptr<RSkeletalMesh> sm = std::dynamic_pointer_cast<RSkeletalMesh>(mesh);
+            sm->SetBoneData(rmeshNode.mBoneData);
         }
     }
 }
