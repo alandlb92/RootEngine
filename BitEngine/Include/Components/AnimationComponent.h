@@ -30,10 +30,10 @@ namespace Faia
             float mCurrentTime = 0;
             bool mLoopAnim = true;
 
-            float GetAnimCurrentTime(float maxTime);
+            float GetAnimCurrentTick(float maxTime);
             std::shared_ptr<RAnimationData> pAnimationData;
             std::shared_ptr<RBoneInfoData> pMeshDataReference;
-            Vector3D GetVectorKeyAtCurrentTime(std::vector<RAnimationVectorKey>& vectorKeyList);
+            Vector3D GetVectorKeyAtCurrentTick(std::vector<RAnimationVectorKey>& vectorKeyList);
             Quaternion GetQuatKeyAtCurrentTime(std::vector<RAnimationQuatKey>& quatKeyList);
 
             void ProcessBoneHierarchy(RBoneInfo& bone, RMatrix4x4 parentTransform, RMatrix4x4(&animationMatrix)[MAX_NUM_OF_ANIMATION_CHANNELS]);

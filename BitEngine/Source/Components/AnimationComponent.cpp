@@ -23,39 +23,39 @@ namespace Faia
 
         void AnimationComponent::Update(float deltaTime)
         {
-            //todo: consider ticks per second to calculate the time, the is in tiks not seconds (just multiply time * numberOfTicks)
-            mCurrentTime += (deltaTime * 30);
+            mCurrentTime += deltaTime;
         }
 
-        float AnimationComponent::GetAnimCurrentTime(float maxTime)
+        float AnimationComponent::GetAnimCurrentTick(float maxTick)
         {
-            //Todo: Loop animation
-            if (!mLoopAnim && mCurrentTime > maxTime)
+            float currentTick = mCurrentTime * pAnimationData->mTicksPerSecond;
+
+            if (!mLoopAnim && currentTick > maxTick)
             {
-                return maxTime;
+                return maxTick;
             }
 
-            int mult = mCurrentTime / maxTime;
+            int mult = currentTick / maxTick;
 
             if (mult > 0)
             {
-                return mCurrentTime - (maxTime * mult);
+                return currentTick - (maxTick * mult);
             }
             else
             {
-                return mCurrentTime;
+                return currentTick;
             }
         }
 
-        Vector3D AnimationComponent::GetVectorKeyAtCurrentTime(std::vector<RAnimationVectorKey>& vectorKeyList)
+        Vector3D AnimationComponent::GetVectorKeyAtCurrentTick(std::vector<RAnimationVectorKey>& vectorKeyList)
         {
-            float currentTime = GetAnimCurrentTime(vectorKeyList.back().mTime);;
+            float currentTick = GetAnimCurrentTick(vectorKeyList.back().mTime);;
 
             int nextPosIdx = 0;
 
             for (size_t posIdx = 0; posIdx < vectorKeyList.size(); ++posIdx)
             {
-                if (vectorKeyList[posIdx].mTime > currentTime)
+                if (vectorKeyList[posIdx].mTime > currentTick)
                 {
                     nextPosIdx = posIdx;
                     break;
@@ -70,7 +70,7 @@ namespace Faia
             float previousTime = vectorKeyList[nextPosIdx - 1].mTime;
             float nextTime = vectorKeyList[nextPosIdx].mTime;
             float timeBetwen = nextTime - previousTime;
-            float currTimeNormalize = currentTime - previousTime;
+            float currTimeNormalize = currentTick - previousTime;
             float lerpValue = currTimeNormalize / timeBetwen;
 
 
@@ -83,7 +83,7 @@ namespace Faia
 
         Quaternion AnimationComponent::GetQuatKeyAtCurrentTime(std::vector<RAnimationQuatKey>& quatKeyList)
         {
-            float currentTime = GetAnimCurrentTime(quatKeyList.back().mTime);;
+            float currentTime = GetAnimCurrentTick(quatKeyList.back().mTime);;
             int nextPosIdx = 0;
 
             for (size_t posIdx = 0; posIdx < quatKeyList.size(); ++posIdx)
@@ -118,9 +118,9 @@ namespace Faia
 
             if (pAnimationData->mAnimChannels.size() - 1 > bone.mIndex)
             {
-                position = GetVectorKeyAtCurrentTime(pAnimationData->mAnimChannels[bone.mIndex].mPositions);
+                position = GetVectorKeyAtCurrentTick(pAnimationData->mAnimChannels[bone.mIndex].mPositions);
                 rotation = GetQuatKeyAtCurrentTime(pAnimationData->mAnimChannels[bone.mIndex].mRotations);
-                scale = GetVectorKeyAtCurrentTime(pAnimationData->mAnimChannels[bone.mIndex].mScales);
+                scale = GetVectorKeyAtCurrentTick(pAnimationData->mAnimChannels[bone.mIndex].mScales);
             }
 
             RMatrix4x4 animPoseMatrix = RMatrix4x4::CreateTransformationMatrix(position, rotation, scale);

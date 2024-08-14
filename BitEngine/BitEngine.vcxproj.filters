@@ -50,13 +50,7 @@
     <ClInclude Include="Include\Core\BitEngine.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Core\WindowsApplication.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Data\RMeshData.h">
-      <Filter>Header Files\Data</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Data\Transform.h">
       <Filter>Header Files\Data</Filter>
     </ClInclude>
     <ClInclude Include="Include\Data\Vector2D.h">
@@ -151,13 +145,7 @@
     <ClCompile Include="Source\Core\BitEngine.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\WindowsApplication.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Data\RMeshData.cpp">
-      <Filter>Source Files\Data</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Data\Transform.cpp">
       <Filter>Source Files\Data</Filter>
     </ClCompile>
     <ClCompile Include="Source\Graphics\Camera.cpp">

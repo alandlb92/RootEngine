@@ -290,10 +290,10 @@ namespace Faia
 
             Clear(Colors::CornflowerBlue, 1.0f, 0);
 
-
+            //We can put some parts of the code in other classes, for exemple the mesh upload data can be inside RMeshRenderer or something like that
             for (auto& ro : SceneManager::GetInstance()->GetCurrentScene()->GetRenderablebleObjects())
             {
-                //Todo: avoid GetComponentOfType        
+                //Todo: avoid GetComponentOfType do it when create RenderData
                 if (auto anim = ro->GetComponentOfType<AnimationComponent>())
                 {
                     anim->GetAnimationChannelsMatrix(GraphicsMain::tempPerObjectBuffer.animTransformMatrix);
@@ -361,7 +361,6 @@ namespace Faia
                     _deviceContext->IASetVertexBuffers(1, 1, &uvBuffer, &uvStride, &offset);
                     _deviceContext->IASetVertexBuffers(2, 1, &normalBuffer, &normalStride, &offset);
 
-                    //TODO: Set Bones data
                     if(std::shared_ptr<RSkeletalMesh> sMesh = std::dynamic_pointer_cast<RSkeletalMesh>(mesh))
                     {
                         const UINT boneDataStride = sizeof(RVertexBoneData);

@@ -1,6 +1,5 @@
 #pragma once
 #include "Core/Scene/SceneObject.h"
-#include "Data/Transform.h"
 #include "Data/Quaternion.h"
 
 #include "d3d11.h"

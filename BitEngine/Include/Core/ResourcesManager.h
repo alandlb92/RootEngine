@@ -37,6 +37,7 @@ namespace Faia
             }
 
         private:
+            //todo: this path just work in vs, we need to create config files to get the paths
 #ifdef _DEBUG
             const char* pathToContent = "\\..\\X64\\Debug\\Content\\";
 #elif _NDEBUG

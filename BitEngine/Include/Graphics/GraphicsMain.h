@@ -74,7 +74,7 @@ namespace Faia
 			void Present(bool vSync);
 			void Renderer();
 
-			//TODO: new functions in shaderManager to upload constant buffers, this is just a test
+			//TODO: new functions in shaderManager to upload constant buffers, this is just a test do RRenderData class like RDA PRUMO
 			static int boneSelected;
 			GlobalBuffer tempGlobalBuffer = { 0, 0 };
 			static PerObjectBufer tempPerObjectBuffer;

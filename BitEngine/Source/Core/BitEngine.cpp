@@ -37,11 +37,9 @@ namespace Faia
             DWORD currentTime = timeGetTime();
             float deltaTime = (currentTime - _previousTime) / 1000.0f;
             _previousTime = currentTime;
-            //deltaTime = std::min<float>(deltaTime, maxTimeStep);
 
-            //TODO: I need to make the render a separeted thread or the vsync will stop my application and i will have some problems with Input system events for exemple. 
-            //_graphicsMain->Update(deltaTime);
             _sceneManager->Update(deltaTime);
+            //TODO: I need to make the render a separeted thread or the vsync will stop my application and i will have some problems with Input system events for exemple. 
             _graphicsMain->Renderer();
 
             FaiaInputSystem::GetInstance()->Update(deltaTime);

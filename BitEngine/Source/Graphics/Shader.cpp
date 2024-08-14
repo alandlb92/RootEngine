@@ -7,7 +7,7 @@
 #include "Faia/Converter.h"
 #include "Data/RMeshData.h"
 
-//todo: All directx references must be in files with _DX11 sufix
+//Todo-FUTURE: All directx references must be in files with _DX11 sufix, Just do it when we will do the DX12 or other api
 using namespace DirectX;
 
 namespace Faia

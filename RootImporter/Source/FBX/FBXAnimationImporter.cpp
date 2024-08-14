@@ -51,7 +51,7 @@ namespace Faia
                 }
 
                 //Import Animation
-                //TODO: This will just import the animation 0, we need to import all animation and do some editor in the future
+                ////Todo-FUTURE:: This will just import the animation 0, we need to import all animation and do some editor in the future
                 if (aiScene->mNumAnimations == 0)
                 {
                     //error to import

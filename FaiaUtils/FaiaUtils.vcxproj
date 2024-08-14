@@ -32,11 +32,13 @@
     <ClInclude Include="Include\Faia\HashUtils.h" />
     <ClInclude Include="Include\Faia\Memory.h" />
     <ClInclude Include="Include\Faia\Paths.h" />
+    <ClInclude Include="Include\Faia\WindowsApplication.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Faia\Converter.cpp" />
     <ClCompile Include="Source\Faia\Debug.cpp" />
     <ClCompile Include="Source\Faia\HashUtils.cpp" />
+    <ClCompile Include="Source\Faia\WindowsApplication.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
