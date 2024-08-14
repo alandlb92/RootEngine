@@ -1,5 +1,5 @@
 
-#include "Graphics/Camera.h"
+#include "Graphics/RCamera.h"
 #include "Graphics/GraphicsMain.h"
 #include "FaiaInputSystem.h"
 
@@ -7,7 +7,7 @@ namespace Faia
 {
     namespace Root
     {
-        Camera::Camera()// : Super()
+        RCamera::RCamera()// : Super()
         {
             _eyePosition = XMVECTOR();
             _focusPoint = XMVECTOR();
@@ -29,7 +29,7 @@ namespace Faia
         }
         using namespace Faia::InputSystem;
 
-        void Camera::Init()
+        void RCamera::Init()
         {
             Super::Init();
             UpdateViewMatrix();
@@ -66,19 +66,19 @@ namespace Faia
             GraphicsMain::UpdateConstantBuffer(ConstantBuffer::CB_Object, &GraphicsMain::tempPerObjectBuffer);
             GraphicsMain::UpdateConstantBuffer(ConstantBuffer::CB_Application, &_projectionMatrix);
 
-            FaiaInputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::W, std::bind(&Camera::MoveCameraYFront, this, std::placeholders::_1));
-            FaiaInputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::S, std::bind(&Camera::MoveCameraYBack, this, std::placeholders::_1));
-            FaiaInputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::A, std::bind(&Camera::MoveCameraXRight, this, std::placeholders::_1));
-            FaiaInputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::D, std::bind(&Camera::MoveCameraXLeft, this, std::placeholders::_1));
-            FaiaInputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_PRESSED, KeyCode::Q, std::bind(&Camera::ChangeBonePlusTest, this));
-            FaiaInputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_PRESSED, KeyCode::E, std::bind(&Camera::ChangeBoneMinusTest, this));
+            FaiaInputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::W, std::bind(&RCamera::MoveCameraYFront, this, std::placeholders::_1));
+            FaiaInputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::S, std::bind(&RCamera::MoveCameraYBack, this, std::placeholders::_1));
+            FaiaInputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::A, std::bind(&RCamera::MoveCameraXRight, this, std::placeholders::_1));
+            FaiaInputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::D, std::bind(&RCamera::MoveCameraXLeft, this, std::placeholders::_1));
+            FaiaInputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_PRESSED, KeyCode::Q, std::bind(&RCamera::ChangeBonePlusTest, this));
+            FaiaInputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_PRESSED, KeyCode::E, std::bind(&RCamera::ChangeBoneMinusTest, this));
 
-            FaiaInputSystem::GetInstance()->RegisterAxisEvent(AxisType::MOUSE_X, std::bind(&Camera::RotateCameraX, this, std::placeholders::_1, std::placeholders::_2), { KeyCode::MOUSE_LEFT });
-            FaiaInputSystem::GetInstance()->RegisterAxisEvent(AxisType::MOUSE_Y, std::bind(&Camera::RotateCameraY, this, std::placeholders::_1, std::placeholders::_2), { KeyCode::MOUSE_LEFT });
+            FaiaInputSystem::GetInstance()->RegisterAxisEvent(AxisType::MOUSE_X, std::bind(&RCamera::RotateCameraX, this, std::placeholders::_1, std::placeholders::_2), { KeyCode::MOUSE_LEFT });
+            FaiaInputSystem::GetInstance()->RegisterAxisEvent(AxisType::MOUSE_Y, std::bind(&RCamera::RotateCameraY, this, std::placeholders::_1, std::placeholders::_2), { KeyCode::MOUSE_LEFT });
 
         }
 
-        void Camera::AddLocalPosition(RVector3D positionToAdd)
+        void RCamera::AddLocalPosition(RVector3D positionToAdd)
         {
             _position += (_right * positionToAdd.X);
             _position += (_forward * positionToAdd.Z);
@@ -86,19 +86,19 @@ namespace Faia
             UpdateViewMatrix();
         }
 
-        void Camera::AddWorldPosition(RVector3D positionToAdd)
+        void RCamera::AddWorldPosition(RVector3D positionToAdd)
         {
             _position += positionToAdd;
             UpdateViewMatrix();
         }
 
-        void Camera::Rotate(float pitch, float yaw, float roll)
+        void RCamera::Rotate(float pitch, float yaw, float roll)
         {
             _rotation += RVector3D(pitch, yaw, roll);
             UpdateViewMatrix();
         }
 
-        void Camera::UpdateViewMatrix()
+        void RCamera::UpdateViewMatrix()
         {
             //Calculate camera rotation matrix
             XMMATRIX camRotationMatrix = XMMatrixRotationRollPitchYaw(this->_rotation.X, this->_rotation.Y, this->_rotation.Z);
@@ -145,18 +145,18 @@ namespace Faia
             GraphicsMain::UpdateConstantBuffer(ConstantBuffer::CB_Frame, &_viewMatrix);
         }
 
-        void Camera::Update(float deltaTime)
+        void RCamera::Update(float deltaTime)
         {
             Super::Update(deltaTime);
         }
 
 
-        void Camera::ChangeBonePlusTest()
+        void RCamera::ChangeBonePlusTest()
         {
             GraphicsMain::boneSelected++;
         }
 
-        void Camera::ChangeBoneMinusTest()
+        void RCamera::ChangeBoneMinusTest()
         {
             if (GraphicsMain::boneSelected > 0)
             {
@@ -165,43 +165,43 @@ namespace Faia
         }
 
 
-        void Camera::MoveCameraYFront(float deltaTime)
+        void RCamera::MoveCameraYFront(float deltaTime)
         {
             AddLocalPosition(RVector3D(0, 0, cameraTranslationVelocity * deltaTime));
         }
 
-        void Camera::MoveCameraYBack(float deltaTime)
+        void RCamera::MoveCameraYBack(float deltaTime)
         {
             AddLocalPosition(RVector3D(0, 0, -cameraTranslationVelocity * deltaTime));
         }
 
-        void Camera::MoveCameraXRight(float deltaTime)
+        void RCamera::MoveCameraXRight(float deltaTime)
         {
             AddLocalPosition(RVector3D(-cameraTranslationVelocity * deltaTime, 0, 0));
         }
 
-        void Camera::MoveCameraXLeft(float deltaTime)
+        void RCamera::MoveCameraXLeft(float deltaTime)
         {
             AddLocalPosition(RVector3D(cameraTranslationVelocity * deltaTime, 0, 0));
         }
 
-        void Camera::MoveCameraZUp(float deltaTime)
+        void RCamera::MoveCameraZUp(float deltaTime)
         {
             AddWorldPosition(RVector3D(0, 100 * deltaTime, 0));
         }
 
-        void Camera::MoveCameraZDown(float deltaTime)
+        void RCamera::MoveCameraZDown(float deltaTime)
         {
             AddWorldPosition(RVector3D(0, -100 * deltaTime, 0));
         }
 
-        void Camera::RotateCameraX(float axisValue, float deltaTime)
+        void RCamera::RotateCameraX(float axisValue, float deltaTime)
         {
             Rotate(0, axisValue * deltaTime * cameraRotationVelocity, 0);
             OutputDebugStringA(_rotation.ToString().c_str());
         }
 
-        void Camera::RotateCameraY(float axisValue, float deltaTime)
+        void RCamera::RotateCameraY(float axisValue, float deltaTime)
         {
             Rotate(axisValue * deltaTime * cameraRotationVelocity, 0, 0);
             OutputDebugStringA(_rotation.ToString().c_str());

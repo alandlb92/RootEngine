@@ -303,7 +303,7 @@ namespace Faia
                 {
                     uint32_t indexCount = 0;
                     int materialIndex = mesh->GetMaterialIndex();
-                    Material* material = ro->GetMaterialComponent()->GetMaterialOfIndex(materialIndex);
+                    RMaterial* material = ro->GetMaterialComponent()->GetMaterialOfIndex(materialIndex);
 
                     XMFLOAT3 XMFObjPos = XMFLOAT3(ro->GetPosition().X, ro->GetPosition().Y, ro->GetPosition().Z);
                     XMVECTOR XMVObjPos = XMLoadFloat3(&XMFObjPos);

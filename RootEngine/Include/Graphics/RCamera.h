@@ -12,12 +12,12 @@ namespace Faia
 {
     namespace Root
     {
-        class Camera : public SceneObject
+        class RCamera : public SceneObject
         {
             typedef SceneObject Super;
 
         public:
-            Camera();
+            RCamera();
             void Update(float deltaTime);
             void Init();
             void AddWorldPosition(RVector3D positionToAdd);

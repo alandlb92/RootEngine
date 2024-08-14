@@ -104,7 +104,7 @@ namespace Faia
                         for (int keyIndex = 0; keyIndex < nodeAnim->mNumRotationKeys; ++keyIndex)
                         {
                             aiQuatKey& quatKey = nodeAnim->mRotationKeys[keyIndex];
-                            ac.mRotations.push_back({ static_cast<float>(quatKey.mTime), Quaternion(quatKey.mValue.x, quatKey.mValue.y, quatKey.mValue.z, quatKey.mValue.w) });
+                            ac.mRotations.push_back({ static_cast<float>(quatKey.mTime), RQuaternion(quatKey.mValue.x, quatKey.mValue.y, quatKey.mValue.z, quatKey.mValue.w) });
                         }
 
                         rad.mAnimChannels[ac.mBoneId] = ac;

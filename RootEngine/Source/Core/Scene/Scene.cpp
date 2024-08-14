@@ -1,8 +1,8 @@
 #include "Core/Scene/Scene.h"
 #include "Graphics/Mesh/RMesh.h"
 #include "Graphics/Mesh/RSkeletalMesh.h"
-#include "Graphics/Material.h"
-#include "Graphics/Camera.h"
+#include "Graphics/RMaterial.h"
+#include "Graphics/RCamera.h"
 #include "Graphics/LightManager.h"
 #include "Components/RSkeletalMeshComponent.h"
 #include "Components/RMaterialComponent.h"
@@ -36,23 +36,23 @@ namespace Faia
             animationComponent->LoadAnimation("Animations\\testAnimation.ranim");
             animationComponent->LoadBoneInfo("Models\\HeroGoat.rboneinfo");
 
-            Material material0;
+            RMaterial material0;
             material0.SetShader("SimpleSkinned");
             material0.SetTexture("Content\\Textures\\HeroGoat\\Ch40_1001_Diffuse.png", 0);
 
-            Material material1;
+            RMaterial material1;
             material1.SetShader("SimpleSkinned");
             material1.SetTexture("Content\\Textures\\HeroGoat\\Ch40_1002_Diffuse.png", 0);
 
-            Material material2;
+            RMaterial material2;
             material2.SetShader("SimpleSkinned");
             material2.SetTexture("Content\\Textures\\HeroGoat\\Ch40_1002_Diffuse.png", 0);
 
-            Material material3;
+            RMaterial material3;
             material3.SetShader("SimpleSkinned");
             material3.SetTexture("Content\\Textures\\HeroGoat\\Ch40_1003_Diffuse.png", 0);
 
-            Material cubeMaterial;
+            RMaterial cubeMaterial;
             cubeMaterial.SetShader("Simple");
 
 
@@ -63,7 +63,7 @@ namespace Faia
 
             materialComponent2->AddMaterial(cubeMaterial);
 
-            Camera* camera = new Camera();
+            RCamera* camera = new RCamera();
             camera->SetPosition(RVector3D(0, 200, 500));
             camera->SetRotation(RVector3D(0.367590f, 110, 0));
 

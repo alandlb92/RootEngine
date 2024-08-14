@@ -8,7 +8,7 @@ namespace Faia
 {
     namespace Root
     {
-        class Material
+        class RMaterial
         {
         public:
             void SetShader(const char* shaderName);

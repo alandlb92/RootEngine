@@ -1,6 +1,6 @@
 #pragma once
 #include "Core/RComponent.h"
-#include "Graphics/Material.h"
+#include "Graphics/RMaterial.h"
 #include <vector>
 #include <memory>
 
@@ -11,11 +11,11 @@ namespace Faia
         class RMaterialComponent : public RComponent
         {
         public:
-            void AddMaterial(Material material);
-            Material* GetMaterialOfIndex(int index);
+            void AddMaterial(RMaterial material);
+            RMaterial* GetMaterialOfIndex(int index);
 
         private:
-            std::vector<std::shared_ptr<Material>> _materials;
+            std::vector<std::shared_ptr<RMaterial>> _materials;
 
         };
     }

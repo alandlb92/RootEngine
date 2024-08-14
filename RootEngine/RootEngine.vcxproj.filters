@@ -59,13 +59,13 @@
     <ClInclude Include="Include\Data\RVector3D.h">
       <Filter>Header Files\Data</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Graphics\Camera.h">
+    <ClInclude Include="Include\Graphics\RCamera.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Include\Graphics\GraphicsMain.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Graphics\Material.h">
+    <ClInclude Include="Include\Graphics\RMaterial.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Include\Graphics\MaterialManager.h">
@@ -148,13 +148,13 @@
     <ClCompile Include="Source\Data\RMeshData.cpp">
       <Filter>Source Files\Data</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\Camera.cpp">
+    <ClCompile Include="Source\Graphics\RCamera.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Source\Graphics\GraphicsMain.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\Material.cpp">
+    <ClCompile Include="Source\Graphics\RMaterial.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Source\Graphics\MaterialManager.cpp">
