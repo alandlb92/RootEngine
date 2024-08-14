@@ -18,7 +18,6 @@ namespace Faia
         }
 
         WindowsApplication::~WindowsApplication() {
-            delete _appInstance;
             _appInstance = nullptr;
         }
 
