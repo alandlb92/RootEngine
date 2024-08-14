@@ -1,0 +1,31 @@
+#pragma once
+#include "SceneObject.h"
+#include <list>
+#include <memory>
+
+namespace Faia
+{
+    namespace Root
+    {
+        class Scene : public RObject
+        {
+            friend class SceneManager;
+            typedef RObject Super;
+
+        public:
+            static Scene* MakeDemoScene();
+            std::list<SceneObject*> GetRenderablebleObjects();
+            void AddObject(SceneObject* obj);
+
+        protected:
+            virtual void Init();
+            virtual void Update(float deltaTime);
+
+        private:
+            std::list<SceneObject*> _sceneObjects;
+            std::list<SceneObject*> _renderablebleObjects;
+
+            void NotifyComponentAdded(RObject* obj, RComponent* component);
+        };
+    }
+}

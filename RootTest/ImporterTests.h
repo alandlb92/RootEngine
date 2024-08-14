@@ -72,14 +72,14 @@ TEST(FBXImporter, ImportJustMesh)
     EXPECT_EQ(rmesh.mRMeshNodes[0].mIndices[0], 0);
     EXPECT_EQ(rmesh.mRMeshNodes[0].mIndices.back(), 23);
 
-    EXPECT_EQ(rmesh.mRMeshNodes[0].mVertices[0], Faia::Root::Vector3D(1.0f));
-    EXPECT_EQ(rmesh.mRMeshNodes[0].mVertices.back(), Faia::Root::Vector3D(1.0f, 1.0f, -1.0f));
+    EXPECT_EQ(rmesh.mRMeshNodes[0].mVertices[0], Faia::Root::RVector3D(1.0f));
+    EXPECT_EQ(rmesh.mRMeshNodes[0].mVertices.back(), Faia::Root::RVector3D(1.0f, 1.0f, -1.0f));
 
-    EXPECT_EQ(rmesh.mRMeshNodes[0].mNormals[0], Faia::Root::Vector3D(0.0f, 0.0f, 1.0f));
-    EXPECT_EQ(rmesh.mRMeshNodes[0].mNormals.back(), Faia::Root::Vector3D(0.0f, 1.0f, 0.0f));
+    EXPECT_EQ(rmesh.mRMeshNodes[0].mNormals[0], Faia::Root::RVector3D(0.0f, 0.0f, 1.0f));
+    EXPECT_EQ(rmesh.mRMeshNodes[0].mNormals.back(), Faia::Root::RVector3D(0.0f, 1.0f, 0.0f));
 
-    EXPECT_EQ(rmesh.mRMeshNodes[0].mUV[0], Faia::Root::Vector2D(0.625f, -0.5f));
-    EXPECT_EQ(rmesh.mRMeshNodes[0].mUV.back(), Faia::Root::Vector2D(0.375f, -0.5f));
+    EXPECT_EQ(rmesh.mRMeshNodes[0].mUV[0], Faia::Root::RVector2D(0.625f, -0.5f));
+    EXPECT_EQ(rmesh.mRMeshNodes[0].mUV.back(), Faia::Root::RVector2D(0.375f, -0.5f));
 }
 
 
@@ -193,20 +193,20 @@ TEST(FBXImporter, ImportMeshWithBoneInfo)
     EXPECT_EQ(rmesh.mRMeshNodes.back().mIndices[0], 0);
     EXPECT_EQ(rmesh.mRMeshNodes.back().mIndices.back(), 860);
 
-    EXPECT_EQ(rmesh.mRMeshNodes[0].mVertices[0], Faia::Root::Vector3D(11.5714121f, 126.246719f, 4.65061283f));
-    EXPECT_EQ(rmesh.mRMeshNodes[0].mVertices.back(), Faia::Root::Vector3D(-9.68652344f, 120.549553f, 4.89830399f));
-    EXPECT_EQ(rmesh.mRMeshNodes.back().mVertices[0], Faia::Root::Vector3D(-0.700381994f, 159.894638f, 10.6821823f));
-    EXPECT_EQ(rmesh.mRMeshNodes.back().mVertices.back(), Faia::Root::Vector3D(-0.586758971f, 165.443375f, 11.3377914f));
+    EXPECT_EQ(rmesh.mRMeshNodes[0].mVertices[0], Faia::Root::RVector3D(11.5714121f, 126.246719f, 4.65061283f));
+    EXPECT_EQ(rmesh.mRMeshNodes[0].mVertices.back(), Faia::Root::RVector3D(-9.68652344f, 120.549553f, 4.89830399f));
+    EXPECT_EQ(rmesh.mRMeshNodes.back().mVertices[0], Faia::Root::RVector3D(-0.700381994f, 159.894638f, 10.6821823f));
+    EXPECT_EQ(rmesh.mRMeshNodes.back().mVertices.back(), Faia::Root::RVector3D(-0.586758971f, 165.443375f, 11.3377914f));
 
-    EXPECT_EQ(rmesh.mRMeshNodes[0].mNormals[0], Faia::Root::Vector3D(0.956207216f, -0.292055070f, 0.0192740038f));
-    EXPECT_EQ(rmesh.mRMeshNodes[0].mNormals.back(), Faia::Root::Vector3D(-0.802569628f, 0.501011789f, 0.323834836f));
-    EXPECT_EQ(rmesh.mRMeshNodes.back().mNormals[0], Faia::Root::Vector3D(-0.701394320f, 0.0542889796f, 0.710703194f));
-    EXPECT_EQ(rmesh.mRMeshNodes.back().mNormals.back(), Faia::Root::Vector3D(-0.276736021f, -0.0109040011f, 0.960884094f));
+    EXPECT_EQ(rmesh.mRMeshNodes[0].mNormals[0], Faia::Root::RVector3D(0.956207216f, -0.292055070f, 0.0192740038f));
+    EXPECT_EQ(rmesh.mRMeshNodes[0].mNormals.back(), Faia::Root::RVector3D(-0.802569628f, 0.501011789f, 0.323834836f));
+    EXPECT_EQ(rmesh.mRMeshNodes.back().mNormals[0], Faia::Root::RVector3D(-0.701394320f, 0.0542889796f, 0.710703194f));
+    EXPECT_EQ(rmesh.mRMeshNodes.back().mNormals.back(), Faia::Root::RVector3D(-0.276736021f, -0.0109040011f, 0.960884094f));
 
-    EXPECT_EQ(rmesh.mRMeshNodes[0].mUV[0], Faia::Root::Vector2D(0.421817005f, -0.931591988f));
-    EXPECT_EQ(rmesh.mRMeshNodes[0].mUV.back(), Faia::Root::Vector2D(0.421011001f, -0.236858994f));
-    EXPECT_EQ(rmesh.mRMeshNodes.back().mUV[0], Faia::Root::Vector2D(0.926757991f, -0.745123982f));
-    EXPECT_EQ(rmesh.mRMeshNodes.back().mUV.back(), Faia::Root::Vector2D(0.772275984f, -0.648880005f));
+    EXPECT_EQ(rmesh.mRMeshNodes[0].mUV[0], Faia::Root::RVector2D(0.421817005f, -0.931591988f));
+    EXPECT_EQ(rmesh.mRMeshNodes[0].mUV.back(), Faia::Root::RVector2D(0.421011001f, -0.236858994f));
+    EXPECT_EQ(rmesh.mRMeshNodes.back().mUV[0], Faia::Root::RVector2D(0.926757991f, -0.745123982f));
+    EXPECT_EQ(rmesh.mRMeshNodes.back().mUV.back(), Faia::Root::RVector2D(0.772275984f, -0.648880005f));
 
     EXPECT_EQ(rmesh.mRMeshNodes[0].mBoneData[0].boneId[2], 3);
     EXPECT_EQ(rmesh.mRMeshNodes[0].mBoneData[0].weights[2], 0.00622486323f);
@@ -253,9 +253,9 @@ TEST(FBXImporter, ImportAnimation)
 
     EXPECT_EQ(ranimData.mAnimChannels[0].mBoneId, 0);
     EXPECT_EQ(ranimData.mAnimChannels[0].mPositions[9].mTime, 9.f);
-    EXPECT_EQ(ranimData.mAnimChannels[0].mPositions[9].mValue, Faia::Root::Vector3D(9.71774292f, 104.502266f, 6.37402725f));
+    EXPECT_EQ(ranimData.mAnimChannels[0].mPositions[9].mValue, Faia::Root::RVector3D(9.71774292f, 104.502266f, 6.37402725f));
     EXPECT_EQ(ranimData.mAnimChannels[0].mScales[9].mTime, 9.f);
-    EXPECT_EQ(ranimData.mAnimChannels[0].mScales[9].mValue, Faia::Root::Vector3D(1.f, 1.f, 0.999999940f));
+    EXPECT_EQ(ranimData.mAnimChannels[0].mScales[9].mValue, Faia::Root::RVector3D(1.f, 1.f, 0.999999940f));
     EXPECT_EQ(ranimData.mAnimChannels[0].mRotations[9].mTime, 9.f);
-    EXPECT_EQ(ranimData.mAnimChannels[0].mRotations[9].mValue, Faia::Root::Quaternion(-0.0804047585f, -0.122044772f, -0.0798984095f, 0.986030638f));
+    EXPECT_EQ(ranimData.mAnimChannels[0].mRotations[9].mValue, Faia::Root::RQuaternion(-0.0804047585f, -0.122044772f, -0.0798984095f, 0.986030638f));
 }

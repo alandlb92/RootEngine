@@ -74,7 +74,7 @@ TEST(RMatrix4X4, QuatMultQuat)
 
 TEST(RMatrix4X4, CreateTranslationMatrix)
 {
-    Faia::Root::Vector3D position = Faia::Root::Vector3D(15.f, 15.f, 10.f);
+    Faia::Root::RVector3D position = Faia::Root::RVector3D(15.f, 15.f, 10.f);
     Faia::Root::RMatrix4x4 A = Faia::Root::RMatrix4x4::CreateTransitionMatrix(position);
 
     Faia::Root::RMatrix4x4 expectedResult(1.f, .0f, .0f, 15.f,
@@ -87,7 +87,7 @@ TEST(RMatrix4X4, CreateTranslationMatrix)
 
 TEST(RMatrix4X4, CreateRotationMatrix)
 {
-    Faia::Root::Quaternion rotation = Faia::Root::Quaternion(0.4619398f, 0.1913417f, 0.4619398f, 0.7325378f);
+    Faia::Root::RQuaternion rotation = Faia::Root::RQuaternion(0.4619398f, 0.1913417f, 0.4619398f, 0.7325378f);
     Faia::Root::RMatrix4x4 A = Faia::Root::RMatrix4x4::CreateRotationMatrixFromQuaternion(rotation);
 
     
@@ -102,7 +102,7 @@ TEST(RMatrix4X4, CreateRotationMatrix)
 
 TEST(RMatrix4X4, CreateScaleMatrix)
 {
-    Faia::Root::Vector3D scale = Faia::Root::Vector3D(15.f, 15.f, 10.f);
+    Faia::Root::RVector3D scale = Faia::Root::RVector3D(15.f, 15.f, 10.f);
     Faia::Root::RMatrix4x4 A = Faia::Root::RMatrix4x4::CreateScaleMatrix(scale);
 
     Faia::Root::RMatrix4x4 expectedResult(   15.f,  .0f,  .0f,  .0f,
@@ -115,9 +115,9 @@ TEST(RMatrix4X4, CreateScaleMatrix)
 
 TEST(RMatrix4X4, CreateTransformationMatrix)
 {
-    Faia::Root::Vector3D position = Faia::Root::Vector3D(15.f, 15.f, 10.f);
-    Faia::Root::Quaternion rotation = Faia::Root::Quaternion(0.4619398f, 0.1913417f, 0.4619398f, 0.7325378f);
-    Faia::Root::Vector3D scale = Faia::Root::Vector3D(15.f, 15.f, 10.f);
+    Faia::Root::RVector3D position = Faia::Root::RVector3D(15.f, 15.f, 10.f);
+    Faia::Root::RQuaternion rotation = Faia::Root::RQuaternion(0.4619398f, 0.1913417f, 0.4619398f, 0.7325378f);
+    Faia::Root::RVector3D scale = Faia::Root::RVector3D(15.f, 15.f, 10.f);
 
     Faia::Root::RMatrix4x4 A = Faia::Root::RMatrix4x4::CreateTransformationMatrix(position, rotation, scale);
     Faia::Root::RMatrix4x4 expectedResult(7.49999905f, -7.50000095f, 10.6066027f, 15.0000000f,

@@ -92,13 +92,13 @@ namespace Faia
                         for (int keyIndex = 0; keyIndex < nodeAnim->mNumPositionKeys; ++keyIndex)
                         {
                             aiVectorKey& vectorKey = nodeAnim->mPositionKeys[keyIndex];
-                            ac.mPositions.push_back({ static_cast<float>(vectorKey.mTime), Vector3D(vectorKey.mValue.x, vectorKey.mValue.y, vectorKey.mValue.z) });
+                            ac.mPositions.push_back({ static_cast<float>(vectorKey.mTime), RVector3D(vectorKey.mValue.x, vectorKey.mValue.y, vectorKey.mValue.z) });
                         }
 
                         for (int keyIndex = 0; keyIndex < nodeAnim->mNumScalingKeys; ++keyIndex)
                         {
                             aiVectorKey& vectorKey = nodeAnim->mScalingKeys[keyIndex];
-                            ac.mScales.push_back({ static_cast<float>(vectorKey.mTime), Vector3D(vectorKey.mValue.x, vectorKey.mValue.y, vectorKey.mValue.z) });
+                            ac.mScales.push_back({ static_cast<float>(vectorKey.mTime), RVector3D(vectorKey.mValue.x, vectorKey.mValue.y, vectorKey.mValue.z) });
                         }
 
                         for (int keyIndex = 0; keyIndex < nodeAnim->mNumRotationKeys; ++keyIndex)

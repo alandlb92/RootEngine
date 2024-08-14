@@ -30,7 +30,7 @@
     <ClCompile Include="Source\RootCmdTools.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BitEngine\BitEngine.vcxproj">
+    <ProjectReference Include="..\RootEngine\RootEngine.vcxproj">
       <Project>{6a46f19a-eb0f-4d71-ab22-47805d8600c2}</Project>
     </ProjectReference>
     <ProjectReference Include="..\RootImporter\RootImporter.vcxproj">

@@ -89,7 +89,7 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>$(SolutionDir)FaiaUtils\Include;$(SolutionDir)BitEngine\Include;$(SolutionDir)RootImporter\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)FaiaUtils\Include;$(SolutionDir)RootEngine\Include;$(SolutionDir)RootImporter\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -109,7 +109,7 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>$(SolutionDir)FaiaUtils\Include;$(SolutionDir)BitEngine\Include;$(SolutionDir)RootImporter\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)FaiaUtils\Include;$(SolutionDir)RootEngine\Include;$(SolutionDir)RootImporter\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -144,7 +144,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(SolutionDir)FaiaUtils\Include;$(SolutionDir)BitEngine\Include;$(SolutionDir)RootImporter\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)FaiaUtils\Include;$(SolutionDir)RootEngine\Include;$(SolutionDir)RootImporter\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -180,7 +180,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BitEngine\BitEngine.vcxproj">
+    <ProjectReference Include="..\RootEngine\RootEngine.vcxproj">
       <Project>{6a46f19a-eb0f-4d71-ab22-47805d8600c2}</Project>
     </ProjectReference>
     <ProjectReference Include="..\FaiaUtils\FaiaUtils.vcxproj">

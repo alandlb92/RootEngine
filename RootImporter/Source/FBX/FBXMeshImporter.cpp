@@ -50,11 +50,11 @@ namespace Faia
                     for (unsigned int j = 0; j < aiMesh->mNumVertices; ++j)
                     {
                         aiVector3D& vertex = aiMesh->mVertices[j];
-                        Vector3D vert(vertex.x, vertex.y, vertex.z);
+                        RVector3D vert(vertex.x, vertex.y, vertex.z);
                         mesh.mVertices.push_back(vert);
 
                         aiVector3D& normal = aiMesh->mNormals[j];
-                        Vector3D rnorm(normal.x, normal.y, normal.z);
+                        RVector3D rnorm(normal.x, normal.y, normal.z);
                         mesh.mNormals.push_back(rnorm);
                     }
 
@@ -75,7 +75,7 @@ namespace Faia
                         for (unsigned int j = 0; j < aiMesh->mNumVertices; ++j)
                         {
                             aiVector3D& uv = aiMesh->mTextureCoords[0][j];
-                            Vector2D uvCoord(uv.x, -uv.y);
+                            RVector2D uvCoord(uv.x, -uv.y);
                             mesh.mUV.push_back(uvCoord);
                         }
                     }
