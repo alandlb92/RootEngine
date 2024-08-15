@@ -7,15 +7,10 @@ namespace Faia
 {
     namespace Root
     {
-        const float RootEngine::targetFramerate = 30.0f;
-        const float RootEngine::maxTimeStep = 1.0f / targetFramerate;
-
         using namespace Faia::InputSystem;
 
         RootEngine::RootEngine(HWND windowHandler) : _windowHandler(windowHandler)
-        {
-
-        }
+        {}
 
         void RootEngine::Init()
         {

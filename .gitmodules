@@ -1,3 +1,6 @@
 [submodule "FaiaInputSystem"]
 	path = FaiaInputSystem
 	url = git@github.com:alandlb92/FaiaInputSystem.git
+[submodule "assimp"]
+	path = assimp
+	url = git@github.com:assimp/assimp.git

@@ -26,10 +26,6 @@ namespace Faia
 			std::unique_ptr<GraphicsMain> _graphicsMain;
 			std::unique_ptr<SceneManager> _sceneManager;
 			std::unique_ptr<Graphics::Light::LightManager> _lightManager;
-
-			static const float targetFramerate;
-			static const float maxTimeStep;
-
 		};
 	}
 }
