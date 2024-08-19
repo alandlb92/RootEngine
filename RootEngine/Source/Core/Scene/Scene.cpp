@@ -14,7 +14,7 @@ namespace Faia
 {
     namespace Root
     {
-        Scene* Scene::MakeDemoScene()
+        Scene* MakeDemoScene()
         {
             Scene* scene = new Scene();
 

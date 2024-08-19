@@ -21,14 +21,6 @@ namespace Faia
 
         namespace Importer
         {
-            //todo: specific of bone
-            struct BoneNode
-            {
-                int boneId;
-                int parent;
-                std::vector<int> childs;
-            };
-
             enum ImporterType
             {
                 MS,

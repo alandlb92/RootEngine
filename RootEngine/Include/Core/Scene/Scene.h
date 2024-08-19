@@ -7,13 +7,14 @@ namespace Faia
 {
     namespace Root
     {
+
         class Scene : public RObject
         {
             friend class SceneManager;
             typedef RObject Super;
 
         public:
-            static Scene* MakeDemoScene();
+            
             std::list<SceneObject*> GetRenderablebleObjects();
             void AddObject(SceneObject* obj);
 
@@ -27,5 +28,7 @@ namespace Faia
 
             void NotifyComponentAdded(RObject* obj, RComponent* component);
         };
+
+        Scene* MakeDemoScene();
     }
 }

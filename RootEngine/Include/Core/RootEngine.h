@@ -14,17 +14,13 @@ namespace Faia
 		{
 
 		public:
-			RootEngine(HWND windowHandler);
+			RootEngine();
 
 			void Init();
 			void Update();
 
 		private:
 			DWORD _previousTime;
-			HWND _windowHandler;
-
-			std::unique_ptr<GraphicsMain> _graphicsMain;
-			std::unique_ptr<SceneManager> _sceneManager;
 			std::unique_ptr<Graphics::Light::LightManager> _lightManager;
 		};
 	}

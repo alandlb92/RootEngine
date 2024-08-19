@@ -23,12 +23,14 @@
     <ClInclude Include="Include\FBX\FBXBoneInfoImporter.h" />
     <ClInclude Include="Include\FBX\FBXImporter.h" />
     <ClInclude Include="Include\FBX\FBXMeshImporter.h" />
+    <ClInclude Include="Include\Textures\JPGImporter.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\FBX\FBXAnimationImporter.cpp" />
     <ClCompile Include="Source\FBX\FBXBoneInfoImporter.cpp" />
     <ClCompile Include="Source\FBX\FBXImporter.cpp" />
     <ClCompile Include="Source\FBX\FBXMeshImporter.cpp" />
+    <ClCompile Include="Source\Textures\JPGImporter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RootEngine\RootEngine.vcxproj">
@@ -133,7 +135,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(SolutionDir)RootEngine\Include;$(SolutionDir)assimp\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(SolutionDir)RootEngine\Include;$(SolutionDir)libs\thirdparty\assimp\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -145,7 +147,7 @@
       <AdditionalDependencies>assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)assimp\lib\MinSizeRel;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)libs\thirdparty\assimp\lib\MinSizeRel;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -158,7 +160,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(SolutionDir)RootEngine\Include;$(SolutionDir)assimp\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(SolutionDir)RootEngine\Include;$(SolutionDir)libs\thirdparty\assimp\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -171,7 +173,7 @@
       <AdditionalDependencies>assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)assimp\lib\MinSizeRel;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)libs\thirdparty\assimp\lib\MinSizeRel;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

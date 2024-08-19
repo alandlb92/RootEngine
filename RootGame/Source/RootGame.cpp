@@ -18,11 +18,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     Faia::Windows::WindowsApplication app(hInstance, IDS_APP_TITLE, IDC_RootGame, IDI_SMALL);
     if (app.InitInstance(nCmdShow))
     {
-        Faia::InputSystem::FaiaInputSystem inputSystem;
-        Faia::Root::RootEngine engine(app.GetWindowHandler());
+        Faia::Root::RootEngine engine;
         engine.Init();
         app.RegisterWinAppUpdateFunction(std::bind(&Faia::Root::RootEngine::Update, &engine));
-        app.RegisterWinAppProcFunction(std::bind(&Faia::InputSystem::FaiaInputSystem::SendOSEvent, &inputSystem, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+        app.RegisterWinAppProcFunction(std::bind(&Faia::InputSystem::FaiaInputSystem::SendOSEvent, Faia::InputSystem::GetFaiaInputSystem(), std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
         return app.Run(nCmdShow);
     }
 

@@ -8,6 +8,13 @@ namespace Faia
     {
         namespace Importer
         {
+            struct BoneNode
+            {
+                int boneId;
+                int parent;
+                std::vector<int> childs;
+            };
+
             class FBXBoneInfoImporter : public FBXImporter
             {
             public:

@@ -9,9 +9,10 @@
 #include "Graphics/Mesh/RSkeletalMesh.h"
 #include "Data/RMeshData.h"
 #include "Components/RAnimationComponent.h"
+#include "Faia/WindowsApplication.h"
 
 using namespace DirectX;
-
+using namespace Faia::Root;
 
 namespace Faia
 {
@@ -28,23 +29,31 @@ namespace Faia
             }
         }
 
+
+        GraphicsMain* gGraphics;
+        GraphicsMain* GetGraphics()
+        {
+            if (gGraphics == nullptr)
+            {
+                gGraphics = new GraphicsMain();
+            }
+
+            return gGraphics;
+        }
+
         GraphicsMain::PerObjectBufer GraphicsMain::tempPerObjectBuffer = {};
 
-
-        GraphicsMain* GraphicsMain::_instance = nullptr;
         int GraphicsMain::boneSelected = 0;
 
-        GraphicsMain::GraphicsMain(HWND windowHandler)
-        {
-            _windowHandler = windowHandler;
-        }
+        GraphicsMain::GraphicsMain()
+        {}
 
         void GraphicsMain::SetupDevice()
         {
             // A window handle must have been created already.
-            assert(_windowHandler != 0);
+            assert(Windows::GetWindowHandler() != 0);
             RECT clientRect;
-            GetClientRect(_windowHandler, &clientRect);
+            GetClientRect(Windows::GetWindowHandler(), &clientRect);
 
             // Compute the exact client dimensions. This will be used
             // to initialize the render targets for our swap chain.
@@ -61,7 +70,7 @@ namespace Faia
             swapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
             swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
             swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-            swapChainDesc.OutputWindow = _windowHandler;
+            swapChainDesc.OutputWindow = Windows::GetWindowHandler();
             swapChainDesc.SampleDesc.Count = 1;
             swapChainDesc.SampleDesc.Quality = 0;
             swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
@@ -260,8 +269,6 @@ namespace Faia
                 msg.append("Fail to create samplerState");
                 OutputDebugStringA(msg.c_str());
             }
-
-            _instance = this;
         }
 
         void GraphicsMain::Clear(const FLOAT clearColor[4], FLOAT clearDepth, UINT8 clearStencil)
@@ -291,7 +298,7 @@ namespace Faia
             Clear(Colors::CornflowerBlue, 1.0f, 0);
 
             //We can put some parts of the code in other classes, for exemple the mesh upload data can be inside RMeshRenderer or something like that
-            for (auto& ro : SceneManager::GetInstance()->GetCurrentScene()->GetRenderablebleObjects())
+            for (auto& ro : GetSceneManager()->GetCurrentScene()->GetRenderablebleObjects())
             {
                 //Todo: avoid GetComponentOfType do it when create RenderData
                 if (auto anim = ro->GetComponentOfType<RAnimationComponent>())

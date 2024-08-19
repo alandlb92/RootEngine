@@ -28,29 +28,27 @@ namespace Faia
 			NumConstantBuffers
 		};
 
+		class GraphicsMain;
+		GraphicsMain* GetGraphics();
+
 		class GraphicsMain
 		{
 		public:
-			static GraphicsMain* GetInstace()
-			{
-				return _instance;
-			}
-
 			static ID3D11Device* GetDevice()
 			{
-				assert(_instance);
-				return _instance->_device.Get();
+				assert(GetGraphics());
+				return GetGraphics()->_device.Get();
 			};
 
 			static ID3D11DeviceContext* GetDeviceContext()
 			{
-				assert(_instance);
-				return _instance->_deviceContext.Get();
+				assert(GetGraphics());
+				return GetGraphics()->_deviceContext.Get();
 			};
 
 			static void UpdateConstantBuffer(ConstantBuffer type, const void* pSrcData)
 			{
-				_instance->_deviceContext->UpdateSubresource(_instance->_constantBuffers[type], 0, nullptr, pSrcData, 0, 0);
+				GetGraphics()->_deviceContext->UpdateSubresource(GetGraphics()->_constantBuffers[type], 0, nullptr, pSrcData, 0, 0);
 			}
 
 			struct GlobalBuffer
@@ -68,7 +66,7 @@ namespace Faia
 			float GetWidth() { return _clientWidth; }
 			float GetHeight() { return _clientHeight; }
 
-			GraphicsMain(HWND windowHandler);
+			GraphicsMain();
 			void SetupDevice();
 			void Clear(const FLOAT clearColor[4], FLOAT clearDepth, UINT8 clearStencil);
 			void Present(bool vSync);
@@ -80,15 +78,12 @@ namespace Faia
 			static PerObjectBufer tempPerObjectBuffer;
 
 		private:
-			static GraphicsMain* _instance;
-
 			IDXGISwapChain* _swapChain;
 			Microsoft::WRL::ComPtr<ID3D11Device> _device;
 			Microsoft::WRL::ComPtr<ID3D11DeviceContext> _deviceContext;
 
 			ID3D11RenderTargetView* _renderTargetView;
 			ID3D11DepthStencilView* _depthStencilView = nullptr;
-			HWND _windowHandler;
 
 			ID3D11DepthStencilState* _depthStencilState;
 			D3D11_VIEWPORT _viewport = { 0 };

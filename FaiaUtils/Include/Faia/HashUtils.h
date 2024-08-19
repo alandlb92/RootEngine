@@ -2,9 +2,8 @@
 #include <ostream>
 namespace Faia
 {
-    class HashUtils
+    namespace HashUtils
     {
-    public:
-        static uint32_t CharToHashFnv1a(const char* str);
+        uint32_t CharToHashFnv1a(const char* str);
     };
 }

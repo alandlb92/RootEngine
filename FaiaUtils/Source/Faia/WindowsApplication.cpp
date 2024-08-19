@@ -5,10 +5,16 @@ namespace Faia
 {
     namespace Windows
     {
+        HWND gWindowHandler;
+        HWND GetWindowHandler()
+        {
+            return gWindowHandler;
+        }
+
         WindowsApplication* WindowsApplication::_appInstance = nullptr;
 
         WindowsApplication::WindowsApplication(HINSTANCE hInstance, UINT idsAppTittle, UINT idcGame, UINT idcSamall)
-            : hInstance(hInstance), windowHandler(nullptr) {
+            : hInstance(hInstance) {
             _idcSamall = idcSamall;
             _idsAppTittle = idsAppTittle;
             _idcGame = idcGame;
@@ -52,11 +58,6 @@ namespace Faia
             return (int)msg.wParam;
         }
 
-        HWND WindowsApplication::GetWindowHandler()
-        {
-            return windowHandler;
-        }
-
         ATOM WindowsApplication::RegisterClass() {
             WNDCLASSEXW wcex;
             wcex.cbSize = sizeof(WNDCLASSEX);
@@ -81,15 +82,15 @@ namespace Faia
                 return FALSE;
             }
 
-            windowHandler = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+            gWindowHandler = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
                 CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
 
-            if (!windowHandler) {
+            if (!gWindowHandler) {
                 return FALSE;
             }
 
-            ShowWindow(windowHandler, nCmdShow);
-            UpdateWindow(windowHandler);
+            ShowWindow(gWindowHandler, nCmdShow);
+            UpdateWindow(gWindowHandler);
 
             return TRUE;
         }

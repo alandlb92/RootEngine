@@ -5,16 +5,22 @@ namespace Faia
 {
     namespace Root
     {
-        SceneManager* SceneManager::_instance = nullptr;
+
+        SceneManager* gSceneManager;
+
+        SceneManager* GetSceneManager()
+        {
+            if (gSceneManager == nullptr)
+            {
+                gSceneManager = new SceneManager();
+            }
+
+            return gSceneManager;
+        }
 
         SceneManager::SceneManager()
         {
-            _instance = this;
-        }
-
-        void SceneManager::Init()
-        {
-            _currentScene->Init();
+            _currentScene = nullptr;
         }
 
         void SceneManager::Update(float deltaTime)
@@ -26,6 +32,7 @@ namespace Faia
         void SceneManager::LoadScene(Scene* scene)
         {
             _currentScene = scene;
+            _currentScene->Init();
         }
 
         Scene* SceneManager::GetCurrentScene()

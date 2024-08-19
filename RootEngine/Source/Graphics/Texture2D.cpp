@@ -45,7 +45,7 @@ namespace Faia
             };
 
 
-            rgbaTest tex[25] = {rgbaTest{255, 0, 0, 255}, rgbaTest{255, 0, 0, 255},rgbaTest{255, 0, 0, 255},rgbaTest{255, 0, 0, 255},rgbaTest{255, 0, 0, 255},
+            rgbaTest tex[25] = {rgbaTest{255, 0, 255, 255}, rgbaTest{255, 0, 255, 255},rgbaTest{255, 0, 255, 255},rgbaTest{255, 0, 255, 255},rgbaTest{255, 0, 255, 255},
                                 rgbaTest{255, 0, 0, 255}, rgbaTest{255, 0, 0, 255},rgbaTest{255, 0, 0, 255},rgbaTest{255, 0, 0, 255},rgbaTest{255, 0, 0, 255},
                                 rgbaTest{255, 0, 0, 255}, rgbaTest{255, 0, 0, 255},rgbaTest{255, 0, 0, 255},rgbaTest{255, 0, 0, 255},rgbaTest{255, 0, 0, 255},
                                 rgbaTest{255, 0, 0, 255}, rgbaTest{255, 0, 0, 255},rgbaTest{255, 0, 0, 255},rgbaTest{255, 0, 0, 255},rgbaTest{255, 0, 0, 255},

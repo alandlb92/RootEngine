@@ -35,8 +35,8 @@ namespace Faia
             UpdateViewMatrix();
             _worldMatrix = XMMatrixRotationAxis(XMVectorSet(.5f, .5f, .5f, .0f), XMConvertToRadians(0));
             _fieldOfView = XMConvertToRadians(45.0f); // Ângulo de visão de 45 graus
-            float w = GraphicsMain::GetInstace()->GetWidth();
-            float h = GraphicsMain::GetInstace()->GetHeight();
+            float w = GetGraphics()->GetWidth();
+            float h = GetGraphics()->GetHeight();
             _aspectRatio = w / h;
             _nearPlane = 0.1f;
             _farPlane = 100000.0f;
@@ -66,15 +66,15 @@ namespace Faia
             GraphicsMain::UpdateConstantBuffer(ConstantBuffer::CB_Object, &GraphicsMain::tempPerObjectBuffer);
             GraphicsMain::UpdateConstantBuffer(ConstantBuffer::CB_Application, &_projectionMatrix);
 
-            FaiaInputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::W, std::bind(&RCamera::MoveCameraYFront, this, std::placeholders::_1));
-            FaiaInputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::S, std::bind(&RCamera::MoveCameraYBack, this, std::placeholders::_1));
-            FaiaInputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::A, std::bind(&RCamera::MoveCameraXRight, this, std::placeholders::_1));
-            FaiaInputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::D, std::bind(&RCamera::MoveCameraXLeft, this, std::placeholders::_1));
-            FaiaInputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_PRESSED, KeyCode::Q, std::bind(&RCamera::ChangeBonePlusTest, this));
-            FaiaInputSystem::GetInstance()->RegisterActionEvent(InputEventType::KEY_PRESSED, KeyCode::E, std::bind(&RCamera::ChangeBoneMinusTest, this));
+            GetFaiaInputSystem()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::W, std::bind(&RCamera::MoveCameraYFront, this, std::placeholders::_1));
+            GetFaiaInputSystem()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::S, std::bind(&RCamera::MoveCameraYBack, this, std::placeholders::_1));
+            GetFaiaInputSystem()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::A, std::bind(&RCamera::MoveCameraXRight, this, std::placeholders::_1));
+            GetFaiaInputSystem()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::D, std::bind(&RCamera::MoveCameraXLeft, this, std::placeholders::_1));
+            GetFaiaInputSystem()->RegisterActionEvent(InputEventType::KEY_PRESSED, KeyCode::Q, std::bind(&RCamera::ChangeBonePlusTest, this));
+            GetFaiaInputSystem()->RegisterActionEvent(InputEventType::KEY_PRESSED, KeyCode::E, std::bind(&RCamera::ChangeBoneMinusTest, this));
 
-            FaiaInputSystem::GetInstance()->RegisterAxisEvent(AxisType::MOUSE_X, std::bind(&RCamera::RotateCameraX, this, std::placeholders::_1, std::placeholders::_2), { KeyCode::MOUSE_LEFT });
-            FaiaInputSystem::GetInstance()->RegisterAxisEvent(AxisType::MOUSE_Y, std::bind(&RCamera::RotateCameraY, this, std::placeholders::_1, std::placeholders::_2), { KeyCode::MOUSE_LEFT });
+            GetFaiaInputSystem()->RegisterAxisEvent(AxisType::MOUSE_X, std::bind(&RCamera::RotateCameraX, this, std::placeholders::_1, std::placeholders::_2), { KeyCode::MOUSE_LEFT });
+            GetFaiaInputSystem()->RegisterAxisEvent(AxisType::MOUSE_Y, std::bind(&RCamera::RotateCameraY, this, std::placeholders::_1, std::placeholders::_2), { KeyCode::MOUSE_LEFT });
 
         }
 

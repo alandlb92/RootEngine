@@ -10,10 +10,6 @@ namespace Faia
 {
     namespace Root 
     {
-        class ResourcesManager;
-
-        ResourcesManager* GetResourcesManager();
-
 		class ResourcesManager
 		{
         public:
@@ -27,7 +23,7 @@ namespace Faia
                     std::filesystem::path fullPath = std::filesystem::current_path();
                     fullPath += pathToContent;
                     fullPath += relativePath;
-                    ResourceContainer rc = ResourceContainer::Create<T>(std::bind(&ResourcesManager::DeleteResourceInMap, this, std::placeholders::_1), hash);
+                    ResourceContainer rc = CreateResourceContainer<T>(std::bind(&ResourcesManager::DeleteResourceInMap, this, std::placeholders::_1), hash);
                     std::string s = fullPath.string();
                     rc.GetRaw<T>()->ReadFromPath(s.c_str());
                     mHashToResource[hash] = rc;
@@ -47,5 +43,7 @@ namespace Faia
             void DeleteResourceInMap(uint32_t hash);
 
 		};
+
+        ResourcesManager* GetResourcesManager();
     }
 }
