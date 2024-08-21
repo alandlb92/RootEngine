@@ -16,7 +16,7 @@ namespace Faia
     {
         void Texture2D::Load(const char* textureRelativePath)
         {
-            ID3D11Device* device = GraphicsMain::GetDevice();
+            ID3D11Device* device = GetDevice();
 
             std::wstring texturePath(GetApplicationFolderPath());
             texturePath.append(Faia::Converter::CharToLPCWSTR(textureRelativePath));

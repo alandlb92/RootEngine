@@ -21,7 +21,10 @@ namespace Faia
 
 		private:
 			DWORD _previousTime;
+			//Todo: move this for a RenderData class or something like that
 			std::unique_ptr<Graphics::Light::LightManager> _lightManager;
 		};
+
+		RootEngine* GetEngine();
 	}
 }

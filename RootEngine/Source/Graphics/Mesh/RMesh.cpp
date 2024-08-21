@@ -22,7 +22,7 @@ namespace Faia
             D3D11_SUBRESOURCE_DATA resourceData;
             ZeroMemory(&resourceData, sizeof(D3D11_SUBRESOURCE_DATA));
             resourceData.pSysMem = mVertices.data();
-            HRESULT hr = GraphicsMain::GetDevice()->CreateBuffer(&vertexBufferDesc, &resourceData, mVertexBuffer.GetAddressOf());
+            HRESULT hr = GetDevice()->CreateBuffer(&vertexBufferDesc, &resourceData, mVertexBuffer.GetAddressOf());
 
             if (FAILED(hr))
             {
@@ -46,7 +46,7 @@ namespace Faia
             ZeroMemory(&resourceData, sizeof(D3D11_SUBRESOURCE_DATA));
             resourceData.pSysMem = mIndices.data();
 
-            auto* device = GraphicsMain::GetDevice();
+            ID3D11Device* device = GetDevice();
             HRESULT hr = device->CreateBuffer(&indexBufferDesc, &resourceData, mIndexBuffer.ReleaseAndGetAddressOf());
             if (FAILED(hr))
             {
@@ -69,7 +69,7 @@ namespace Faia
             ZeroMemory(&resourceData, sizeof(D3D11_SUBRESOURCE_DATA));
             resourceData.pSysMem = mUv.data();
 
-            HRESULT hr = GraphicsMain::GetDevice()->CreateBuffer(&uvBufferDesc, &resourceData, mUvBuffer.GetAddressOf());
+            HRESULT hr = GetDevice()->CreateBuffer(&uvBufferDesc, &resourceData, mUvBuffer.GetAddressOf());
             if (FAILED(hr))
             {
                 throw std::invalid_argument("Faile to create uv buffer");
@@ -91,7 +91,7 @@ namespace Faia
             D3D11_SUBRESOURCE_DATA resourceData;
             ZeroMemory(&resourceData, sizeof(D3D11_SUBRESOURCE_DATA));
             resourceData.pSysMem = mNormals.data();
-            HRESULT hr = GraphicsMain::GetDevice()->CreateBuffer(&normalBufferDesc, &resourceData, mNormalBuffer.GetAddressOf());
+            HRESULT hr = GetDevice()->CreateBuffer(&normalBufferDesc, &resourceData, mNormalBuffer.GetAddressOf());
 
             if (FAILED(hr))
             {

@@ -20,7 +20,7 @@ namespace Faia
             D3D11_SUBRESOURCE_DATA resourceData;
             ZeroMemory(&resourceData, sizeof(D3D11_SUBRESOURCE_DATA));
             resourceData.pSysMem = _boneData.data();
-            HRESULT hr = GraphicsMain::GetDevice()->CreateBuffer(&boneIdsBufferDesc, &resourceData, mBoneDataBuffer.GetAddressOf());
+            HRESULT hr = GetDevice()->CreateBuffer(&boneIdsBufferDesc, &resourceData, mBoneDataBuffer.GetAddressOf());
 
             if (FAILED(hr))
             {

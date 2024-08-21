@@ -30,22 +30,14 @@ namespace Faia
 
 		class GraphicsMain;
 		GraphicsMain* GetGraphics();
+		ID3D11Device* GetDevice();
+		ID3D11DeviceContext* GetDeviceContext();
 
 		class GraphicsMain
 		{
+			friend ID3D11Device* GetDevice();
+			friend ID3D11DeviceContext* GetDeviceContext();
 		public:
-			static ID3D11Device* GetDevice()
-			{
-				assert(GetGraphics());
-				return GetGraphics()->_device.Get();
-			};
-
-			static ID3D11DeviceContext* GetDeviceContext()
-			{
-				assert(GetGraphics());
-				return GetGraphics()->_deviceContext.Get();
-			};
-
 			static void UpdateConstantBuffer(ConstantBuffer type, const void* pSrcData)
 			{
 				GetGraphics()->_deviceContext->UpdateSubresource(GetGraphics()->_constantBuffers[type], 0, nullptr, pSrcData, 0, 0);

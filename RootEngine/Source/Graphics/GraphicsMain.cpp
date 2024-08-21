@@ -41,6 +41,18 @@ namespace Faia
             return gGraphics;
         }
 
+        ID3D11Device* GetDevice()
+        {
+            assert(GetGraphics());
+            return GetGraphics()->_device.Get();
+        };
+
+        ID3D11DeviceContext* GetDeviceContext()
+        {
+            assert(GetGraphics());
+            return GetGraphics()->_deviceContext.Get();
+        };
+
         GraphicsMain::PerObjectBufer GraphicsMain::tempPerObjectBuffer = {};
 
         int GraphicsMain::boneSelected = 0;

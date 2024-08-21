@@ -1,17 +1,56 @@
 ﻿#include "WindowsApplication.h"
-
+#include "Debug.h"
 
 namespace Faia
 {
     namespace Windows
-    {
+    {        
+        WindowsApplication* gWindowApp;
+        WindowsApplication* GetWinApp()
+        {
+            if (gWindowApp == nullptr)
+            {
+                Debug::PopError("The windou app are not initialized, please do it before call GetWinApp");
+            }
+
+            return gWindowApp;
+        }
+
         HWND gWindowHandler;
         HWND GetWindowHandler()
         {
             return gWindowHandler;
         }
 
-        WindowsApplication* WindowsApplication::_appInstance = nullptr;
+        void InitializeApp(HINSTANCE hInstance, UINT idsAppTittle, UINT idcGame, UINT idcSamall, int nCmdShow)
+        {
+            if (gWindowApp == nullptr)
+            {
+                gWindowApp = new WindowsApplication(hInstance, idsAppTittle, idcGame, idcSamall);
+                gWindowApp->InitInstance(nCmdShow);
+            }
+            else
+            {
+                Debug::PopError("The windou app is already initialized");
+            }
+        }
+
+        LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+            if (message == WM_CREATE) {
+                LPCREATESTRUCT pCreateStruct = reinterpret_cast<LPCREATESTRUCT>(lParam);
+                SetWindowLongPtr(hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pCreateStruct->lpCreateParams));
+            }
+
+            if (WindowsApplication* app = GetWinApp())
+            {
+                for (NotifyWinProc& updateFunc : app->mFunctionsNotifyAppWinProc)
+                {
+                    updateFunc(hWnd, message, wParam, lParam);
+                }
+            }
+
+            return DefWindowProc(hWnd, message, wParam, lParam);
+        }
 
         WindowsApplication::WindowsApplication(HINSTANCE hInstance, UINT idsAppTittle, UINT idcGame, UINT idcSamall)
             : hInstance(hInstance) {
@@ -20,12 +59,9 @@ namespace Faia
             _idcGame = idcGame;
             LoadStringW(hInstance, _idsAppTittle, szTitle, MAX_LOADSTRING);
             LoadStringW(hInstance, _idcGame, szWindowClass, MAX_LOADSTRING);
-            _appInstance = this;
         }
 
-        WindowsApplication::~WindowsApplication() {
-            _appInstance = nullptr;
-        }
+        WindowsApplication::~WindowsApplication() { }
 
 
         void  WindowsApplication::RegisterWinAppProcFunction(NotifyWinProc winprocFunction)
@@ -48,7 +84,7 @@ namespace Faia
                     TranslateMessage(&msg);
                     DispatchMessage(&msg);
                 }
-
+                
                 for (NotifyUpdate& updateFunc : mFunctionsNotifyAppUpdate)
                 {
                     updateFunc();
@@ -93,23 +129,6 @@ namespace Faia
             UpdateWindow(gWindowHandler);
 
             return TRUE;
-        }
-
-        LRESULT CALLBACK WindowsApplication::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
-            if (message == WM_CREATE) {
-                LPCREATESTRUCT pCreateStruct = reinterpret_cast<LPCREATESTRUCT>(lParam);
-                SetWindowLongPtr(hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pCreateStruct->lpCreateParams));
-            }
-
-            if (_appInstance)
-            {
-                for (NotifyWinProc& updateFunc : _appInstance->mFunctionsNotifyAppWinProc)
-                {
-                    updateFunc(hWnd, message, wParam, lParam);
-                }
-            }
-
-            return DefWindowProc(hWnd, message, wParam, lParam);
         }
     }
 }

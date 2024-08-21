@@ -9,13 +9,24 @@ namespace Faia
     {
         using namespace Faia::InputSystem;
 
+        RootEngine* gEngine;
+        RootEngine* GetEngine()
+        {
+            if (gEngine == nullptr)
+            {
+                gEngine = new RootEngine();
+                gEngine->Init();
+            }
+
+            return gEngine;
+        }
+
         RootEngine::RootEngine()
         {}
 
         void RootEngine::Init()
         {
             _lightManager = std::make_unique<Graphics::Light::LightManager>();
-
             _previousTime = timeGetTime();
             GetGraphics()->SetupDevice();
             GetSceneManager()->LoadScene(MakeDemoScene());
@@ -27,12 +38,10 @@ namespace Faia
             DWORD currentTime = timeGetTime();
             float deltaTime = (currentTime - _previousTime) / 1000.0f;
             _previousTime = currentTime;
-
+            GetFaiaInputSystem()->Update(deltaTime);
             GetSceneManager()->Update(deltaTime);
             //TODO: I need to make the render a separeted thread or the vsync will stop my application and i will have some problems with Input system events for exemple. 
             GetGraphics()->Renderer();
-
-            GetFaiaInputSystem()->Update(deltaTime);
         }
     }
 }
