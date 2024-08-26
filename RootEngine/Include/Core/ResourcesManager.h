@@ -2,6 +2,7 @@
 #include "Data/RMeshData.h"
 #include "Core/ResourceContainer.h"
 #include "Faia/HashUtils.h"
+#include "Faia/Debug.h"
 
 #include <filesystem>
 #include <unordered_map>
@@ -23,6 +24,19 @@ namespace Faia
                     std::filesystem::path fullPath = std::filesystem::current_path();
                     fullPath += pathToContent;
                     fullPath += relativePath;
+
+                    if (!std::filesystem::exists(fullPath)) {
+                        std::string msg("The file: ");
+                        msg.append(fullPath.string());
+                        msg.append(" Can't be found");
+                        Debug::PopError(msg.c_str());
+                    }
+                    else {
+                        std::string msg("get file from: ");
+                        msg.append(fullPath.string());
+                        Debug::Log(msg.c_str());
+                    }
+
                     ResourceContainer rc = CreateResourceContainer<T>(std::bind(&ResourcesManager::DeleteResourceInMap, this, std::placeholders::_1), hash);
                     std::string s = fullPath.string();
                     rc.GetRaw<T>()->ReadFromPath(s.c_str());
@@ -33,12 +47,7 @@ namespace Faia
             }
 
         private:
-            //todo: this path just work in vs, we need to create config files to get the paths
-#ifdef _DEBUG
-            const char* pathToContent = "\\..\\X64\\Debug\\Content\\";
-#elif _NDEBUG
-            const char* pathToContent = "\\Content\\";
-#endif
+            const char* pathToContent = "\\..\\Content\\";
             unordered_map<uint32_t, ResourceContainer> mHashToResource;
             void DeleteResourceInMap(uint32_t hash);
 
