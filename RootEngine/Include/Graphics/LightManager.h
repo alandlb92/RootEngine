@@ -37,7 +37,6 @@ namespace Faia
 				{
 				private:
 					CB_LightData* _lightData;
-					void UploadLightBuffer();
 
 					static LightManager* _instance;
 				public:

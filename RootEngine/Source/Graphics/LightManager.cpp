@@ -1,5 +1,5 @@
 #include "Graphics/LightManager.h"
-#include "Graphics/GraphicsMain.h"
+#include "Graphics/RConstantBuffersHandler.h"
 
 namespace Faia
 {
@@ -23,39 +23,34 @@ namespace Faia
                     _lightData = nullptr;
                 }
 
-                void LightManager::UploadLightBuffer()
-                {
-                    GraphicsMain::UpdateConstantBuffer(ConstantBuffer::CB_Light, _lightData);
-                }
-
                 void LightManager::SetAmbientLightColor(RColorRGB color)
                 {
                     _lightData->ambientLightColor = color;
-                    UploadLightBuffer();
+                    GetConstantBuffersHandler()->SetParamData(gAmbientLightColorHash, &_lightData->ambientLightColor);
                 }
 
                 void LightManager::SetAmbientLightStrength(float strength)
                 {
                     _lightData->ambientLightStrength = strength;
-                    UploadLightBuffer();
+                    GetConstantBuffersHandler()->SetParamData(gAmbientLightStrengthHash, &_lightData->ambientLightStrength);
                 }
 
                 void LightManager::SetPointLightColor(RColorRGB color)
                 {
                     _lightData->pointLightColor = color;
-                    UploadLightBuffer();
+                    GetConstantBuffersHandler()->SetParamData(gPointLightColorHash, &_lightData->pointLightColor);
                 }
 
                 void LightManager::SetPointLightPosition(RVector3D position)
                 {
                     _lightData->pointLightPosition = position;
-                    UploadLightBuffer();
+                    GetConstantBuffersHandler()->SetParamData(gPointLightpositionHash, &_lightData->pointLightPosition);
                 }
 
                 void LightManager::SetPointLightStrength(float strength)
                 {
                     _lightData->pointLightStrength = strength;
-                    UploadLightBuffer();
+                    GetConstantBuffersHandler()->SetParamData(gPointLightStrengthHash, &_lightData->pointLightStrength);
                 }
             }
         }

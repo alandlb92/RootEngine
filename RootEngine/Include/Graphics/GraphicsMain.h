@@ -17,17 +17,6 @@ namespace Faia
 {
 	namespace Root
 	{
-		// Shader resources
-		enum ConstantBuffer
-		{
-			CB_Application,
-			CB_Frame,
-			CB_Object,
-			CB_Globals,
-			CB_Light,
-			NumConstantBuffers
-		};
-
 		class GraphicsMain;
 		GraphicsMain* GetGraphics();
 		ID3D11Device* GetDevice();
@@ -38,23 +27,6 @@ namespace Faia
 			friend ID3D11Device* GetDevice();
 			friend ID3D11DeviceContext* GetDeviceContext();
 		public:
-			static void UpdateConstantBuffer(ConstantBuffer type, const void* pSrcData)
-			{
-				GetGraphics()->_deviceContext->UpdateSubresource(GetGraphics()->_constantBuffers[type], 0, nullptr, pSrcData, 0, 0);
-			}
-
-			struct GlobalBuffer
-			{
-				int hasTexture;
-				int boneSelectedId;
-			};
-
-			struct PerObjectBufer
-			{
-				RMatrix4x4 worldMatrix;
-				RMatrix4x4 animTransformMatrix[MAX_NUM_OF_ANIMATION_CHANNELS];
-			};
-
 			float GetWidth() { return _clientWidth; }
 			float GetHeight() { return _clientHeight; }
 
@@ -63,12 +35,6 @@ namespace Faia
 			void Clear(const FLOAT clearColor[4], FLOAT clearDepth, UINT8 clearStencil);
 			void Present(bool vSync);
 			void Renderer();
-
-			//TODO: new functions in shaderManager to upload constant buffers, this is just a test do RRenderData class like RDA PRUMO
-			static int boneSelected;
-			GlobalBuffer tempGlobalBuffer = { 0, 0 };
-			static PerObjectBufer tempPerObjectBuffer;
-
 		private:
 			IDXGISwapChain* _swapChain;
 			Microsoft::WRL::ComPtr<ID3D11Device> _device;
@@ -80,7 +46,6 @@ namespace Faia
 			ID3D11DepthStencilState* _depthStencilState;
 			D3D11_VIEWPORT _viewport = { 0 };
 			ID3D11RasterizerState* _rasterizerState;
-			ID3D11Buffer* _constantBuffers[NumConstantBuffers];
 
 			Microsoft::WRL::ComPtr<ID3D11SamplerState> _defaultSamplerState;
 

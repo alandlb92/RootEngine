@@ -10,6 +10,8 @@
 #include "Data/RMeshData.h"
 #include "Components/RAnimationComponent.h"
 #include "Faia/WindowsApplication.h"
+#include "Graphics/RConstantBuffersHandler.h"
+#include "Faia/HashUtils.h"
 
 using namespace DirectX;
 using namespace Faia::Root;
@@ -53,12 +55,9 @@ namespace Faia
             return GetGraphics()->_deviceContext.Get();
         };
 
-        GraphicsMain::PerObjectBufer GraphicsMain::tempPerObjectBuffer = {};
-
-        int GraphicsMain::boneSelected = 0;
-
         GraphicsMain::GraphicsMain()
-        {}
+        {
+        }
 
         void GraphicsMain::SetupDevice()
         {
@@ -207,55 +206,10 @@ namespace Faia
             _viewport.MinDepth = 0.0f;
             _viewport.MaxDepth = 1.0f;
 
-
             // Compute the exact client dimensions.
             // This is required for a correct projection matrix.
             _clientWidth = static_cast<float>(clientRect.right - clientRect.left);
             _clientHeight = static_cast<float>(clientRect.bottom - clientRect.top);
-
-            // Create the constant buffers for the variables defined in the vertex shader.
-            D3D11_BUFFER_DESC constantBufferDesc;
-            ZeroMemory(&constantBufferDesc, sizeof(D3D11_BUFFER_DESC));
-
-            constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-            constantBufferDesc.ByteWidth = sizeof(XMMATRIX);
-            constantBufferDesc.CPUAccessFlags = 0;
-            constantBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-
-            hr = _device->CreateBuffer(&constantBufferDesc, nullptr, &_constantBuffers[CB_Application]);
-            if (FAILED(hr))
-            {
-                OutputDebugStringA("Failed to create Buffer CB_Application\n");
-            }
-            hr = _device->CreateBuffer(&constantBufferDesc, nullptr, &_constantBuffers[CB_Frame]);
-            if (FAILED(hr))
-            {
-                OutputDebugStringA("Failed to create Buffer CB_Frame\n");
-            }
-
-            constantBufferDesc.ByteWidth = sizeof(XMMATRIX) + (sizeof(XMMATRIX) * MAX_NUM_OF_ANIMATION_CHANNELS);
-
-            hr = _device->CreateBuffer(&constantBufferDesc, nullptr, &_constantBuffers[CB_Object]);
-            if (FAILED(hr))
-            {
-                OutputDebugStringA("Failed to create Buffer CB_Object\n");
-            }
-
-            //2 int32
-            constantBufferDesc.ByteWidth = 32 * 2;
-            hr = _device->CreateBuffer(&constantBufferDesc, nullptr, &_constantBuffers[CB_Globals]);
-            if (FAILED(hr))
-            {
-                OutputDebugStringA("Failed to create Buffer CB_Globals\n");
-            }
-
-            constantBufferDesc.ByteWidth = sizeof(float) * 12;
-            hr = _device->CreateBuffer(&constantBufferDesc, nullptr, &_constantBuffers[CB_Light]);
-            if (FAILED(hr))
-            {
-                OutputDebugStringA("Failed to create Buffer CB_Light\n");
-            }
-
 
             D3D11_SAMPLER_DESC samplerDesc;
             ZeroMemory(&samplerDesc, sizeof(samplerDesc));
@@ -309,13 +263,18 @@ namespace Faia
 
             Clear(Colors::CornflowerBlue, 1.0f, 0);
 
+            Graphics::GetConstantBuffersHandler()->UpdateSubresource(Graphics::gPerApplicationHash);
+            Graphics::GetConstantBuffersHandler()->UpdateSubresource(Graphics::gLightBufferHash);
+            Graphics::GetConstantBuffersHandler()->UpdateSubresource(Graphics::gPerFrameHash);
             //We can put some parts of the code in other classes, for exemple the mesh upload data can be inside RMeshRenderer or something like that
             for (auto& ro : GetSceneManager()->GetCurrentScene()->GetRenderablebleObjects())
             {
                 //Todo: avoid GetComponentOfType do it when create RenderData
                 if (auto anim = ro->GetComponentOfType<RAnimationComponent>())
                 {
-                    anim->GetAnimationChannelsMatrix(GraphicsMain::tempPerObjectBuffer.animTransformMatrix);
+                    Faia::Root::RMatrix4x4 animMatrix[MAX_NUM_OF_ANIMATION_CHANNELS];
+                    anim->GetAnimationChannelsMatrix(animMatrix);
+                    Graphics::GetConstantBuffersHandler()->SetParamData(Graphics::gAnimMatrixHash, &animMatrix);
                 }
 
                 for (std::shared_ptr<RMesh> mesh : ro->GetMeshComponent()->GetMeshs())
@@ -344,25 +303,8 @@ namespace Faia
 
                     DirectX::XMMATRIX transformMatrix = scaleMatrix * rotationMatrix * translationMatrix;
 
-
-                    GraphicsMain::tempPerObjectBuffer.worldMatrix.m00 = transformMatrix.r[0].m128_f32[0];
-                    GraphicsMain::tempPerObjectBuffer.worldMatrix.m01 = transformMatrix.r[0].m128_f32[1];
-                    GraphicsMain::tempPerObjectBuffer.worldMatrix.m02 = transformMatrix.r[0].m128_f32[2];
-                    GraphicsMain::tempPerObjectBuffer.worldMatrix.m03 = transformMatrix.r[0].m128_f32[3];
-                    GraphicsMain::tempPerObjectBuffer.worldMatrix.m10 = transformMatrix.r[1].m128_f32[0];
-                    GraphicsMain::tempPerObjectBuffer.worldMatrix.m11 = transformMatrix.r[1].m128_f32[1];
-                    GraphicsMain::tempPerObjectBuffer.worldMatrix.m12 = transformMatrix.r[1].m128_f32[2];
-                    GraphicsMain::tempPerObjectBuffer.worldMatrix.m13 = transformMatrix.r[1].m128_f32[3];
-                    GraphicsMain::tempPerObjectBuffer.worldMatrix.m20 = transformMatrix.r[2].m128_f32[0];
-                    GraphicsMain::tempPerObjectBuffer.worldMatrix.m21 = transformMatrix.r[2].m128_f32[1];
-                    GraphicsMain::tempPerObjectBuffer.worldMatrix.m22 = transformMatrix.r[2].m128_f32[2];
-                    GraphicsMain::tempPerObjectBuffer.worldMatrix.m33 = transformMatrix.r[3].m128_f32[3];
-                    GraphicsMain::tempPerObjectBuffer.worldMatrix.m30 = transformMatrix.r[3].m128_f32[0];
-                    GraphicsMain::tempPerObjectBuffer.worldMatrix.m31 = transformMatrix.r[3].m128_f32[1];
-                    GraphicsMain::tempPerObjectBuffer.worldMatrix.m32 = transformMatrix.r[3].m128_f32[2];
-                    GraphicsMain::tempPerObjectBuffer.worldMatrix.m33 = transformMatrix.r[3].m128_f32[3];
-
-                    UpdateConstantBuffer(ConstantBuffer::CB_Object, &GraphicsMain::tempPerObjectBuffer);
+                    Graphics::GetConstantBuffersHandler()->SetParamData(Graphics::gWorldMatrixHash, &transformMatrix);
+                    Graphics::GetConstantBuffersHandler()->UpdateSubresource(Graphics::gPerObjectHash);
 
                     _deviceContext->IASetInputLayout(material->GetShader()->GetInputLayout());
 
@@ -393,6 +335,7 @@ namespace Faia
                         }
                     }
 
+
                     _deviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R16_UINT, 0);
 
 
@@ -408,19 +351,17 @@ namespace Faia
                         samplerState = material->GetTexture(0)->GetSamplerState();
                     }
 
-                    const UINT hasTexture = textureSRV == NULL ? 0 : 1;
-                    tempGlobalBuffer.hasTexture = hasTexture;
-                    tempGlobalBuffer.boneSelectedId = boneSelected;
-
-                    UpdateConstantBuffer(ConstantBuffer::CB_Globals, &tempGlobalBuffer);
+                    uint32_t hasTexture = textureSRV == NULL ? 0 : 1;
+                    Graphics::GetConstantBuffersHandler()->SetParamData(Graphics::gHasTextureHash, &hasTexture);
+                    Graphics::GetConstantBuffersHandler()->UpdateSubresource(Graphics::gGlobalsHash);
 
 
                     _deviceContext->PSSetShaderResources(0, 1, &textureSRV);
                     _deviceContext->PSSetSamplers(0, 1, &samplerState);
-                    _deviceContext->PSSetConstantBuffers(0, NumConstantBuffers, _constantBuffers);
+                    Graphics::GetConstantBuffersHandler()->PSSetConstantBuffers();
 
                     _deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-                    _deviceContext->VSSetConstantBuffers(0, NumConstantBuffers, _constantBuffers);
+                    Graphics::GetConstantBuffersHandler()->VSSetConstantBuffers();
                     _deviceContext->RSSetState(_rasterizerState);
                     _deviceContext->RSSetViewports(1, &_viewport);
 

@@ -17,6 +17,7 @@ namespace Faia
         Scene* MakeDemoScene()
         {
             Scene* scene = new Scene();
+            
 
             SceneObject* sceneObject = new SceneObject();
             SceneObject* sceneObject2 = new SceneObject();

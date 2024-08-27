@@ -40,5 +40,5 @@ cbuffer LightBuffer : register(b4)
     float offset;
     
     float3 pointLightposition;
-    float pointLightStrenght;
+    float pointLightStrength;
 }

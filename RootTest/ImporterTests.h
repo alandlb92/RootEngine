@@ -17,6 +17,7 @@ const char* heroGoatRboneInfoRelativePath = "\\TestContent\\ImporterTest\\RFiles
 const char* heroGoatRmeshRelativePath = "\\TestContent\\ImporterTest\\RFiles\\HeroGoat.rmesh";
 const char* heroGoatRanimRelativePath = "\\TestContent\\ImporterTest\\RFiles\\HeroGoatTestAnimation.ranim";
 
+//todo: now we have Mesh, boneinfo, animation all separeted we need to verify this tests include for textures
 namespace ImporterTest
 {
     bool IsTheNeededFilesExists()

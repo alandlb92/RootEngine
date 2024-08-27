@@ -18,6 +18,7 @@ namespace Faia
     {
         void Shader::Load(const char* shaderName)
         {
+            //Todo: put shaders in content folder too
             _shaderName = std::string(shaderName);
 
             ID3D11Device* device = GetDevice();

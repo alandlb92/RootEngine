@@ -1,14 +1,18 @@
 
 #include "Graphics/RCamera.h"
 #include "Graphics/GraphicsMain.h"
+#include "Graphics/RConstantBuffersHandler.h"
 #include "FaiaInputSystem.h"
+#include "Faia/Converter.h"
 
 namespace Faia
 {
     namespace Root
     {
+        static uint32_t boneSelected = 0;
         RCamera::RCamera()// : Super()
         {
+            Graphics::GetConstantBuffersHandler()->SetParamData(Graphics::gBoneSelectedIdHash, &boneSelected);
             _eyePosition = XMVECTOR();
             _focusPoint = XMVECTOR();
             _upDirection = XMVECTOR();
@@ -41,30 +45,9 @@ namespace Faia
             _nearPlane = 0.1f;
             _farPlane = 100000.0f;
             _projectionMatrix = XMMatrixPerspectiveFovLH(_fieldOfView, _aspectRatio, _nearPlane, _farPlane);
-
-            GraphicsMain::tempPerObjectBuffer.worldMatrix.m00 = _worldMatrix.r[0].m128_f32[0];
-            GraphicsMain::tempPerObjectBuffer.worldMatrix.m01 = _worldMatrix.r[0].m128_f32[1];
-            GraphicsMain::tempPerObjectBuffer.worldMatrix.m02 = _worldMatrix.r[0].m128_f32[2];
-            GraphicsMain::tempPerObjectBuffer.worldMatrix.m03 = _worldMatrix.r[0].m128_f32[3];
-
-            GraphicsMain::tempPerObjectBuffer.worldMatrix.m10 = _worldMatrix.r[1].m128_f32[0];
-            GraphicsMain::tempPerObjectBuffer.worldMatrix.m11 = _worldMatrix.r[1].m128_f32[1];
-            GraphicsMain::tempPerObjectBuffer.worldMatrix.m12 = _worldMatrix.r[1].m128_f32[2];
-            GraphicsMain::tempPerObjectBuffer.worldMatrix.m13 = _worldMatrix.r[1].m128_f32[3];
-
-            GraphicsMain::tempPerObjectBuffer.worldMatrix.m20 = _worldMatrix.r[2].m128_f32[0];
-            GraphicsMain::tempPerObjectBuffer.worldMatrix.m21 = _worldMatrix.r[2].m128_f32[1];
-            GraphicsMain::tempPerObjectBuffer.worldMatrix.m22 = _worldMatrix.r[2].m128_f32[2];
-
-            GraphicsMain::tempPerObjectBuffer.worldMatrix.m33 = _worldMatrix.r[3].m128_f32[3];
-            GraphicsMain::tempPerObjectBuffer.worldMatrix.m30 = _worldMatrix.r[3].m128_f32[0];
-            GraphicsMain::tempPerObjectBuffer.worldMatrix.m31 = _worldMatrix.r[3].m128_f32[1];
-            GraphicsMain::tempPerObjectBuffer.worldMatrix.m32 = _worldMatrix.r[3].m128_f32[2];
-            GraphicsMain::tempPerObjectBuffer.worldMatrix.m33 = _worldMatrix.r[3].m128_f32[3];
-
-
-            GraphicsMain::UpdateConstantBuffer(ConstantBuffer::CB_Object, &GraphicsMain::tempPerObjectBuffer);
-            GraphicsMain::UpdateConstantBuffer(ConstantBuffer::CB_Application, &_projectionMatrix);
+            
+            Graphics::GetConstantBuffersHandler()->SetParamData(Graphics::gWorldMatrixHash, &_worldMatrix);
+            Graphics::GetConstantBuffersHandler()->SetParamData(Graphics::gProjectionMatrixHash, &_projectionMatrix);
 
             GetFaiaInputSystem()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::W, std::bind(&RCamera::MoveCameraYFront, this, std::placeholders::_1));
             GetFaiaInputSystem()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::S, std::bind(&RCamera::MoveCameraYBack, this, std::placeholders::_1));
@@ -139,10 +122,8 @@ namespace Faia
             XMStoreFloat3(&float3Right, vec_right);
             _right = RVector3D(float3Right.x, float3Right.y, float3Right.z);
 
-            OutputDebugStringA(_forward.ToString().c_str());
-
             //update buffer
-            GraphicsMain::UpdateConstantBuffer(ConstantBuffer::CB_Frame, &_viewMatrix);
+            Graphics::GetConstantBuffersHandler()->SetParamData(Graphics::gViewMatrixHash, &_viewMatrix);
         }
 
         void RCamera::Update(float deltaTime)
@@ -150,17 +131,18 @@ namespace Faia
             Super::Update(deltaTime);
         }
 
-
         void RCamera::ChangeBonePlusTest()
         {
-            GraphicsMain::boneSelected++;
+            boneSelected++;
+            Graphics::GetConstantBuffersHandler()->SetParamData(Graphics::gBoneSelectedIdHash, &boneSelected);
         }
 
         void RCamera::ChangeBoneMinusTest()
         {
-            if (GraphicsMain::boneSelected > 0)
+            if (boneSelected > 0)
             {
-                GraphicsMain::boneSelected--;
+                boneSelected--;
+                Graphics::GetConstantBuffersHandler()->SetParamData(Graphics::gBoneSelectedIdHash, &boneSelected);
             }
         }
 

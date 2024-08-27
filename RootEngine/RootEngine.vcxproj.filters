@@ -140,6 +140,9 @@
     <ClInclude Include="Include\Components\RSkeletalMeshComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Graphics\RConstantBuffersHandler.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\RootEngine.cpp">
@@ -216,6 +219,9 @@
     </ClCompile>
     <ClCompile Include="Source\Components\RSkeletalMeshComponent.cpp">
       <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\RConstantBuffersHandler.cpp">
+      <Filter>Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

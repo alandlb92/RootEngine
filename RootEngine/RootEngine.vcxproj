@@ -134,6 +134,7 @@ xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
     <ClInclude Include="Include\Graphics\RCamera.h" />
     <ClInclude Include="Include\Graphics\GraphicsMain.h" />
     <ClInclude Include="Include\Graphics\LightManager.h" />
+    <ClInclude Include="Include\Graphics\RConstantBuffersHandler.h" />
     <ClInclude Include="Include\Graphics\RMaterial.h" />
     <ClInclude Include="Include\Graphics\MaterialManager.h" />
     <ClInclude Include="Include\Graphics\Mesh\RMesh.h" />
@@ -161,6 +162,7 @@ xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
     <ClCompile Include="Source\Graphics\RCamera.cpp" />
     <ClCompile Include="Source\Graphics\GraphicsMain.cpp" />
     <ClCompile Include="Source\Graphics\LightManager.cpp" />
+    <ClCompile Include="Source\Graphics\RConstantBuffersHandler.cpp" />
     <ClCompile Include="Source\Graphics\RMaterial.cpp" />
     <ClCompile Include="Source\Graphics\MaterialManager.cpp" />
     <ClCompile Include="Source\Graphics\Mesh\RMesh.cpp" />
