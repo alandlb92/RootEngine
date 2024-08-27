@@ -4,3 +4,6 @@
 [submodule "libs/thirdparty/assimp"]
 	path = libs/thirdparty/assimp
 	url = git@github.com:assimp/assimp.git
+[submodule "libs/thirdparty/libjpegturbo"]
+	path = libs/thirdparty/libjpegturbo
+	url = git@github.com:libjpeg-turbo/libjpeg-turbo.git
