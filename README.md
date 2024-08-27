@@ -2,12 +2,33 @@ A custom engine, current in WIP.
 
 # Build instructions
 ## Assimp
-## Libjpeg-turbo
-
-Just fallow this commands:
+Just copy and paste this commands one by each:
 
 ```sh
-cd "path\to\RootEngine\libs\thirdparty\libjpegturbo\lib"
+cd "path\to\RootEngine\libs\thirdparty\assimp"
+
+mkdir build 
+
+cd build
+
+cmake .. -DBUILD_SHARED_LIBS=OFF -DASSIMP_BUILD_ZLIB=ON
+
+cmake --build . --config Release
+
+cmake --build .
+```
+
+This commands will generate lib folder in ```"path\to\RootEngine\libs\thirdparty\assimp\build"```
+And include folder in ```"path\to\RootEngine\libs\thirdparty\assimp\build"``` And ```"path\to\RootEngine\libs\thirdparty\assimp"```
+
+
+
+## Libjpeg-turbo
+
+Just copy and paste this commands one by each:
+
+```sh
+cd "path\to\RootEngine\libs\thirdparty\libjpegturbo"
 
 mkdir build 
 

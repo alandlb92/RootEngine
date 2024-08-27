@@ -57,6 +57,7 @@
       <AdditionalIncludeDirectories>$(ProjectDir)Include;$(SolutionDir)FaiaUtils\Include;$(SolutionDir)FaiaInputSystem\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

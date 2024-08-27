@@ -89,12 +89,13 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>$(SolutionDir)FaiaUtils\Include;$(SolutionDir)RootEngine\Include;$(SolutionDir)RootImporter\Include;$(SolutionDir)libs\thirdparty\assimp\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)FaiaUtils\Include;$(SolutionDir)RootEngine\Include;$(SolutionDir)RootImporter\Include;$(SolutionDir)libs\thirdparty\assimp\Include;$(SolutionDir)libs\thirdparty\assimp\build\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>$(SolutionDir)libs\thirdparty\assimp\build\lib\Debug\assimp-vc143-mtd.lib;$(SolutionDir)libs\thirdparty\assimp\build\\contrib\zlib\Release\zlibstatic.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>if not exist "$(OutputPath)TestContent" mkdir "$(OutputPath)TestContent" &amp;&amp; xcopy "$(ProjectDir)TestContent" "$(OutputPath)TestContent" /E /I /V</Command>
