@@ -1,7 +1,6 @@
-#include "FBX/FBXImporter.h"
+#include "RImporter.h"
 #include <iostream>
 #include <string>
-
 
 // params:
 // arg[0] is the .exe 
@@ -21,17 +20,16 @@ int main(int argc, char* argv[])
         std::cerr << "\033[1;31mError:\033[0m Input and output paths are required.\n";
         return 1;
     }
-    
-    
-    if (std::strcmp(argv[1], "fbximport") != 0)
+        
+    if (std::strcmp(argv[1], "import") != 0)
     {
         std::cerr << "\033[1;31mError:\033[0m" << argv[1] << " Not recognized" << "\n";
         return 1;
     }
 
+    std::unique_ptr<Faia::Root::Importer::RImporter> importer = Faia::Root::Importer::RImporter::GetImporter(argc, argv);
 
-    std::unique_ptr<Faia::Root::Importer::FBXImporter> fbxImporter = Faia::Root::Importer::FBXImporter::GetImporter(argc, argv);
-    if (!fbxImporter)
+    if (!importer)
     {
         std::cerr << "\033[1;31mError:\033[0m The argument " << argv[2] << " was not recognized\n";
         std::cout << "Thes list of arguments are:\n";
@@ -46,12 +44,10 @@ int main(int argc, char* argv[])
 
     std::cout << "Start command! " << argv[2] << "\n";
 
+    importer->Run();
 
-    fbxImporter->Run();
-   
-    
-    while (fbxImporter->GetState() == Faia::Root::Importer::WAITING_START
-        || fbxImporter->GetState() == Faia::Root::Importer::RUNNING)
+    while (importer->GetState() == Faia::Root::Importer::WAITING_START
+        || importer->GetState() == Faia::Root::Importer::RUNNING)
     {
         std::cout << "\\" << "\r";
         std::this_thread::sleep_for(std::chrono::milliseconds(250));
@@ -63,9 +59,9 @@ int main(int argc, char* argv[])
         std::this_thread::sleep_for(std::chrono::milliseconds(250));
     }
 
-    if (fbxImporter->GetState() == Faia::Root::Importer::ERROR)
+    if (importer->GetState() == Faia::Root::Importer::ERROR)
     {
-        std::cout << "Import has found an \033[1;31mERROR!" << "\n-> " << fbxImporter->GetErrorMsg() << "\n";
+        std::cout << "Import has found an \033[1;31mERROR!" << "\n-> " << importer->GetErrorMsg() << "\n";
     }
     else
     {

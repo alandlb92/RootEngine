@@ -8,15 +8,16 @@ namespace Faia
 {
     namespace Root
     {
+        struct RTextureData;
         namespace Importer 
         {
-            class JPGImporter : public RImporter
+            class PNGImporter : public RImporter
             {
             public:
                 void Run() override;
 
             private:
-                std::vector<RColorRGBA_8b> ConvertToColorArray(const std::vector<unsigned char>& imgBuffer, int width, int height);
+                void ConvertToColorArray(const std::vector<unsigned char>& imgBuffer, RTextureData& texData);
             };
         }
     }

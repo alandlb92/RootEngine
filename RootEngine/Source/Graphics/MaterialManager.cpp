@@ -21,6 +21,7 @@ namespace Faia
             return shader;
         }
 
+        //Todo: implement resource manager
         std::shared_ptr<Texture2D> MaterialManager::LoadTexture2D(const char* texturePath)
         {
 

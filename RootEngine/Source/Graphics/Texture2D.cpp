@@ -3,10 +3,12 @@
 #include "Faia/Converter.h"
 #include <string>
 #include "Faia/Paths.h"
+#include "Data/RMeshData.h"
 //todo: remove directXText to more mult platform way
 //#include "DirectXTex.h"
 
 
+#include <filesystem>
 using namespace Faia::Paths;
 
 
@@ -21,11 +23,19 @@ namespace Faia
             std::wstring texturePath(GetApplicationFolderPath());
             texturePath.append(Faia::Converter::CharToLPCWSTR(textureRelativePath));
 
+            const char* pathToContent = "\\..\\Content\\";
+            std::filesystem::path fullPath = std::filesystem::current_path();
+            fullPath += pathToContent;
+            fullPath += textureRelativePath;
+
+            RTextureData tex;
+            tex.ReadFromPath(fullPath.string().c_str());
+
             //Texture description
             D3D11_TEXTURE2D_DESC texDesc;
             ZeroMemory(&texDesc, sizeof(D3D11_TEXTURE2D_DESC));
-            texDesc.Width = 5;
-            texDesc.Height = 5;
+            texDesc.Width = tex.mWidth;
+            texDesc.Height = tex.mHeight;
             texDesc.MipLevels = 1;
             texDesc.ArraySize = 1;
             texDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -36,27 +46,13 @@ namespace Faia
             texDesc.CPUAccessFlags = 0;
             texDesc.MiscFlags =  0;
             //Todo: read the texture from a file we will do a importer for the texture.
-            struct rgbaTest
-            {
-                uint8_t r;
-                uint8_t g;
-                uint8_t b;
-                uint8_t a;
-            };
-
-
-            rgbaTest tex[25] = {rgbaTest{255, 0, 255, 255}, rgbaTest{255, 0, 255, 255},rgbaTest{255, 0, 255, 255},rgbaTest{255, 0, 255, 255},rgbaTest{255, 0, 255, 255},
-                                rgbaTest{255, 0, 0, 255}, rgbaTest{255, 0, 0, 255},rgbaTest{255, 0, 0, 255},rgbaTest{255, 0, 0, 255},rgbaTest{255, 0, 0, 255},
-                                rgbaTest{255, 0, 0, 255}, rgbaTest{255, 0, 0, 255},rgbaTest{255, 0, 0, 255},rgbaTest{255, 0, 0, 255},rgbaTest{255, 0, 0, 255},
-                                rgbaTest{255, 0, 0, 255}, rgbaTest{255, 0, 0, 255},rgbaTest{255, 0, 0, 255},rgbaTest{255, 0, 0, 255},rgbaTest{255, 0, 0, 255},
-                                rgbaTest{255, 0, 0, 255}, rgbaTest{255, 0, 0, 255},rgbaTest{255, 0, 0, 255},rgbaTest{255, 0, 0, 255},rgbaTest{255, 0, 0, 255}
-                                };
+            
 
             //Texture data
             D3D11_SUBRESOURCE_DATA texData;
             ZeroMemory(&texData, sizeof(D3D11_SUBRESOURCE_DATA));
-            texData.pSysMem = tex;
-            texData.SysMemPitch = texDesc.Width * sizeof(rgbaTest);
+            texData.pSysMem = tex.mPixels.data();
+            texData.SysMemPitch = tex.mWidth * 4;
             texData.SysMemSlicePitch = 0;
 
             //ScratchImage image;

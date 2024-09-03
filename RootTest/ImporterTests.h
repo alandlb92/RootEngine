@@ -8,14 +8,23 @@
 #include "FBX/FBXBoneInfoImporter.h"
 #include "FBX/FBXAnimationImporter.h"
 
+#include "Textures/JPGImporter.h"
+#include "Textures/PNGImporter.h"
+
 const char* cubeFbxRelativePath = "\\TestContent\\ImporterTest\\FBX\\cube.fbx";
 const char* heroGoatFbxRelativePath = "\\TestContent\\ImporterTest\\FBX\\HeroGoat.fbx";
 const char* heroGoatFbxAnimRelativePath = "\\TestContent\\ImporterTest\\FBX\\HeroGoatTestAnimation.fbx";
+const char* jpgTestRelativePath = "\\TestContent\\ImporterTest\\Textures\\jpgTest.jpg";
+const char* pngTestRelativePath = "\\TestContent\\ImporterTest\\Textures\\pngTest.png";
+const char* pngNoAlphaTestRelativePath = "\\TestContent\\ImporterTest\\Textures\\pngNoAlphaTest.png";
 
 const char* cubeRmeshRelativePath = "\\TestContent\\ImporterTest\\RFiles\\cube.rmesh";
 const char* heroGoatRboneInfoRelativePath = "\\TestContent\\ImporterTest\\RFiles\\HeroGoat.rboneinfo";
 const char* heroGoatRmeshRelativePath = "\\TestContent\\ImporterTest\\RFiles\\HeroGoat.rmesh";
 const char* heroGoatRanimRelativePath = "\\TestContent\\ImporterTest\\RFiles\\HeroGoatTestAnimation.ranim";
+const char* jpgTestRtextureRelativePath = "\\TestContent\\ImporterTest\\RFiles\\jpgTest.rtexture";
+const char* pngTestRtextureRelativePath = "\\TestContent\\ImporterTest\\RFiles\\pngTest.rtexture";
+const char* pngNoAlphaTestRtextureRelativePath = "\\TestContent\\ImporterTest\\RFiles\\pngNoAlphaTest.rtexture";
 
 //todo: now we have Mesh, boneinfo, animation all separeted we need to verify this tests include for textures
 namespace ImporterTest
@@ -29,16 +38,27 @@ namespace ImporterTest
         std::filesystem::path goatAnimFBXPath = std::filesystem::current_path();
         goatAnimFBXPath += heroGoatFbxAnimRelativePath;
 
+        std::filesystem::path jpgPath = std::filesystem::current_path();
+        jpgPath += jpgTestRelativePath;
+        std::filesystem::path pngPath = std::filesystem::current_path();
+        pngPath += pngTestRelativePath;
+        std::filesystem::path pngNoAPath = std::filesystem::current_path();
+        pngNoAPath += pngNoAlphaTestRelativePath;
+
         bool existsCubeFBX = std::filesystem::exists(cubeFBXPath);
         bool existsGoatFBX = std::filesystem::exists(goatFBXPath);
         bool existsGoatAnimFBX = std::filesystem::exists(goatAnimFBXPath);
+        bool existTestjpg = std::filesystem::exists(jpgPath);
+        bool existTestPNG = std::filesystem::exists(pngPath);
+        bool existTestPNGnoA = std::filesystem::exists(pngNoAPath);
 
-        return existsCubeFBX && existsGoatFBX && existsGoatAnimFBX;
+        return existsCubeFBX && existsGoatFBX && existsGoatAnimFBX && existTestjpg
+            && existTestPNG && existTestPNGnoA;
     }
 }
 
 //Test reach: Read and write .rmeshs (only meshs)
-TEST(FBXImporter, ImportJustMesh) 
+TEST(FBXImporter, JustMesh) 
 {
     std::filesystem::path inputPath = std::filesystem::current_path();
     inputPath += cubeFbxRelativePath;
@@ -85,7 +105,7 @@ TEST(FBXImporter, ImportJustMesh)
 
 
 //Test reach: Read and write .rboneinfo
-TEST(FBXImporter, ImportBoneinfo)
+TEST(FBXImporter, Boneinfo)
 {
     std::filesystem::path inputPath = std::filesystem::current_path();
     inputPath += heroGoatFbxRelativePath;
@@ -146,7 +166,7 @@ TEST(FBXImporter, ImportBoneinfo)
 }
 
 //Test reach: Read and write .rmeshs (with bone info)
-TEST(FBXImporter, ImportMeshWithBoneInfo)
+TEST(FBXImporter, MeshWithBoneInfo)
 {
     std::filesystem::path inputPath = std::filesystem::current_path();
     inputPath += heroGoatFbxRelativePath;
@@ -220,9 +240,8 @@ TEST(FBXImporter, ImportMeshWithBoneInfo)
     EXPECT_EQ(rmesh.mRMeshNodes.back().mBoneData.back().weights[2], .0f);
 }
 
-
 //Test reach: Read and write .ranim
-TEST(FBXImporter, ImportAnimation)
+TEST(FBXImporter, Animation)
 {
     std::filesystem::path inputPath = std::filesystem::current_path();
     inputPath += heroGoatFbxAnimRelativePath;
@@ -260,3 +279,107 @@ TEST(FBXImporter, ImportAnimation)
     EXPECT_EQ(ranimData.mAnimChannels[0].mRotations[9].mTime, 9.f);
     EXPECT_EQ(ranimData.mAnimChannels[0].mRotations[9].mValue, Faia::Root::RQuaternion(-0.0804047585f, -0.122044772f, -0.0798984095f, 0.986030638f));
 }
+
+//Test reach: Read and write .rtexture
+TEST(TextureImporter, JPG)
+{
+    std::filesystem::path inputPath = std::filesystem::current_path();
+    inputPath += jpgTestRelativePath;
+    std::filesystem::path outputPath = std::filesystem::current_path();
+    outputPath += jpgTestRtextureRelativePath;
+
+    Faia::Root::Importer::JPGImporter* texImporter = new Faia::Root::Importer::JPGImporter();
+
+    std::string inputPathStr = inputPath.string();
+    std::string  outputPathStr = outputPath.string();
+
+    texImporter->mArgs.push_back(inputPathStr.c_str());
+    texImporter->mArgs.push_back(outputPathStr.c_str());
+    texImporter->Run();
+
+    Faia::Root::RTextureData rtextureData;
+    rtextureData.ReadFromPath(outputPathStr.c_str());
+
+    delete texImporter;
+
+    EXPECT_EQ(rtextureData.mHeight, 1);
+    EXPECT_EQ(rtextureData.mWidth, 6);
+
+    EXPECT_EQ(rtextureData.mPixels[0], RColorRGBA_8b(254, 0, 0, 255));
+    EXPECT_EQ(rtextureData.mPixels[1], RColorRGBA_8b(0, 255, 1, 255));
+    EXPECT_EQ(rtextureData.mPixels[2], RColorRGBA_8b(0, 0, 254, 255));
+    EXPECT_EQ(rtextureData.mPixels[3], RColorRGBA_8b(255, 0, 254, 255));
+    EXPECT_EQ(rtextureData.mPixels[4], RColorRGBA_8b(0, 255, 255, 255));
+    EXPECT_EQ(rtextureData.mPixels[5], RColorRGBA_8b(255, 255, 0, 255));
+}
+
+//Test reach: Read and write .rtexture
+TEST(TextureImporter, PNG)
+{
+    std::filesystem::path inputPath = std::filesystem::current_path();
+    inputPath += pngTestRelativePath;
+    std::filesystem::path outputPath = std::filesystem::current_path();
+    outputPath += pngTestRtextureRelativePath;
+
+    Faia::Root::Importer::PNGImporter* texImporter = new Faia::Root::Importer::PNGImporter();
+
+    std::string inputPathStr = inputPath.string();
+    std::string  outputPathStr = outputPath.string();
+
+    texImporter->mArgs.push_back(inputPathStr.c_str());
+    texImporter->mArgs.push_back(outputPathStr.c_str());
+    texImporter->Run();
+
+    Faia::Root::RTextureData rtextureData;
+    rtextureData.ReadFromPath(outputPathStr.c_str());
+
+    delete texImporter;
+
+    EXPECT_EQ(rtextureData.mHeight, 1);
+    EXPECT_EQ(rtextureData.mWidth, 6);
+
+    EXPECT_EQ(rtextureData.mPixels[0], RColorRGBA_8b(254, 0, 0, 130));
+    EXPECT_EQ(rtextureData.mPixels[1], RColorRGBA_8b(0, 255, 1, 130));
+    EXPECT_EQ(rtextureData.mPixels[2], RColorRGBA_8b(0, 0, 254, 130));
+    EXPECT_EQ(rtextureData.mPixels[3], RColorRGBA_8b(255, 0, 254, 130));
+    EXPECT_EQ(rtextureData.mPixels[4], RColorRGBA_8b(0, 255, 255, 130));
+    EXPECT_EQ(rtextureData.mPixels[5], RColorRGBA_8b(255, 255, 0, 130));
+}
+
+
+//Test reach: Read and write .rtexture
+TEST(TextureImporter, PNG_no_alpha)
+{
+    std::filesystem::path inputPath = std::filesystem::current_path();
+    inputPath += pngNoAlphaTestRelativePath;
+    std::filesystem::path outputPath = std::filesystem::current_path();
+    outputPath += pngNoAlphaTestRtextureRelativePath;
+
+    Faia::Root::Importer::PNGImporter* texImporter = new Faia::Root::Importer::PNGImporter();
+
+    std::string inputPathStr = inputPath.string();
+    std::string  outputPathStr = outputPath.string();
+
+    texImporter->mArgs.push_back(inputPathStr.c_str());
+    texImporter->mArgs.push_back(outputPathStr.c_str());
+    texImporter->Run();
+
+    Faia::Root::RTextureData rtextureData;
+    rtextureData.ReadFromPath(outputPathStr.c_str());
+
+    delete texImporter;
+
+    EXPECT_EQ(rtextureData.mHeight, 1);
+    EXPECT_EQ(rtextureData.mWidth, 6);
+
+    EXPECT_EQ(rtextureData.mPixels[0], RColorRGBA_8b(255, 0, 0, 255));
+    EXPECT_EQ(rtextureData.mPixels[1], RColorRGBA_8b(0, 255, 0, 255));
+    EXPECT_EQ(rtextureData.mPixels[2], RColorRGBA_8b(0, 0, 255, 255));
+    EXPECT_EQ(rtextureData.mPixels[3], RColorRGBA_8b(255, 0, 255, 255));
+    EXPECT_EQ(rtextureData.mPixels[4], RColorRGBA_8b(0, 255, 255, 255));
+    EXPECT_EQ(rtextureData.mPixels[5], RColorRGBA_8b(255, 255, 0, 255));
+}
+
+
+
+

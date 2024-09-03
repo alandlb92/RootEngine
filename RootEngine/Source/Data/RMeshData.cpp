@@ -384,5 +384,37 @@ namespace Faia
                 }
             }
         }
+
+        void RTextureData::Write(const char* output)
+        {
+            std::ofstream os(output, std::ios::binary);
+            if (!os) 
+            {
+                stringstream ss;
+                ss << "of stream cant open outPut path: " << output << std::endl;
+                throw std::invalid_argument(ss.str().c_str());
+            }
+
+            os.write(reinterpret_cast<char*>(&mWidth), sizeof(uint32_t));
+            os.write(reinterpret_cast<char*>(&mHeight), sizeof(uint32_t));
+            os.write(reinterpret_cast<char*>(mPixels.data()), sizeof(RColorRGBA_8b) * mWidth * mHeight);
+        }
+
+        void RTextureData::ReadFromPath(const char* filePath)
+        {
+            std::ifstream is(filePath, std::ios::binary);
+
+            if (!is) 
+            {
+                stringstream ss;
+                ss << "if stream cant open filePath path: " << filePath << std::endl;
+                throw std::invalid_argument(ss.str().c_str());
+            }
+
+            is.read(reinterpret_cast<char*>(&mWidth), sizeof(uint32_t));
+            is.read(reinterpret_cast<char*>(&mHeight), sizeof(uint32_t));
+            mPixels = std::vector<RColorRGBA_8b>(mWidth * mHeight);
+            is.read(reinterpret_cast<char*>(mPixels.data()), sizeof(RColorRGBA_8b) * mWidth * mHeight);
+        }
     }
 }

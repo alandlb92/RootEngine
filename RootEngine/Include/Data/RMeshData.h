@@ -4,6 +4,7 @@
 #include <map>
 
 #include "RMatrix4x4.h"
+#include "RColor.h"
 
 using namespace std;
 
@@ -101,6 +102,15 @@ namespace Faia
             void Write(const char* output);
             void ReadFromPath(const char* filePath);
             std::string ToString();
+        };
+
+        struct RTextureData
+        {
+            uint32_t mHeight;
+            uint32_t mWidth;
+            std::vector<RColorRGBA_8b> mPixels;
+            void Write(const char* output);
+            void ReadFromPath(const char* filePath);
         };
     }
 }

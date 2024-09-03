@@ -1,5 +1,5 @@
 #pragma once
-#include "FBXImporter.h"
+#include "RImporter.h"
 
 
 namespace Faia
@@ -8,7 +8,7 @@ namespace Faia
     {
         namespace Importer
         {
-            class FBXAnimationImporter : public FBXImporter
+            class FBXAnimationImporter : public RImporter
             {
             public:
                 void Run() override;

@@ -1,5 +1,5 @@
 #pragma once
-#include "FBXImporter.h"
+#include "RImporter.h"
 
 
 namespace Faia
@@ -15,7 +15,7 @@ namespace Faia
                 std::vector<int> childs;
             };
 
-            class FBXBoneInfoImporter : public FBXImporter
+            class FBXBoneInfoImporter : public RImporter
             {
             public:
                 void Run() override;

@@ -14,11 +14,11 @@
     <Filter Include="Source Files\FBX">
       <UniqueIdentifier>{94ab8388-7a64-4046-aac8-2ea71a8aafd7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Texture">
-      <UniqueIdentifier>{334a0819-f287-49c2-8b51-c2d3c3571d6d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Texture">
+    <Filter Include="Source Files\Textures">
       <UniqueIdentifier>{1c1bb744-5982-48a8-b21a-a5a0bad968fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Textures">
+      <UniqueIdentifier>{334a0819-f287-49c2-8b51-c2d3c3571d6d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -28,14 +28,17 @@
     <ClInclude Include="Include\FBX\FBXBoneInfoImporter.h">
       <Filter>Header Files\FBX</Filter>
     </ClInclude>
-    <ClInclude Include="Include\FBX\FBXImporter.h">
-      <Filter>Header Files\FBX</Filter>
-    </ClInclude>
     <ClInclude Include="Include\FBX\FBXMeshImporter.h">
       <Filter>Header Files\FBX</Filter>
     </ClInclude>
     <ClInclude Include="Include\Textures\JPGImporter.h">
-      <Filter>Header Files\Texture</Filter>
+      <Filter>Header Files\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\RImporter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Textures\PNGImporter.h">
+      <Filter>Header Files\Textures</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -45,14 +48,17 @@
     <ClCompile Include="Source\FBX\FBXBoneInfoImporter.cpp">
       <Filter>Source Files\FBX</Filter>
     </ClCompile>
-    <ClCompile Include="Source\FBX\FBXImporter.cpp">
-      <Filter>Source Files\FBX</Filter>
-    </ClCompile>
     <ClCompile Include="Source\FBX\FBXMeshImporter.cpp">
       <Filter>Source Files\FBX</Filter>
     </ClCompile>
     <ClCompile Include="Source\Textures\JPGImporter.cpp">
-      <Filter>Source Files\Texture</Filter>
+      <Filter>Source Files\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\RImporter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Textures\PNGImporter.cpp">
+      <Filter>Source Files\Textures</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

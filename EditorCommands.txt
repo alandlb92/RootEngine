@@ -7,3 +7,6 @@ C:\Users\alan.bittencourt\Documents\Projects\Personal\RootEngine\x64\Debug\RootC
 
 
 C:\Users\alan.bittencourt\Documents\Projects\Personal\RootEngine\x64\Debug\RootCmdTools.exe import C:\Users\alan.bittencourt\OneDrive\Faia\Projetos\WIP\RootEngine\Content\Models\HeroGoat.fbx C:\Users\alan.bittencourt\Documents\Projects\Personal\RootEngine\x64\Debug\Content\Models\HeroGoat.bitMesh
+
+
+import -texjpg C:\Users\alan.bittencourt\OneDrive\Faia\Projetos\WIP\RootEngine\TestContent\ImporterTest\Textures\jpgTest.jpg C:\Users\alan.bittencourt\OneDrive\Faia\Projetos\WIP\RootEngine\TestContent\ImporterTest\RFiles\jpgTest.rtexture

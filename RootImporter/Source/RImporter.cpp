@@ -1,4 +1,4 @@
-#include "FBX/FBXImporter.h"
+#include "RImporter.h"
 #include "Data/RMeshData.h"
 #include <iostream>
 #include <sstream>
@@ -13,28 +13,31 @@
 #include "FBX/FBXBoneInfoImporter.h"
 #include "FBX/FBXAnimationImporter.h"
 
+#include "Textures/JPGImporter.h"
+#include "Textures/PNGImporter.h"
+
 namespace Faia
 {
     namespace Root
     {
         namespace Importer
         {
-            FBXImporter::FBXImporter()
+            RImporter::RImporter()
             {
                 mState = WAITING_START;
             }            
 
-            ImporterState FBXImporter::GetState()
+            ImporterState RImporter::GetState()
             {
                 return mState;
             }
 
-            std::string FBXImporter::GetErrorMsg()
+            std::string RImporter::GetErrorMsg()
             {
                 return mErrorMsg;
             }
 
-            RMatrix4x4 FBXImporter::AiMatrixToRMatrix(aiMatrix4x4 assimpMatrix)
+            RMatrix4x4 RImporter::AiMatrixToRMatrix(aiMatrix4x4 assimpMatrix)
             {
                 RMatrix4x4 result;
 
@@ -46,9 +49,9 @@ namespace Faia
                 return result;
             }
 
-            std::unique_ptr<FBXImporter> FBXImporter::GetImporter(int argc, char* argv[])
+            std::unique_ptr<RImporter> RImporter::GetImporter(int argc, char* argv[])
             {
-                std::unique_ptr<FBXImporter> importer;
+                std::unique_ptr<RImporter> importer;
                 switch (GetImporterType(argv[2]))
                 {
                 case MS:
@@ -59,6 +62,12 @@ namespace Faia
                     break;
                 case BONE:
                     importer = std::make_unique<FBXBoneInfoImporter>();
+                    break;
+                case TEXTURE_JPG:
+                    importer = std::make_unique<JPGImporter>();
+                    break;
+                case TEXTURE_PNG:
+                    importer = std::make_unique<PNGImporter>();
                     break;
                 case NOT_FOUND:
                     return nullptr;
@@ -73,7 +82,7 @@ namespace Faia
                 return importer;
             }
 
-            ImporterType FBXImporter::GetImporterType(char* importerName)
+            ImporterType RImporter::GetImporterType(char* importerName)
             {
                 std::string name(importerName);
                 ImporterType importerType = NOT_FOUND;

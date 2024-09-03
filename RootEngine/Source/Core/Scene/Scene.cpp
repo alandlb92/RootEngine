@@ -39,19 +39,19 @@ namespace Faia
 
             RMaterial material0;
             material0.SetShader("SimpleSkinned");
-            material0.SetTexture("Content\\Textures\\HeroGoat\\Ch40_1001_Diffuse.png", 0);
+            material0.SetTexture("Textures\\Goat_Diffuse_ch1.rtexture", 0);
 
             RMaterial material1;
             material1.SetShader("SimpleSkinned");
-            material1.SetTexture("Content\\Textures\\HeroGoat\\Ch40_1002_Diffuse.png", 0);
+            material1.SetTexture("Textures\\Goat_Diffuse_ch2.rtexture", 0);
 
             RMaterial material2;
             material2.SetShader("SimpleSkinned");
-            material2.SetTexture("Content\\Textures\\HeroGoat\\Ch40_1002_Diffuse.png", 0);
+            material2.SetTexture("Textures\\Goat_Diffuse_ch2.rtexture", 0);
 
             RMaterial material3;
             material3.SetShader("SimpleSkinned");
-            material3.SetTexture("Content\\Textures\\HeroGoat\\Ch40_1003_Diffuse.png", 0);
+            material3.SetTexture("Textures\\Goat_Diffuse_ch3.rtexture", 0);
 
             RMaterial cubeMaterial;
             cubeMaterial.SetShader("Simple");

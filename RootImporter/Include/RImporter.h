@@ -21,19 +21,24 @@ namespace Faia
 
         namespace Importer
         {
+
             enum ImporterType
             {
                 MS,
                 ANIM,
                 BONE,
-                NOT_FOUND
+                NOT_FOUND,
+                TEXTURE_JPG,
+                TEXTURE_PNG
             };
 
             static const std::unordered_map<std::string, ImporterType> sImporterNameToType
             {
                 {"-ms", MS},
                 {"-anim", ANIM},
-                {"-bone", BONE}
+                {"-bone", BONE},
+                {"-texjpg", TEXTURE_JPG},
+                {"-texpng", TEXTURE_PNG}
             };
 
             enum ImporterState
@@ -44,12 +49,12 @@ namespace Faia
                 ERROR
             };
 
-            class FBXImporter
+            class RImporter
             {
             public:
-                static std::unique_ptr<FBXImporter> GetImporter(int argc, char* argv[]);
+                static std::unique_ptr<RImporter> GetImporter(int argc, char* argv[]);
 
-                FBXImporter();
+                RImporter();
 
                 virtual void Run() = 0;
 

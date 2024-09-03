@@ -24,6 +24,7 @@
     <ClInclude Include="Include\FBX\FBXMeshImporter.h" />
     <ClInclude Include="Include\RImporter.h" />
     <ClInclude Include="Include\Textures\JPGImporter.h" />
+    <ClInclude Include="Include\Textures\PNGImporter.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\FBX\FBXAnimationImporter.cpp" />
@@ -31,6 +32,7 @@
     <ClCompile Include="Source\FBX\FBXMeshImporter.cpp" />
     <ClCompile Include="Source\RImporter.cpp" />
     <ClCompile Include="Source\Textures\JPGImporter.cpp" />
+    <ClCompile Include="Source\Textures\PNGImporter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RootEngine\RootEngine.vcxproj">
@@ -135,7 +137,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(SolutionDir)RootEngine\Include;$(SolutionDir)libs\thirdparty\assimp\build\Include;$(SolutionDir)libs\thirdparty\libjpegturbo\Include;$(SolutionDir)libs\thirdparty\assimp\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(SolutionDir)RootEngine\Include;$(SolutionDir)libs\thirdparty\assimp\build\Include;$(SolutionDir)libs\thirdparty\libjpegturbo\Include;$(SolutionDir)libs\thirdparty\assimp\Include;$(SolutionDir)libs\thirdparty\libpng;C:\Users\alan.bittencourt\Documents\Projects\Personal\RootEngine\libs\thirdparty\libpng\build;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
@@ -145,10 +147,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>assimp-vc143-mtd.lib;turbojpeg-static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>assimp-vc143-mtd.lib;turbojpeg-static.lib;libpng16_staticd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)libs\thirdparty\assimp\build\lib\Debug;$(SolutionDir)libs\thirdparty\libjpegturbo\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)libs\thirdparty\assimp\build\lib\Debug;$(SolutionDir)libs\thirdparty\libjpegturbo\lib;$(SolutionDir)libs\thirdparty\libpng\build\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
