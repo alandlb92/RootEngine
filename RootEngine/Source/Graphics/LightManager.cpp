@@ -1,5 +1,6 @@
 #include "Graphics/LightManager.h"
 #include "Graphics/RConstantBuffersHandler.h"
+#include "Faia/Debug.h"
 
 namespace Faia
 {
@@ -13,44 +14,46 @@ namespace Faia
 
                 LightManager::LightManager()
                 {
-                    _lightData = new CB_LightData();
+                    lightData = new LightData();
                     _instance = this;
                 }
 
                 LightManager::~LightManager()
                 {
-                    delete _lightData;
-                    _lightData = nullptr;
+                    delete lightData;
+                    lightData = nullptr;
                 }
 
                 void LightManager::SetAmbientLightColor(RColorRGB color)
                 {
-                    _lightData->ambientLightColor = color;
-                    GetConstantBuffersHandler()->SetParamData(gAmbientLightColorHash, &_lightData->ambientLightColor);
+                    lightData->ambientLightColor = color;
                 }
 
                 void LightManager::SetAmbientLightStrength(float strength)
                 {
-                    _lightData->ambientLightStrength = strength;
-                    GetConstantBuffersHandler()->SetParamData(gAmbientLightStrengthHash, &_lightData->ambientLightStrength);
+                    lightData->ambientLightStrength = strength;
                 }
 
-                void LightManager::SetPointLightColor(RColorRGB color)
+                void LightManager::SetDirectionalLight(DirectionalLight directionalLight, uint8_t index)
                 {
-                    _lightData->pointLightColor = color;
-                    GetConstantBuffersHandler()->SetParamData(gPointLightColorHash, &_lightData->pointLightColor);
+                    lightData->directionalLight[index] = directionalLight;
                 }
 
-                void LightManager::SetPointLightPosition(RVector3D position)
+                DirectionalLight LightManager::GetDirectionalLight(uint8_t index)
                 {
-                    _lightData->pointLightPosition = position;
-                    GetConstantBuffersHandler()->SetParamData(gPointLightpositionHash, &_lightData->pointLightPosition);
+                    //todo: Implement assert
+                    if (index >= MAX_NUM_OF_DIRECTIONAL_LIGHTS)
+                    {
+                        Debug::PopError("You trying to put more directional light than the max");
+                    }
+
+                    return lightData->directionalLight[index];
                 }
 
-                void LightManager::SetPointLightStrength(float strength)
+                void LightManager::UpdateLightToCB()
                 {
-                    _lightData->pointLightStrength = strength;
-                    GetConstantBuffersHandler()->SetParamData(gPointLightStrengthHash, &_lightData->pointLightStrength);
+                    Graphics::GetConstantBuffersHandler()->SetParamData(Graphics::gLightData, lightData);
+                    Graphics::GetConstantBuffersHandler()->UpdateSubresource(Graphics::gLightBufferHash);
                 }
             }
         }

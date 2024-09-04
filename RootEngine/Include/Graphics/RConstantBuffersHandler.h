@@ -82,20 +82,18 @@ namespace Faia
 
 			extern uint32_t gPerApplicationHash;
 			extern uint32_t gProjectionMatrixHash;
+
 			extern uint32_t gPerFrameHash;
 			extern uint32_t gViewMatrixHash;
+
 			extern uint32_t gPerObjectHash;
+			extern uint32_t gIsSkinnedHash;
+			extern uint32_t gHasTextureHash;
 			extern uint32_t gWorldMatrixHash;
 			extern uint32_t gAnimMatrixHash;
-			extern uint32_t gGlobalsHash;
-			extern uint32_t gHasTextureHash;
-			extern uint32_t gBoneSelectedIdHash;
+
 			extern uint32_t gLightBufferHash;
-			extern uint32_t gAmbientLightColorHash;
-			extern uint32_t gAmbientLightStrengthHash;
-			extern uint32_t gPointLightColorHash;
-			extern uint32_t gPointLightpositionHash;
-			extern uint32_t gPointLightStrengthHash;
+			extern uint32_t gLightData;
 
 			class RConstantBuffersHandler
 			{

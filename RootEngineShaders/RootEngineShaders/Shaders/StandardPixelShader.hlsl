@@ -26,18 +26,12 @@ float4 SimplePixelShader(PixelShaderInput IN) : SV_TARGET
     {
         mainColor = float3(1, 1, 1);
     }
-    
+        
     mainColor *= IN.color;   
 
     float3 ambientLight = ambientLightColor * ambientLightStrength;    
-    
-    float3 vectorToLight = normalize(pointLightposition - IN.worldPos);
-    
-    float3 difuseLightIntensity = max(dot(vectorToLight, IN.normal), 0);
-    
-    float3 difuseLight = difuseLightIntensity * pointLightStrenght * pointLightColor;
-        
-    float3 appliedLight = ambientLight + difuseLight;
+            
+    float3 appliedLight = ambientLight;
     
     float3 finalColor = mainColor * appliedLight;
     

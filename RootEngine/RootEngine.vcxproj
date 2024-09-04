@@ -126,6 +126,7 @@ xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
     <ClInclude Include="Include\Core\Scene\Scene.h" />
     <ClInclude Include="Include\Core\Scene\SceneManager.h" />
     <ClInclude Include="Include\Core\Scene\SceneObject.h" />
+    <ClInclude Include="Include\Data\RLightData.h" />
     <ClInclude Include="Include\Data\RMeshData.h" />
     <ClInclude Include="Include\Data\RColor.h" />
     <ClInclude Include="Include\Data\RMatrix4x4.h" />

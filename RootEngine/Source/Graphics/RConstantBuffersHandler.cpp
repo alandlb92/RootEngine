@@ -13,20 +13,18 @@ namespace Faia
         {
             uint32_t gPerApplicationHash;
             uint32_t gProjectionMatrixHash;
+
             uint32_t gPerFrameHash;
             uint32_t gViewMatrixHash;
+            
             uint32_t gPerObjectHash;
+            uint32_t gIsSkinnedHash;
             uint32_t gWorldMatrixHash;
             uint32_t gAnimMatrixHash;
-            uint32_t gGlobalsHash;
             uint32_t gHasTextureHash;
-            uint32_t gBoneSelectedIdHash;
+            
             uint32_t gLightBufferHash;
-            uint32_t gAmbientLightColorHash;
-            uint32_t gAmbientLightStrengthHash;
-            uint32_t gPointLightColorHash;
-            uint32_t gPointLightpositionHash;
-            uint32_t gPointLightStrengthHash;
+            uint32_t gLightData;
 
             void InitializeGHashs()
             {
@@ -35,18 +33,12 @@ namespace Faia
                 gPerFrameHash = HashUtils::CharToHashFnv1a("PerFrame");
                 gViewMatrixHash = HashUtils::CharToHashFnv1a("ViewMatrix");
                 gPerObjectHash = HashUtils::CharToHashFnv1a("PerObject");
+                gIsSkinnedHash = HashUtils::CharToHashFnv1a("IsSkinned");
                 gWorldMatrixHash = HashUtils::CharToHashFnv1a("WorldMatrix");
                 gAnimMatrixHash = HashUtils::CharToHashFnv1a("AnimMatrix");
-                gGlobalsHash = HashUtils::CharToHashFnv1a("Globals");
                 gHasTextureHash = HashUtils::CharToHashFnv1a("HasTexture");
-                gBoneSelectedIdHash = HashUtils::CharToHashFnv1a("BoneSelectedId");
                 gLightBufferHash = HashUtils::CharToHashFnv1a("LightBuffer");
-                gAmbientLightColorHash = HashUtils::CharToHashFnv1a("AmbientLightColor");
-                gAmbientLightStrengthHash = HashUtils::CharToHashFnv1a("AmbientLightStrength");
-                gPointLightColorHash = HashUtils::CharToHashFnv1a("PointLightColor");
-                gPointLightpositionHash = HashUtils::CharToHashFnv1a("PointLightposition");
-                gPointLightStrengthHash = HashUtils::CharToHashFnv1a("PointLightStrength");
-
+                gLightData = HashUtils::CharToHashFnv1a("LightData");
             }
 
             RConstantBuffersHandler* gConstantBuffersHandler;
@@ -96,105 +88,76 @@ namespace Faia
                 CB_Info cbInfoPerObject;
                 cbInfoPerObject.mHashName = HashUtils::CharToHashFnv1a("PerObject");
                 cbInfoPerObject.mSlot = 2;
-                cbInfoPerObject.mSize = 64 + (64 * MAX_NUM_OF_ANIMATION_CHANNELS);
+                cbInfoPerObject.mSize = 16 + 64 + (64 * MAX_NUM_OF_ANIMATION_CHANNELS);
 
                 CB_Param param1PerObject;
-                param1PerObject.mHashName = HashUtils::CharToHashFnv1a("WorldMatrix");
-                param1PerObject.mSize = 64;
+                param1PerObject.mHashName = HashUtils::CharToHashFnv1a("HasTexture");
+                param1PerObject.mSize = 4;
+                uint32_t intTest = 0;
                 param1PerObject.mDefaultParams = std::vector<uint8_t>(param1PerObject.mSize);
-                std::memcpy(param1PerObject.mDefaultParams.data(), &matrixTest, param1PerObject.mSize);
-                cbInfoPerObject.mParams.push_back(param1PerObject);
-
+                std::memcpy(param1PerObject.mDefaultParams.data(), &intTest, param1PerObject.mSize);
+                cbInfoPerObject.mParams.push_back(param1PerObject);                
 
                 CB_Param param2PerObject;
-                param2PerObject.mHashName = HashUtils::CharToHashFnv1a("AnimMatrix");
-                param2PerObject.mSize = 64 * MAX_NUM_OF_ANIMATION_CHANNELS;
+                param2PerObject.mHashName = HashUtils::CharToHashFnv1a("IsSkinned");
+                param2PerObject.mSize = 4;
+                param2PerObject.mDefaultParams = std::vector<uint8_t>(param2PerObject.mSize);
+                std::memcpy(param2PerObject.mDefaultParams.data(), &intTest, param2PerObject.mSize);
+                cbInfoPerObject.mParams.push_back(param2PerObject);                
+                
+
+                CB_Param param3PerObject;
+                param3PerObject.mHashName = HashUtils::CharToHashFnv1a("offset");
+                param3PerObject.mSize = 4;
+                param3PerObject.mDefaultParams = std::vector<uint8_t>(param3PerObject.mSize);
+                std::memcpy(param3PerObject.mDefaultParams.data(), &intTest, param3PerObject.mSize);
+                cbInfoPerObject.mParams.push_back(param3PerObject);
+
+
+                CB_Param param4PerObject;
+                param4PerObject.mHashName = HashUtils::CharToHashFnv1a("offset");
+                param4PerObject.mSize = 4;
+                param4PerObject.mDefaultParams = std::vector<uint8_t>(param4PerObject.mSize);
+                std::memcpy(param4PerObject.mDefaultParams.data(), &intTest, param4PerObject.mSize);
+                cbInfoPerObject.mParams.push_back(param2PerObject);
+
+                CB_Param param5PerObject;
+                param5PerObject.mHashName = HashUtils::CharToHashFnv1a("WorldMatrix");
+                param5PerObject.mSize = 64;
+                param5PerObject.mDefaultParams = std::vector<uint8_t>(param5PerObject.mSize);
+                std::memcpy(param5PerObject.mDefaultParams.data(), &matrixTest, param5PerObject.mSize);
+                cbInfoPerObject.mParams.push_back(param5PerObject);
+
+                CB_Param param6PerObject;
+                param6PerObject.mHashName = HashUtils::CharToHashFnv1a("AnimMatrix");
+                param6PerObject.mSize = 64 * MAX_NUM_OF_ANIMATION_CHANNELS;
 
                 RMatrix4x4 matrixTestArr[MAX_NUM_OF_ANIMATION_CHANNELS];
                 for (int i = 0; i < MAX_NUM_OF_ANIMATION_CHANNELS; ++i)
                 {
                     matrixTestArr[i] = RMatrix4x4::Identity();
                 }
-                param2PerObject.mDefaultParams = std::vector<uint8_t>(param2PerObject.mSize);
-                std::memcpy(param2PerObject.mDefaultParams.data(), &matrixTestArr, param2PerObject.mSize);
-                cbInfoPerObject.mParams.push_back(param2PerObject);
-
-                //Globals
-                CB_Info cbInfoGlobals;
-                cbInfoGlobals.mHashName = HashUtils::CharToHashFnv1a("Globals");
-                cbInfoGlobals.mSlot = 3;
-                cbInfoGlobals.mSize = 16;
-
-                CB_Param param1Globals;
-                param1Globals.mHashName = HashUtils::CharToHashFnv1a("HasTexture");
-                param1Globals.mSize = 4;
-                uint32_t intTest = 0;
-                param1Globals.mDefaultParams = std::vector<uint8_t>(param1Globals.mSize);
-                std::memcpy(param1Globals.mDefaultParams.data(), &intTest, param1Globals.mSize);
-                cbInfoGlobals.mParams.push_back(param1Globals);
-
-                CB_Param param2Globals;
-                param2Globals.mHashName = HashUtils::CharToHashFnv1a("BoneSelectedId");
-                param2Globals.mSize = 4;
-                param2Globals.mDefaultParams = std::vector<uint8_t>(param2Globals.mSize);
-                std::memcpy(param2Globals.mDefaultParams.data(), &intTest, param2Globals.mSize);
-                cbInfoGlobals.mParams.push_back(param2Globals);
-
+                param6PerObject.mDefaultParams = std::vector<uint8_t>(param6PerObject.mSize);
+                std::memcpy(param6PerObject.mDefaultParams.data(), &matrixTestArr, param6PerObject.mSize);
+                cbInfoPerObject.mParams.push_back(param6PerObject);
 
                 //Light
                 CB_Info cbInfoLightBuffer;
                 cbInfoLightBuffer.mHashName = HashUtils::CharToHashFnv1a("LightBuffer");
-                cbInfoLightBuffer.mSlot = 4;
-                cbInfoLightBuffer.mSize = 48;
+                cbInfoLightBuffer.mSlot = 3;
+                cbInfoLightBuffer.mSize = sizeof(LightData);
 
                 CB_Param param1LightBuffer;
-                param1LightBuffer.mHashName = HashUtils::CharToHashFnv1a("AmbientLightColor");
-                param1LightBuffer.mSize = 12;
-                RVector3D vector3Test(1);
+                param1LightBuffer.mHashName = HashUtils::CharToHashFnv1a("LightData");
+                param1LightBuffer.mSize = sizeof(LightData);
                 param1LightBuffer.mDefaultParams = std::vector<uint8_t>(param1LightBuffer.mSize);
-                std::memcpy(param1LightBuffer.mDefaultParams.data(), &vector3Test, param1LightBuffer.mSize);
+                LightData ld;
+                std::memcpy(param1LightBuffer.mDefaultParams.data(), &ld, param1LightBuffer.mSize);
                 cbInfoLightBuffer.mParams.push_back(param1LightBuffer);
-
-                CB_Param param2LightBuffer;
-                param2LightBuffer.mHashName = HashUtils::CharToHashFnv1a("AmbientLightStrength");
-                param2LightBuffer.mSize = 4;
-                float floatTest = 0;
-                param2LightBuffer.mDefaultParams = std::vector<uint8_t>(param2LightBuffer.mSize);
-                std::memcpy(param2LightBuffer.mDefaultParams.data(), &floatTest, param2LightBuffer.mSize);
-                cbInfoLightBuffer.mParams.push_back(param2LightBuffer);
-
-                CB_Param param3LightBuffer;
-                param3LightBuffer.mHashName = HashUtils::CharToHashFnv1a("PointLightColor");
-                param3LightBuffer.mSize = 12;
-                param3LightBuffer.mDefaultParams = std::vector<uint8_t>(param3LightBuffer.mSize);
-                std::memcpy(param3LightBuffer.mDefaultParams.data(), &vector3Test, param3LightBuffer.mSize);
-                cbInfoLightBuffer.mParams.push_back(param3LightBuffer);
-
-                CB_Param param4LightBuffer;
-                param4LightBuffer.mHashName = HashUtils::CharToHashFnv1a("Offset");
-                param4LightBuffer.mSize = 4;
-                param4LightBuffer.mDefaultParams = std::vector<uint8_t>(param4LightBuffer.mSize);
-                std::memcpy(param4LightBuffer.mDefaultParams.data(), &floatTest, param4LightBuffer.mSize);
-                cbInfoLightBuffer.mParams.push_back(param4LightBuffer);
-
-                CB_Param param5LightBuffer;
-                param5LightBuffer.mHashName = HashUtils::CharToHashFnv1a("PointLightposition");
-                param5LightBuffer.mSize = 12;
-                param5LightBuffer.mDefaultParams = std::vector<uint8_t>(param5LightBuffer.mSize);
-                std::memcpy(param5LightBuffer.mDefaultParams.data(), &vector3Test, param5LightBuffer.mSize);
-                cbInfoLightBuffer.mParams.push_back(param5LightBuffer);
-
-                CB_Param param6LightBuffer;
-                param6LightBuffer.mHashName = HashUtils::CharToHashFnv1a("PointLightStrength");
-                param6LightBuffer.mSize = 4;
-                param6LightBuffer.mDefaultParams = std::vector<uint8_t>(param6LightBuffer.mSize);
-                std::memcpy(param6LightBuffer.mDefaultParams.data(), &floatTest, param6LightBuffer.mSize);
-                cbInfoLightBuffer.mParams.push_back(param6LightBuffer);
 
                 mHashToCbInfo[cbInfoPerApplication.mHashName] = cbInfoPerApplication;
                 mHashToCbInfo[cbInfoPerFrame.mHashName] = cbInfoPerFrame;
-                mHashToCbInfo[cbInfoPerObject.mHashName] = cbInfoPerObject;
-                mHashToCbInfo[cbInfoGlobals.mHashName] = cbInfoGlobals;
+                mHashToCbInfo[cbInfoPerObject.mHashName] = cbInfoPerObject;              
                 mHashToCbInfo[cbInfoLightBuffer.mHashName] = cbInfoLightBuffer;
 
                 mConstantBuffers = std::vector<ID3D11Buffer*>(mHashToCbInfo.size());
@@ -208,7 +171,9 @@ namespace Faia
                 HRESULT hr;
                 for (const std::pair<const uint32_t, CB_Info>& cb : mHashToCbInfo)
                 {
-                    constantBufferDesc.ByteWidth = cb.second.mSize;
+                    uint32_t bufferSize = cb.second.mSize;
+                    bufferSize = (bufferSize + 15) & ~15;
+                    constantBufferDesc.ByteWidth = bufferSize;
                     hr = GetDevice()->CreateBuffer(&constantBufferDesc, nullptr, &mConstantBuffers[cb.second.mSlot]);
                     if (FAILED(hr))
                     {
@@ -237,18 +202,18 @@ namespace Faia
             {
                 std::memcpy(mHashToParam[paramHashName], data, mHashParamToSize[paramHashName]);
 
-                if (paramHashName == gProjectionMatrixHash)
+                uint32_t tes;
+                std::string name = HashUtils::g_hashToStringMap[paramHashName];
+                if (std::strcmp(name.c_str(), "IsSkinned") == 0)
                 {
-                    auto& test = mHashToCbInfo[paramHashName];
-                    RMatrix4x4 pMat;
-                    std::memcpy(&pMat, mHashToParam[paramHashName], mHashParamToSize[paramHashName]);
-                    std::string paramName = HashUtils::g_hashToStringMap[paramHashName];
+                    std::memcpy(&tes, data, sizeof(tes));
                 }
             }
 
             void RConstantBuffersHandler::UpdateSubresource(uint32_t bufferHashName)
             {
                 CB_Info& cbInfo = mHashToCbInfo[bufferHashName];
+                std::string name = HashUtils::g_hashToStringMap[bufferHashName];
 
                 void* data = std::malloc(cbInfo.mSize);
 
@@ -259,15 +224,24 @@ namespace Faia
                     offset += param.mSize;
                 }
 
-                GetDeviceContext()->UpdateSubresource(mConstantBuffers[cbInfo.mSlot], 0, nullptr, data, 0, 0);
-
-                if (bufferHashName == gLightBufferHash)
+                struct test2
                 {
-                    Light::CB_LightData test;
-                    std::memcpy(&test, data, cbInfo.mSize);
-                    std::string bufferName = HashUtils::g_hashToStringMap[bufferHashName];
+                    int hasTexture;
+                    int isSkinned;
+                    RMatrix4x4 worldMatrix;
+                    RMatrix4x4 animMatrix[MAX_NUM_OF_ANIMATION_CHANNELS];
+                };
+
+                test2 tes;
+
+                if (std::strcmp(name.c_str(), "PerObject") == 0)
+                {
+                    std::memcpy(&tes, data, sizeof(test2));
                 }
 
+                GetDeviceContext()->UpdateSubresource(mConstantBuffers[cbInfo.mSlot], 0, nullptr, data, 0, 0);
+
+                //todo: i think we have a memory link here
                 //delete data;
             }
 

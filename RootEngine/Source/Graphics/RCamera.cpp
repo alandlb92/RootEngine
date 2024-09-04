@@ -9,10 +9,8 @@ namespace Faia
 {
     namespace Root
     {
-        static uint32_t boneSelected = 0;
         RCamera::RCamera()// : Super()
         {
-            Graphics::GetConstantBuffersHandler()->SetParamData(Graphics::gBoneSelectedIdHash, &boneSelected);
             _eyePosition = XMVECTOR();
             _focusPoint = XMVECTOR();
             _upDirection = XMVECTOR();
@@ -53,8 +51,6 @@ namespace Faia
             GetFaiaInputSystem()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::S, std::bind(&RCamera::MoveCameraYBack, this, std::placeholders::_1));
             GetFaiaInputSystem()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::A, std::bind(&RCamera::MoveCameraXRight, this, std::placeholders::_1));
             GetFaiaInputSystem()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::D, std::bind(&RCamera::MoveCameraXLeft, this, std::placeholders::_1));
-            GetFaiaInputSystem()->RegisterActionEvent(InputEventType::KEY_PRESSED, KeyCode::Q, std::bind(&RCamera::ChangeBonePlusTest, this));
-            GetFaiaInputSystem()->RegisterActionEvent(InputEventType::KEY_PRESSED, KeyCode::E, std::bind(&RCamera::ChangeBoneMinusTest, this));
 
             GetFaiaInputSystem()->RegisterAxisEvent(AxisType::MOUSE_X, std::bind(&RCamera::RotateCameraX, this, std::placeholders::_1, std::placeholders::_2), { KeyCode::MOUSE_LEFT });
             GetFaiaInputSystem()->RegisterAxisEvent(AxisType::MOUSE_Y, std::bind(&RCamera::RotateCameraY, this, std::placeholders::_1, std::placeholders::_2), { KeyCode::MOUSE_LEFT });
@@ -131,22 +127,6 @@ namespace Faia
             Super::Update(deltaTime);
         }
 
-        void RCamera::ChangeBonePlusTest()
-        {
-            boneSelected++;
-            Graphics::GetConstantBuffersHandler()->SetParamData(Graphics::gBoneSelectedIdHash, &boneSelected);
-        }
-
-        void RCamera::ChangeBoneMinusTest()
-        {
-            if (boneSelected > 0)
-            {
-                boneSelected--;
-                Graphics::GetConstantBuffersHandler()->SetParamData(Graphics::gBoneSelectedIdHash, &boneSelected);
-            }
-        }
-
-
         void RCamera::MoveCameraYFront(float deltaTime)
         {
             AddLocalPosition(RVector3D(0, 0, cameraTranslationVelocity * deltaTime));
@@ -180,13 +160,11 @@ namespace Faia
         void RCamera::RotateCameraX(float axisValue, float deltaTime)
         {
             Rotate(0, axisValue * deltaTime * cameraRotationVelocity, 0);
-            OutputDebugStringA(_rotation.ToString().c_str());
         }
 
         void RCamera::RotateCameraY(float axisValue, float deltaTime)
         {
             Rotate(axisValue * deltaTime * cameraRotationVelocity, 0, 0);
-            OutputDebugStringA(_rotation.ToString().c_str());
         }
     }
 }

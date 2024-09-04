@@ -6,6 +6,7 @@ struct AppData
     float3 position : POSITION;
     float2 texCoord : TEXCOORD0;
     float3 normal : NORMAL;
+    BoneData boneData : BONEDATA;
 };
 
 struct VertexShaderOutput
@@ -22,7 +23,20 @@ VertexShaderOutput SimpleVertexShader(AppData IN)
     VertexShaderOutput OUT;
     
     matrix mvp = mul(projectionMatrix, mul(viewMatrix, worldMatrix));
-    OUT.position = mul(mvp, float4(IN.position, 1.0f));
+    
+    if(isSkinned)
+    {
+        float4x4 boneTransform = animMatrix[IN.boneData.boneId[0]] * IN.boneData.weights[0];
+        boneTransform += animMatrix[IN.boneData.boneId[1]] * IN.boneData.weights[1];
+        boneTransform += animMatrix[IN.boneData.boneId[2]] * IN.boneData.weights[2];
+        boneTransform += animMatrix[IN.boneData.boneId[3]] * IN.boneData.weights[3];
+        OUT.position = mul(mvp, mul(boneTransform, float4(IN.position, 1.0f)));        
+    }
+    else
+    {
+        OUT.position = mul(mvp, float4(IN.position, 1.0f));        
+    }    
+    
     OUT.color = float4(1.0f, 1.0f, 1.0f, 1.0f);
     OUT.texCoord = IN.texCoord;
     float3 normalTransformed = mul(worldMatrix, float4(IN.normal, 0.0));

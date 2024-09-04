@@ -21,7 +21,7 @@ namespace Faia
 
             SceneObject* sceneObject = new SceneObject();
             SceneObject* sceneObject2 = new SceneObject();
-            SceneObject* sceneObject3 = new SceneObject();
+            //SceneObject* sceneObject3 = new SceneObject();
 
             RMaterialComponent* materialComponent = new RMaterialComponent();
             RMaterialComponent* materialComponent2 = new RMaterialComponent();
@@ -30,31 +30,31 @@ namespace Faia
             meshComponent->LoadMesh("Models\\HeroGoat.rmesh");
             RMeshComponent* meshComponent2 = new RMeshComponent();
             meshComponent2->LoadMesh("Models\\cube.rmesh");
-            RMeshComponent* meshComponent3 = new RMeshComponent();
-            meshComponent3->LoadMesh("Models\\cube.rmesh");
+         /*   RMeshComponent* meshComponent3 = new RMeshComponent();
+            meshComponent3->LoadMesh("Models\\cube.rmesh");*/
 
             RAnimationComponent* animationComponent = new RAnimationComponent();
             animationComponent->LoadAnimation("Animations\\testAnimation.ranim");
             animationComponent->LoadBoneInfo("Models\\HeroGoat.rboneinfo");
 
             RMaterial material0;
-            material0.SetShader("SimpleSkinned");
+            material0.SetShader("Standard");
             material0.SetTexture("Textures\\Goat_Diffuse_ch1.rtexture", 0);
 
             RMaterial material1;
-            material1.SetShader("SimpleSkinned");
+            material1.SetShader("Standard");
             material1.SetTexture("Textures\\Goat_Diffuse_ch2.rtexture", 0);
 
             RMaterial material2;
-            material2.SetShader("SimpleSkinned");
+            material2.SetShader("Standard");
             material2.SetTexture("Textures\\Goat_Diffuse_ch2.rtexture", 0);
 
             RMaterial material3;
-            material3.SetShader("SimpleSkinned");
+            material3.SetShader("Standard");
             material3.SetTexture("Textures\\Goat_Diffuse_ch3.rtexture", 0);
 
             RMaterial cubeMaterial;
-            cubeMaterial.SetShader("Simple");
+            cubeMaterial.SetShader("Standard");
 
 
             materialComponent->AddMaterial(material0);
@@ -79,17 +79,17 @@ namespace Faia
             sceneObject2->SetScale(RVector3D(100, 1, 100));
 
             TestComponent* test = new TestComponent();
-            RPointLightComponent* pointLight = new RPointLightComponent();
-            sceneObject3->AddComponent(meshComponent3);
-            sceneObject3->AddComponent(pointLight);
-            sceneObject3->AddComponent(test);
-            sceneObject3->AddComponent(materialComponent2);
-            pointLight->SetColor(1, .5f, .2f);
-            pointLight->SetStrength(1);
+            //RPointLightComponent* pointLight = new RPointLightComponent();
+            //sceneObject3->AddComponent(meshComponent3);
+            //sceneObject3->AddComponent(pointLight);
+            //sceneObject3->AddComponent(test);
+            //sceneObject3->AddComponent(materialComponent2);
+            //pointLight->SetColor(1, .5f, .2f);
+            //pointLight->SetStrength(1);
 
             scene->AddObject(sceneObject);
             scene->AddObject(sceneObject2);
-            scene->AddObject(sceneObject3);
+            //scene->AddObject(sceneObject3);
             scene->AddObject(camera);
 
             Graphics::Light::LightManager::GetInstance()->SetAmbientLightColor(RColorRGB(1, 1, 1));

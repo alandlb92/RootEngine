@@ -9,4 +9,13 @@ C:\Users\alan.bittencourt\Documents\Projects\Personal\RootEngine\x64\Debug\RootC
 C:\Users\alan.bittencourt\Documents\Projects\Personal\RootEngine\x64\Debug\RootCmdTools.exe import C:\Users\alan.bittencourt\OneDrive\Faia\Projetos\WIP\RootEngine\Content\Models\HeroGoat.fbx C:\Users\alan.bittencourt\Documents\Projects\Personal\RootEngine\x64\Debug\Content\Models\HeroGoat.bitMesh
 
 
-import -texjpg C:\Users\alan.bittencourt\OneDrive\Faia\Projetos\WIP\RootEngine\TestContent\ImporterTest\Textures\jpgTest.jpg C:\Users\alan.bittencourt\OneDrive\Faia\Projetos\WIP\RootEngine\TestContent\ImporterTest\RFiles\jpgTest.rtexture
+import -texpng C:\Users\alan.bittencourt\Downloads\Goat_Diffuse.jpg C:\Users\alan.bittencourt\Documents\Projects\Personal\RootEngine\x64\Content\Textures\Goat_Diffuse.rtexture
+
+
+git submodule add git@github.com:pnggroup/libpng.git libs/thirdparty/libpng
+
+cmake .. -DPNG_STATIC=ON -DCMAKE_BUILD_TYPE=Release -DZLIB_INCLUDE_DIR="C:\Users\alan.bittencourt\Documents\Projects\Personal\RootEngine\libs\thirdparty\assimp\contrib\zlib;C:\Users\alan.bittencourt\Documents\Projects\Personal\RootEngine\libs\thirdparty\assimp\build\contrib\zlib" -DZLIB_LIBRARY=C:\Users\alan.bittencourt\Documents\Projects\Personal\RootEngine\libs\thirdparty\assimp\build\contrib\zlib\Release\zlibstatic.lib -G "Visual Studio 17 2022" -A x64
+
+C:\Users\alan.bittencourt\Documents\Projects\Personal\RootEngine\x64\Debug\RootCmdTools.exe import -texpng C:\Users\alan.bittencourt\OneDrive\Faia\Projetos\WIP\RootEngine\Content\Textures\HeroGoat\Ch40_1001_Diffuse.png C:\Users\alan.bittencourt\Documents\Projects\Personal\RootEngine\x64\Content\Textures\Goat_Diffuse_ch1.rtexture
+
+import -texpng C:\Users\alan.bittencourt\OneDrive\Faia\Projetos\WIP\RootEngine\TestContent\ImporterTest\Textures\pngNoAlphaTest.png C:\Users\alan.bittencourt\Documents\Projects\Personal\RootEngine\pngNoAlphaTest.rtexture

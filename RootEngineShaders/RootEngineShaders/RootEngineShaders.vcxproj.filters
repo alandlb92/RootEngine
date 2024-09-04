@@ -9,22 +9,13 @@
     <FxCompile Include="Shaders\CBuffers.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="Shaders\SimplePixelShader.hlsl">
+    <FxCompile Include="Shaders\StandardPixelShader.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="Shaders\SimpleVertexShader.hlsl">
+    <FxCompile Include="Shaders\StandardVertexShader.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="Shaders\BonesWeightsVisualizerVertexShader.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="Shaders\BonesWeightsVisualizerPixelShader.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="Shaders\SimpleSkinnedPixelShader.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="Shaders\SimpleSkinnedVertexShader.hlsl">
+    <FxCompile Include="Shaders\LightData.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

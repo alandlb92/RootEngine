@@ -12,6 +12,7 @@
 #include "Faia/WindowsApplication.h"
 #include "Graphics/RConstantBuffersHandler.h"
 #include "Faia/HashUtils.h"
+#include "Graphics/LightManager.h"
 
 using namespace DirectX;
 using namespace Faia::Root;
@@ -264,18 +265,24 @@ namespace Faia
             Clear(Colors::CornflowerBlue, 1.0f, 0);
 
             Graphics::GetConstantBuffersHandler()->UpdateSubresource(Graphics::gPerApplicationHash);
-            Graphics::GetConstantBuffersHandler()->UpdateSubresource(Graphics::gLightBufferHash);
             Graphics::GetConstantBuffersHandler()->UpdateSubresource(Graphics::gPerFrameHash);
+            Graphics::Light::LightManager::GetInstance()->UpdateLightToCB();
+
             //We can put some parts of the code in other classes, for exemple the mesh upload data can be inside RMeshRenderer or something like that
             for (auto& ro : GetSceneManager()->GetCurrentScene()->GetRenderablebleObjects())
             {
                 //Todo: avoid GetComponentOfType do it when create RenderData
-                if (auto anim = ro->GetComponentOfType<RAnimationComponent>())
+                RAnimationComponent* anim = ro->GetComponentOfType<RAnimationComponent>();
+                if (anim)
                 {
                     Faia::Root::RMatrix4x4 animMatrix[MAX_NUM_OF_ANIMATION_CHANNELS];
                     anim->GetAnimationChannelsMatrix(animMatrix);
                     Graphics::GetConstantBuffersHandler()->SetParamData(Graphics::gAnimMatrixHash, &animMatrix);
                 }
+
+                uint32_t skinned = anim ? 1 : 0;
+                Graphics::GetConstantBuffersHandler()->SetParamData(Graphics::gIsSkinnedHash, &skinned);
+
 
                 for (std::shared_ptr<RMesh> mesh : ro->GetMeshComponent()->GetMeshs())
                 {
@@ -304,7 +311,6 @@ namespace Faia
                     DirectX::XMMATRIX transformMatrix = scaleMatrix * rotationMatrix * translationMatrix;
 
                     Graphics::GetConstantBuffersHandler()->SetParamData(Graphics::gWorldMatrixHash, &transformMatrix);
-                    Graphics::GetConstantBuffersHandler()->UpdateSubresource(Graphics::gPerObjectHash);
 
                     _deviceContext->IASetInputLayout(material->GetShader()->GetInputLayout());
 
@@ -322,8 +328,9 @@ namespace Faia
                     _deviceContext->IASetVertexBuffers(1, 1, &uvBuffer, &uvStride, &offset);
                     _deviceContext->IASetVertexBuffers(2, 1, &normalBuffer, &normalStride, &offset);
 
-                    if(std::shared_ptr<RSkeletalMesh> sMesh = std::dynamic_pointer_cast<RSkeletalMesh>(mesh))
+                    if(skinned)
                     {
+                        std::shared_ptr<RSkeletalMesh> sMesh = std::dynamic_pointer_cast<RSkeletalMesh>(mesh);
                         const UINT boneDataStride = sizeof(RVertexBoneData);
                         ID3D11Buffer* boneDataBuffer = sMesh->GetBonesDataBuffer();
                         if (boneDataBuffer)
@@ -335,9 +342,7 @@ namespace Faia
                         }
                     }
 
-
                     _deviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R16_UINT, 0);
-
 
                     indexCount += mesh->GetIndicesSize();
                     _deviceContext->VSSetShader(material->GetShader()->GetVertexShader(), nullptr, 0);
@@ -353,8 +358,8 @@ namespace Faia
 
                     uint32_t hasTexture = textureSRV == NULL ? 0 : 1;
                     Graphics::GetConstantBuffersHandler()->SetParamData(Graphics::gHasTextureHash, &hasTexture);
-                    Graphics::GetConstantBuffersHandler()->UpdateSubresource(Graphics::gGlobalsHash);
 
+                    Graphics::GetConstantBuffersHandler()->UpdateSubresource(Graphics::gPerObjectHash);
 
                     _deviceContext->PSSetShaderResources(0, 1, &textureSRV);
                     _deviceContext->PSSetSamplers(0, 1, &samplerState);
