@@ -32,9 +32,8 @@ cbuffer PerObject : register(b2)
 
 cbuffer LightBuffer : register(b3)
 {
-    float3 ambientLightColor;
-    float ambientLightStrength;
-    
+    float3 ambientDownColor;
+    float3 ambientUpColor;    
     DirectionalLight directionalLights[MAX_NUM_OF_DIRECTIONAL_LIGHTS];
     
 }

@@ -24,16 +24,6 @@ namespace Faia
                     lightData = nullptr;
                 }
 
-                void LightManager::SetAmbientLightColor(RColorRGB color)
-                {
-                    lightData->ambientLightColor = color;
-                }
-
-                void LightManager::SetAmbientLightStrength(float strength)
-                {
-                    lightData->ambientLightStrength = strength;
-                }
-
                 void LightManager::SetDirectionalLight(DirectionalLight directionalLight, uint8_t index)
                 {
                     lightData->directionalLight[index] = directionalLight;
@@ -52,6 +42,7 @@ namespace Faia
 
                 void LightManager::UpdateLightToCB()
                 {
+                    lightData->DebugDump();
                     Graphics::GetConstantBuffersHandler()->SetParamData(Graphics::gLightData, lightData);
                     Graphics::GetConstantBuffersHandler()->UpdateSubresource(Graphics::gLightBufferHash);
                 }

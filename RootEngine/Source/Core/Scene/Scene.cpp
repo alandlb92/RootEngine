@@ -72,6 +72,7 @@ namespace Faia
             sceneObject->AddComponent(materialComponent);
             sceneObject->AddComponent(animationComponent);
             sceneObject->SetPosition(RVector3D(0, 0, 0));
+            sceneObject->SetRotation(RVector3D(0, 0, 0));
 
             sceneObject2->AddComponent(meshComponent2);
             sceneObject2->AddComponent(materialComponent2);
@@ -91,9 +92,6 @@ namespace Faia
             scene->AddObject(sceneObject2);
             //scene->AddObject(sceneObject3);
             scene->AddObject(camera);
-
-            Graphics::Light::LightManager::GetInstance()->SetAmbientLightColor(RColorRGB(1, 1, 1));
-            Graphics::Light::LightManager::GetInstance()->SetAmbientLightStrength(.2f);
 
             return scene;
         }

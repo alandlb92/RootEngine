@@ -18,6 +18,15 @@ struct VertexShaderOutput
     float3 worldPos : WORLD_POSITION;
 };
 
+float4 CalculateAnimation(matrix mvp, AppData IN)
+{
+    float4x4 boneTransform = animMatrix[IN.boneData.boneId[0]] * IN.boneData.weights[0];
+    boneTransform += animMatrix[IN.boneData.boneId[1]] * IN.boneData.weights[1];
+    boneTransform += animMatrix[IN.boneData.boneId[2]] * IN.boneData.weights[2];
+    boneTransform += animMatrix[IN.boneData.boneId[3]] * IN.boneData.weights[3];
+    return mul(mvp, mul(boneTransform, float4(IN.position, 1.0f)));    
+}
+
 VertexShaderOutput SimpleVertexShader(AppData IN)
 {
     VertexShaderOutput OUT;
@@ -26,11 +35,7 @@ VertexShaderOutput SimpleVertexShader(AppData IN)
     
     if(isSkinned)
     {
-        float4x4 boneTransform = animMatrix[IN.boneData.boneId[0]] * IN.boneData.weights[0];
-        boneTransform += animMatrix[IN.boneData.boneId[1]] * IN.boneData.weights[1];
-        boneTransform += animMatrix[IN.boneData.boneId[2]] * IN.boneData.weights[2];
-        boneTransform += animMatrix[IN.boneData.boneId[3]] * IN.boneData.weights[3];
-        OUT.position = mul(mvp, mul(boneTransform, float4(IN.position, 1.0f)));        
+        OUT.position = CalculateAnimation(mvp, IN);
     }
     else
     {

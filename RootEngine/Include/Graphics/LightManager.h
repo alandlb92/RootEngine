@@ -25,12 +25,7 @@ namespace Faia
 					LightManager();
 					~LightManager();
 
-					void SetAmbientLightColor(RColorRGB color);
-					void SetAmbientLightStrength(float strength);
-					void SetDirectionalLight(DirectionalLight directionalLight, uint8_t index);
-					
-					const RColorRGB GetAmbientLightColor() { return lightData->ambientLightColor; };
-					const float GetAmbientLightStrength() { return lightData->ambientLightStrength; };
+					void SetDirectionalLight(DirectionalLight directionalLight, uint8_t index);					
 					DirectionalLight GetDirectionalLight(uint8_t index);
 
 					void UpdateLightToCB();
