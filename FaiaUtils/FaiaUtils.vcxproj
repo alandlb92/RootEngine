@@ -29,6 +29,7 @@
   <ItemGroup>
     <ClInclude Include="Include\Faia\Converter.h" />
     <ClInclude Include="Include\Faia\Debug.h" />
+    <ClInclude Include="Include\Faia\FMath.h" />
     <ClInclude Include="Include\Faia\HashUtils.h" />
     <ClInclude Include="Include\Faia\Memory.h" />
     <ClInclude Include="Include\Faia\Paths.h" />
@@ -37,6 +38,7 @@
   <ItemGroup>
     <ClCompile Include="Source\Faia\Converter.cpp" />
     <ClCompile Include="Source\Faia\Debug.cpp" />
+    <ClCompile Include="Source\Faia\FMath.cpp" />
     <ClCompile Include="Source\Faia\HashUtils.cpp" />
     <ClCompile Include="Source\Faia\WindowsApplication.cpp" />
   </ItemGroup>

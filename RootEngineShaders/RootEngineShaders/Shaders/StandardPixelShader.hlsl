@@ -13,25 +13,34 @@ struct PixelShaderInput
     float3 worldPos : WORLD_POSITION;
 };
 
-//float3 CalcDirectional(float3 color, PixelShaderInput IN)
-//{
-//    float specExp = 1;
-//    float specIntensity = 0;
+float3 CalcDirectional(float3 color, PixelShaderInput IN)
+{
+    float specExp = 1;
+    float specIntensity = 0;
+    float3 sumResult = float3(0, 0, 0);
     
-//   // Phong diffuse
-//    float3 dirToLight = normalize(-directionalLights[0].direction);
-//    float NDotL = dot(dirToLight, IN.normal);
-//    float3 result = directionalLights[0].base.color * saturate(NDotL);
+    for (int i = 0; i > MAX_NUM_OF_DIRECTIONAL_LIGHTS;++i)
+    {    
+        if (directionalLights[0].active)
+        {
+            // Phong diffuse
+            float3 dirToLight = normalize(-directionalLights[0].direction);
+            float NDotL = dot(dirToLight, IN.normal);
+            float3 result = directionalLights[0].base.color * saturate(NDotL);
    
-//    // Blinn specular
-//    float3 ToEye = EyePosition.xyz - IN.position;
-//    ToEye = normalize(ToEye);
-//    float3 HalfWay = normalize(ToEye + dirToLight);
-//    float NDotH = saturate(dot(HalfWay, IN.normal));
-//    result += directionalLights[0].base.color * pow(NDotH, specExp) * specIntensity;
+            // Blinn specular
+            float3 ToEye = cameraPosition - IN.position.xyz;
+            ToEye = normalize(ToEye);
+            float3 HalfWay = normalize(ToEye + dirToLight);
+            float NDotH = saturate(dot(HalfWay, IN.normal));
+            result += directionalLights[0].base.color * pow(NDotH, specExp) * specIntensity * directionalLights[0].base.strength;
    
-//    return result * color;
-//}
+            sumResult += (result * color);
+        }
+    }
+    
+    return sumResult;
+}
 
 float3 CalcAmbient(float3 color, PixelShaderInput IN)
 {
@@ -54,6 +63,6 @@ float4 SimplePixelShader(PixelShaderInput IN) : SV_TARGET
     }
         
     mainColor *= IN.color;
-    float3 finalColor = CalcAmbient(mainColor, IN);// + CalcDirectional(mainColor, IN);
+    float3 finalColor = CalcAmbient(mainColor, IN) + CalcDirectional(mainColor, IN);
     return float4(finalColor, 1);
 }

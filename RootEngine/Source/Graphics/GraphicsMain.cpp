@@ -266,7 +266,7 @@ namespace Faia
 
             Graphics::GetConstantBuffersHandler()->UpdateSubresource(Graphics::gPerApplicationHash);
             Graphics::GetConstantBuffersHandler()->UpdateSubresource(Graphics::gPerFrameHash);
-            Graphics::Light::LightManager::GetInstance()->UpdateLightToCB();
+            Graphics::Light::GetLightManager()->UpdateLightToCB();
 
             //We can put some parts of the code in other classes, for exemple the mesh upload data can be inside RMeshRenderer or something like that
             for (auto& ro : GetSceneManager()->GetCurrentScene()->GetRenderablebleObjects())

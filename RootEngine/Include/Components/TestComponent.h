@@ -2,6 +2,9 @@
 #include "Core/RComponent.h"
 #include "FaiaInputSystem.h"
 #include "Core/RObject.h"
+#include "Core/Scene/SceneManager.h"
+#include "RDirectionalLightComponent.h"
+#include "Data/RColor.h"
 
 namespace Faia
 {
@@ -19,9 +22,9 @@ namespace Faia
             {
                 Super::Init();
                 Faia::InputSystem::GetFaiaInputSystem()->RegisterActionEvent(Faia::InputSystem::InputEventType::KEY_HELD,
-                    Faia::InputSystem::KeyCode::ARROW_RIGHT, std::bind(&TestComponent::MoveRight, this, std::placeholders::_1));
+                    Faia::InputSystem::KeyCode::ARROW_RIGHT, std::bind(&TestComponent::MoveXP, this, std::placeholders::_1));
                 Faia::InputSystem::GetFaiaInputSystem()->RegisterActionEvent(Faia::InputSystem::InputEventType::KEY_HELD,
-                    Faia::InputSystem::KeyCode::ARROW_LEFT, std::bind(&TestComponent::MoveLeft, this, std::placeholders::_1));
+                    Faia::InputSystem::KeyCode::ARROW_LEFT, std::bind(&TestComponent::MoveXM, this, std::placeholders::_1));
 
                 Faia::InputSystem::GetFaiaInputSystem()->RegisterActionEvent(Faia::InputSystem::InputEventType::KEY_HELD,
                     Faia::InputSystem::KeyCode::ARROW_UP, std::bind(&TestComponent::MoveUp, this, std::placeholders::_1));
@@ -30,20 +33,29 @@ namespace Faia
 
 
                 Faia::InputSystem::GetFaiaInputSystem()->RegisterActionEvent(Faia::InputSystem::InputEventType::KEY_HELD,
-                    Faia::InputSystem::KeyCode::KEYPAD_2, std::bind(&TestComponent::MoveFoward, this, std::placeholders::_1));
+                    Faia::InputSystem::KeyCode::Q, std::bind(&TestComponent::MoveZM, this, std::placeholders::_1));
                 Faia::InputSystem::GetFaiaInputSystem()->RegisterActionEvent(Faia::InputSystem::InputEventType::KEY_HELD,
-                    Faia::InputSystem::KeyCode::KEYPAD_8, std::bind(&TestComponent::MoveBack, this, std::placeholders::_1));
+                    Faia::InputSystem::KeyCode::E, std::bind(&TestComponent::MoveZB, this, std::placeholders::_1));
+
+                GetSceneManager()->GetComponentOfType<RDirectionalLightComponent>()->SetColor(RColorRGB(0, 1, 0));
+                GetSceneManager()->GetComponentOfType<RDirectionalLightComponent>()->SetStrength(1);
 
             }
 
         private:
+            void DumpPosition()
+            {
+                Debug::Log(mOwner->GetRotation().ToString().c_str());
+            }
+
             void MoveUp(float deltaTime)
             {
                 if (mOwner)
                 {
-                    RVector3D curPos = mOwner->GetPosition();
-                    curPos += RVector3D(0, objVelocity * deltaTime, 0);
-                    mOwner->SetPosition(curPos);
+                    RVector3D curPos = mOwner->GetRotation();
+                    curPos += RVector3D(-objVelocity * deltaTime, 0, 0);
+                    mOwner->SetRotation(curPos);
+                    DumpPosition();
                 }
             }
 
@@ -51,49 +63,54 @@ namespace Faia
             {
                 if (mOwner)
                 {
-                    RVector3D curPos = mOwner->GetPosition();
-                    curPos += RVector3D(0, -objVelocity * deltaTime, 0);
-                    mOwner->SetPosition(curPos);
-                }
-            }
-
-            void MoveRight(float deltaTime)
-            {
-                if (mOwner)
-                {
-                    RVector3D curPos = mOwner->GetPosition();
-                    curPos += RVector3D(-objVelocity * deltaTime, 0, 0);
-                    mOwner->SetPosition(curPos);
-                }
-            }
-
-            void MoveLeft(float deltaTime)
-            {
-                if (mOwner)
-                {
-                    RVector3D curPos = mOwner->GetPosition();
+                    RVector3D curPos = mOwner->GetRotation();
                     curPos += RVector3D(objVelocity * deltaTime, 0, 0);
-                    mOwner->SetPosition(curPos);
+                    mOwner->SetRotation(curPos);
+                    DumpPosition();
                 }
             }
 
-            void MoveFoward(float deltaTime)
+            void MoveXP(float deltaTime)
             {
                 if (mOwner)
                 {
-                    RVector3D curPos = mOwner->GetPosition();
-                    curPos += RVector3D(0, 0, objVelocity * deltaTime);
-                    mOwner->SetPosition(curPos);
+                    RVector3D curPos = mOwner->GetRotation();
+                    curPos += RVector3D(0, -objVelocity * deltaTime, 0);
+                    mOwner->SetRotation(curPos);
+                    DumpPosition();
                 }
             }
 
-            void MoveBack(float deltaTime)
+            void MoveXM(float deltaTime)
             {
                 if (mOwner)
                 {
-                    RVector3D curPos = mOwner->GetPosition();
+                    RVector3D curPos = mOwner->GetRotation();
+                    curPos += RVector3D(0, objVelocity * deltaTime, 0);
+                    mOwner->SetRotation(curPos);
+                    DumpPosition();
+                }
+            }
+
+            void MoveZM(float deltaTime)
+            {
+                if (mOwner)
+                {
+                    RVector3D curPos = mOwner->GetRotation();
                     curPos += RVector3D(0, 0, -objVelocity * deltaTime);
-                    mOwner->SetPosition(curPos);
+                    mOwner->SetRotation(curPos);
+                    DumpPosition();
+                }
+            }
+
+            void MoveZB(float deltaTime)
+            {
+                if (mOwner)
+                {
+                    RVector3D curPos = mOwner->GetRotation();
+                    curPos += RVector3D(0, 0, objVelocity * deltaTime);
+                    mOwner->SetRotation(curPos);
+                    DumpPosition();
                 }
             }
 

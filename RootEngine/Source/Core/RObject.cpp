@@ -54,6 +54,11 @@ namespace Faia
             _onNotifyPositionChange.push_back(evt);
         }
 
+        void RObject::RegisterOnNotifyRotationChange(NotifyTrasnformChange evt)
+        {
+            _onNotifyRotationChange.push_back(evt);
+        }
+
         void RObject::SetPosition(RVector3D newPosition)
         {
             _position = newPosition;

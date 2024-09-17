@@ -16,6 +16,7 @@ namespace Faia
 
             uint32_t gPerFrameHash;
             uint32_t gViewMatrixHash;
+            uint32_t gcameraPositionHash;
             
             uint32_t gPerObjectHash;
             uint32_t gIsSkinnedHash;
@@ -32,6 +33,7 @@ namespace Faia
                 gProjectionMatrixHash = HashUtils::CharToHashFnv1a("ProjectionMatrix");
                 gPerFrameHash = HashUtils::CharToHashFnv1a("PerFrame");
                 gViewMatrixHash = HashUtils::CharToHashFnv1a("ViewMatrix");
+                gcameraPositionHash = HashUtils::CharToHashFnv1a("CameraPosition");
                 gPerObjectHash = HashUtils::CharToHashFnv1a("PerObject");
                 gIsSkinnedHash = HashUtils::CharToHashFnv1a("IsSkinned");
                 gWorldMatrixHash = HashUtils::CharToHashFnv1a("WorldMatrix");
@@ -76,13 +78,20 @@ namespace Faia
                 CB_Info cbInfoPerFrame;
                 cbInfoPerFrame.mHashName = HashUtils::CharToHashFnv1a("PerFrame");
                 cbInfoPerFrame.mSlot = 1;
-                cbInfoPerFrame.mSize = 64;
+                cbInfoPerFrame.mSize = 64 + 12;
                 CB_Param param1PerFrame;
                 param1PerFrame.mHashName = HashUtils::CharToHashFnv1a("ViewMatrix");
                 param1PerFrame.mSize = 64;
                 param1PerFrame.mDefaultParams = std::vector<uint8_t>(param1PerFrame.mSize);
                 std::memcpy(param1PerFrame.mDefaultParams.data(), &matrixTest, param1PerFrame.mSize);
                 cbInfoPerFrame.mParams.push_back(param1PerFrame);
+                CB_Param param2PerFrame;
+                param2PerFrame.mHashName = HashUtils::CharToHashFnv1a("CameraPosition");
+                param2PerFrame.mSize = 12;
+                param2PerFrame.mDefaultParams = std::vector<uint8_t>(param2PerFrame.mSize);
+                RVector3D vectorDefaultValue(22);
+                std::memcpy(param2PerFrame.mDefaultParams.data(), &vectorDefaultValue, param2PerFrame.mSize);
+                cbInfoPerFrame.mParams.push_back(param2PerFrame);
 
                 //Per Object
                 CB_Info cbInfoPerObject;
@@ -194,20 +203,13 @@ namespace Faia
             void RConstantBuffersHandler::RegisterData(CB_Param param)
             {
                 mHashToParam[param.mHashName] = std::malloc(param.mSize);
-                std::memcpy(mHashToParam[param.mHashName], &param.mDefaultParams, param.mSize);
+                std::memcpy(mHashToParam[param.mHashName], param.mDefaultParams.data(), param.mSize);
                 mHashParamToSize[param.mHashName] = param.mSize;
             }
 
             void RConstantBuffersHandler::SetParamData(uint32_t paramHashName, void* data)
             {
                 std::memcpy(mHashToParam[paramHashName], data, mHashParamToSize[paramHashName]);
-
-                uint32_t tes;
-                std::string name = HashUtils::g_hashToStringMap[paramHashName];
-                if (std::strcmp(name.c_str(), "IsSkinned") == 0)
-                {
-                    std::memcpy(&tes, data, sizeof(tes));
-                }
             }
 
             void RConstantBuffersHandler::UpdateSubresource(uint32_t bufferHashName)
@@ -222,21 +224,6 @@ namespace Faia
                 {
                     std::memcpy(static_cast<char*>(data) + offset, static_cast<char*>(mHashToParam[param.mHashName]), param.mSize);
                     offset += param.mSize;
-                }
-
-                struct test2
-                {
-                    int hasTexture;
-                    int isSkinned;
-                    RMatrix4x4 worldMatrix;
-                    RMatrix4x4 animMatrix[MAX_NUM_OF_ANIMATION_CHANNELS];
-                };
-
-                test2 tes;
-
-                if (std::strcmp(name.c_str(), "PerObject") == 0)
-                {
-                    std::memcpy(&tes, data, sizeof(test2));
                 }
 
                 GetDeviceContext()->UpdateSubresource(mConstantBuffers[cbInfo.mSlot], 0, nullptr, data, 0, 0);

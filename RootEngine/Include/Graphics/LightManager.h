@@ -3,6 +3,7 @@
 #include "Data/RColor.h"
 #include "Data/RVector3D.h"
 #include "Data/RLightData.h"
+#include "Components/RDirectionalLightComponent.h"
 
 namespace Faia
 {
@@ -11,17 +12,10 @@ namespace Faia
 		namespace Graphics
 		{
 			namespace Light
-			{				
-
+			{	
 				class LightManager
 				{
-				private:
-					LightData* lightData;
-					static LightManager* _instance;
-
 				public:
-					static LightManager* GetInstance() { return _instance; }
-
 					LightManager();
 					~LightManager();
 
@@ -29,7 +23,16 @@ namespace Faia
 					DirectionalLight GetDirectionalLight(uint8_t index);
 
 					void UpdateLightToCB();
+					void RegisterEnvironmentLight(RDirectionalLightComponent* directionalLightComponent);
+					void RemoveEnvironmentLight(uint8_t id);
+
+				private:
+					LightData* mLightData;
+					uint8_t mDirectionalLightsInScene = 0;					 
+					RDirectionalLightComponent* mDirectionalLights[MAX_NUM_OF_DIRECTIONAL_LIGHTS];
 				};
+
+				LightManager* GetLightManager();
 			}
 		}
 	}

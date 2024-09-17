@@ -146,6 +146,9 @@
     <ClInclude Include="Include\Data\RLightData.h">
       <Filter>Header Files\Data</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Components\RDirectionalLightComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\RootEngine.cpp">
@@ -225,6 +228,9 @@
     </ClCompile>
     <ClCompile Include="Source\Graphics\RConstantBuffersHandler.cpp">
       <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Components\RDirectionalLightComponent.cpp">
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

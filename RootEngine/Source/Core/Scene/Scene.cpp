@@ -21,7 +21,8 @@ namespace Faia
 
             SceneObject* sceneObject = new SceneObject();
             SceneObject* sceneObject2 = new SceneObject();
-            //SceneObject* sceneObject3 = new SceneObject();
+            SceneObject* sceneObject3 = new SceneObject();
+            SceneObject* sceneObject4 = new SceneObject();
 
             RMaterialComponent* materialComponent = new RMaterialComponent();
             RMaterialComponent* materialComponent2 = new RMaterialComponent();
@@ -30,8 +31,10 @@ namespace Faia
             meshComponent->LoadMesh("Models\\HeroGoat.rmesh");
             RMeshComponent* meshComponent2 = new RMeshComponent();
             meshComponent2->LoadMesh("Models\\cube.rmesh");
-         /*   RMeshComponent* meshComponent3 = new RMeshComponent();
-            meshComponent3->LoadMesh("Models\\cube.rmesh");*/
+            RMeshComponent* meshComponent3 = new RMeshComponent();
+            meshComponent3->LoadMesh("Models\\GizmoArrow.rmesh");
+            RMeshComponent* meshComponent4 = new RMeshComponent();
+            meshComponent4->LoadMesh("Models\\Sphere.rmesh");
 
             RAnimationComponent* animationComponent = new RAnimationComponent();
             animationComponent->LoadAnimation("Animations\\testAnimation.ranim");
@@ -77,20 +80,31 @@ namespace Faia
             sceneObject2->AddComponent(meshComponent2);
             sceneObject2->AddComponent(materialComponent2);
 
-            sceneObject2->SetScale(RVector3D(100, 1, 100));
+            sceneObject2->SetScale(RVector3D(1000, 1, 1000));
 
             TestComponent* test = new TestComponent();
-            //RPointLightComponent* pointLight = new RPointLightComponent();
-            //sceneObject3->AddComponent(meshComponent3);
-            //sceneObject3->AddComponent(pointLight);
-            //sceneObject3->AddComponent(test);
-            //sceneObject3->AddComponent(materialComponent2);
-            //pointLight->SetColor(1, .5f, .2f);
-            //pointLight->SetStrength(1);
+            RDirectionalLightComponent* dirLightComp = new RDirectionalLightComponent();
+            sceneObject3->AddComponent(meshComponent3);
+            sceneObject3->AddComponent(dirLightComp);
+            sceneObject3->AddComponent(test);
+            sceneObject3->AddComponent(materialComponent2);
+
+            sceneObject3->SetPosition(RVector3D(0, 200, 0));
+            sceneObject3->SetRotation(RVector3D(0, 0, 0));
+            sceneObject3->SetScale(RVector3D(2, 2, 2));
+
+            sceneObject4->AddComponent(meshComponent4);
+            sceneObject4->AddComponent(materialComponent2);
+            sceneObject4->SetPosition(RVector3D(50, 150, 300));
+            sceneObject4->SetScale(RVector3D(20, 20, 20));
+
+         
 
             scene->AddObject(sceneObject);
             scene->AddObject(sceneObject2);
-            //scene->AddObject(sceneObject3);
+            scene->AddObject(sceneObject3);
+            scene->AddObject(sceneObject4);
+
             scene->AddObject(camera);
 
             return scene;

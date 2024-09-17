@@ -10,23 +10,32 @@ namespace Faia
         {
             namespace Light
             {
-                LightManager* LightManager::_instance = nullptr;
+                LightManager* gLightManager = nullptr;
+
+                LightManager* GetLightManager()
+                {
+                    if (!gLightManager)
+                    {
+                        gLightManager = new LightManager();
+                    }
+
+                    return gLightManager;
+                }
 
                 LightManager::LightManager()
                 {
-                    lightData = new LightData();
-                    _instance = this;
+                    mLightData = new LightData();
                 }
 
                 LightManager::~LightManager()
                 {
-                    delete lightData;
-                    lightData = nullptr;
+                    delete mLightData;
+                    mLightData = nullptr;
                 }
 
                 void LightManager::SetDirectionalLight(DirectionalLight directionalLight, uint8_t index)
                 {
-                    lightData->directionalLight[index] = directionalLight;
+                    mLightData->directionalLight[index] = directionalLight;
                 }
 
                 DirectionalLight LightManager::GetDirectionalLight(uint8_t index)
@@ -37,14 +46,45 @@ namespace Faia
                         Debug::PopError("You trying to put more directional light than the max");
                     }
 
-                    return lightData->directionalLight[index];
+                    return mLightData->directionalLight[index];
                 }
 
                 void LightManager::UpdateLightToCB()
                 {
-                    lightData->DebugDump();
-                    Graphics::GetConstantBuffersHandler()->SetParamData(Graphics::gLightData, lightData);
+                    Graphics::GetConstantBuffersHandler()->SetParamData(Graphics::gLightData, mLightData);
                     Graphics::GetConstantBuffersHandler()->UpdateSubresource(Graphics::gLightBufferHash);
+                    //mLightData->DebugDump();
+                }
+
+                void LightManager::RegisterEnvironmentLight(RDirectionalLightComponent* directionalLightComponent)
+                {
+                    int id = mDirectionalLightsInScene;
+
+                    if (mDirectionalLightsInScene >= MAX_NUM_OF_DIRECTIONAL_LIGHTS)
+                    {
+                        Debug::PopError("You exced the max number of directional lights per scene");
+                        return;
+                    }
+
+
+                    directionalLightComponent->mData = &mLightData->directionalLight[id];
+                    directionalLightComponent->mDirectionalLightId = id;
+                    mLightData->directionalLight[id].active = 1;
+                    mDirectionalLights[id] = directionalLightComponent;
+                    mDirectionalLightsInScene++;
+                }
+
+                void LightManager::RemoveEnvironmentLight(uint8_t id)
+                {
+                    mDirectionalLightsInScene--;
+
+                    if (id != MAX_NUM_OF_DIRECTIONAL_LIGHTS - 1)
+                    {
+                       mLightData->directionalLight[id].active = 0;
+                       std::swap(mLightData->directionalLight[id], mLightData->directionalLight[MAX_NUM_OF_DIRECTIONAL_LIGHTS - 1]);
+                       std::swap(mDirectionalLights[id], mDirectionalLights[MAX_NUM_OF_DIRECTIONAL_LIGHTS - 1]);
+                       mDirectionalLights[MAX_NUM_OF_DIRECTIONAL_LIGHTS - 1] = nullptr;
+                    }
                 }
             }
         }

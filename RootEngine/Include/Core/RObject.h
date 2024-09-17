@@ -25,6 +25,7 @@ namespace Faia
             virtual void AddComponent(RComponent* component);
             void RegisterOnNotifyComponentAddedEvent(NotifyAddComponentEvent evt);
             void RegisterOnNotifyPositionChange(NotifyTrasnformChange evt);
+            void RegisterOnNotifyRotationChange(NotifyTrasnformChange evt);
 
             template<typename T>
             T* GetComponentOfType()

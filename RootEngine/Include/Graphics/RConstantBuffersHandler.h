@@ -27,64 +27,14 @@ namespace Faia
 				uint32_t mSlot;
 				uint16_t mSize;
 				std::vector<CB_Param> mParams;
-			};
-
-			// Shader resources
-			//enum ConstantBuffer
-			//{
-			//	CB_Application, //ok _projectionMatrix
-			//	CB_Frame, //ok viewmatrix
-			//	CB_Object, //ok
-			//	CB_Globals, //ok
-			//	CB_Light, //ok
-			//	NumConstantBuffers
-			//};
-			//CB Application 
-			//XMMATRIX _projectionMatrix;
-
-			//CB frame
-			//XMMATRIX _viewMatrix;
-
-		/*	struct CB_LightData
-			{
-				RColorRGB ambientLightColor;
-				float ambientLightStrength;
-
-				RColorRGB pointLightColor;
-				float offset;
-
-				RVector3D pointLightPosition;
-				float pointLightStrength;
-
-				CB_LightData()
-				{
-					ambientLightColor = RColorRGB(1.0f, 1.0f, 1.0f);
-					ambientLightStrength = 1.0f;
-					offset = 0.0f;
-					pointLightColor = RColorRGB(1.0f, 1.0f, 1.0f);
-					pointLightPosition = RVector3D(0.0f, 0.0f, 0.0f);
-					pointLightStrength = 0.0f;
-				}
-			};
-
-			struct GlobalBuffer
-			{
-				int hasTexture;
-				int boneSelectedId;
-			};
-
-			struct PerObjectBufer
-			{
-				RMatrix4x4 worldMatrix;
-				RMatrix4x4 animTransformMatrix[MAX_NUM_OF_ANIMATION_CHANNELS];
-			};*/
-			
+			};			
 
 			extern uint32_t gPerApplicationHash;
 			extern uint32_t gProjectionMatrixHash;
 
 			extern uint32_t gPerFrameHash;
 			extern uint32_t gViewMatrixHash;
+			extern uint32_t gcameraPositionHash;
 
 			extern uint32_t gPerObjectHash;
 			extern uint32_t gIsSkinnedHash;

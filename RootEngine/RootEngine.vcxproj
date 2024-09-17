@@ -113,6 +113,7 @@ xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Components\RAnimationComponent.h" />
+    <ClInclude Include="Include\Components\RDirectionalLightComponent.h" />
     <ClInclude Include="Include\Components\RPointLightComponent.h" />
     <ClInclude Include="Include\Components\RMaterialComponent.h" />
     <ClInclude Include="Include\Components\RMeshComponent.h" />
@@ -148,6 +149,7 @@ xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Components\RAnimationComponent.cpp" />
+    <ClCompile Include="Source\Components\RDirectionalLightComponent.cpp" />
     <ClCompile Include="Source\Components\RPointLightComponent.cpp" />
     <ClCompile Include="Source\Components\RMaterialComponent.cpp" />
     <ClCompile Include="Source\Components\RMeshComponent.cpp" />

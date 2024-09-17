@@ -124,6 +124,7 @@ namespace Faia
 
         void RCamera::Update(float deltaTime)
         {
+            Graphics::GetConstantBuffersHandler()->SetParamData(Graphics::gcameraPositionHash, &_position);
             Super::Update(deltaTime);
         }
 

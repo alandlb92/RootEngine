@@ -19,6 +19,7 @@ cbuffer PerApplication : register(b0)
 cbuffer PerFrame : register(b1)
 {
     float4x4 viewMatrix;
+    float3 cameraPosition;
 }
 
 //todo: Make a cbuffer for animation data, because we don't need to send animMatrix for each object

@@ -10,4 +10,5 @@ struct DirectionalLight
 {
     BaseLight base;
     float3 direction;
+    int active;
 };
