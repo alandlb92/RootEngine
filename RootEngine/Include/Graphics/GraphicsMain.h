@@ -13,10 +13,16 @@
 #include <vector>
 
 
+#include <functional>
+
+
 namespace Faia
 {
 	namespace Root
 	{
+
+		using PostRenderFunction = std::function<void()>;
+
 		class GraphicsMain;
 		GraphicsMain* GetGraphics();
 		ID3D11Device* GetDevice();
@@ -35,7 +41,11 @@ namespace Faia
 			void Clear(const FLOAT clearColor[4], FLOAT clearDepth, UINT8 clearStencil);
 			void Present(bool vSync);
 			void Renderer();
+
+			void RegisterPostRendererFunction(PostRenderFunction postRendererFunction);
 		private:
+			std::vector<PostRenderFunction> mPostRenderFunctions;
+
 			IDXGISwapChain* _swapChain;
 			Microsoft::WRL::ComPtr<ID3D11Device> _device;
 			Microsoft::WRL::ComPtr<ID3D11DeviceContext> _deviceContext;

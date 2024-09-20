@@ -10,3 +10,6 @@
 [submodule "libs/thirdparty/libpng"]
 	path = libs/thirdparty/libpng
 	url = git@github.com:pnggroup/libpng.git
+[submodule "RootEditor/Vendor/imgui"]
+	path = RootEditor/Vendor/imgui
+	url = git@github.com:ocornut/imgui.git

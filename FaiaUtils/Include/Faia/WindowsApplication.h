@@ -29,7 +29,7 @@ namespace Faia
             WindowsApplication(HINSTANCE hInstance, UINT idsAppTittle, UINT idcGame, UINT idcSamall);
             BOOL InitInstance(int nCmdShow);
 
-            UINT _idcSamall;
+            UINT _idiSmall;
             UINT _idsAppTittle;
             UINT _idcGame;
 

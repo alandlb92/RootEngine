@@ -54,7 +54,7 @@ namespace Faia
 
         WindowsApplication::WindowsApplication(HINSTANCE hInstance, UINT idsAppTittle, UINT idcGame, UINT idcSamall)
             : hInstance(hInstance) {
-            _idcSamall = idcSamall;
+            _idiSmall = idcSamall;
             _idsAppTittle = idsAppTittle;
             _idcGame = idcGame;
             LoadStringW(hInstance, _idsAppTittle, szTitle, MAX_LOADSTRING);
@@ -108,7 +108,7 @@ namespace Faia
             wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
             wcex.lpszMenuName = MAKEINTRESOURCEW(_idcGame);
             wcex.lpszClassName = szWindowClass;
-            wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(_idcSamall));
+            wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(_idiSmall));
 
             return RegisterClassExW(&wcex);
         }

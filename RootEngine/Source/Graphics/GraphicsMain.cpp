@@ -60,6 +60,12 @@ namespace Faia
         {
         }
 
+
+        void  GraphicsMain::RegisterPostRendererFunction(PostRenderFunction postRendererFunction)
+        {
+            mPostRenderFunctions.push_back(postRendererFunction);
+        }
+
         void GraphicsMain::SetupDevice()
         {
             // A window handle must have been created already.
@@ -377,6 +383,13 @@ namespace Faia
                 }
             }
             //TODO: i cant use vsync right now because this will bring a problem in input system
+
+            for (PostRenderFunction& postRenderFunc : mPostRenderFunctions)
+            {
+                postRenderFunc();
+            }
+
+
             Present(false);
         }
     }
