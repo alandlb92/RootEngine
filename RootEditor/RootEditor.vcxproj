@@ -187,6 +187,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\REContent.cpp" />
+    <ClCompile Include="Source\REInspector.cpp" />
+    <ClCompile Include="Source\REditor.cpp" />
+    <ClCompile Include="Source\REWindow.cpp" />
+    <ClCompile Include="Source\REViewport.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Vendor\imgui\backends\imgui_impl_dx11.cpp" />
     <ClCompile Include="Vendor\imgui\backends\imgui_impl_win32.cpp" />
@@ -197,7 +202,13 @@
     <ClCompile Include="Vendor\imgui\imgui_widgets.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\REConfiguration.h" />
     <ClInclude Include="Include\Resource.h" />
+    <ClInclude Include="Include\REViewport.h" />
+    <ClInclude Include="Include\REWindow.h" />
+    <ClInclude Include="Include\REditor.h" />
+    <ClInclude Include="Include\REInspector.h" />
+    <ClInclude Include="Include\REContent.h" />
     <ClInclude Include="Vendor\imgui\backends\imgui_impl_dx11.h" />
     <ClInclude Include="Vendor\imgui\backends\imgui_impl_win32.h" />
     <ClInclude Include="Vendor\imgui\imconfig.h" />
