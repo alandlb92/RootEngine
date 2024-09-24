@@ -27,11 +27,16 @@ namespace Faia
 		GraphicsMain* GetGraphics();
 		ID3D11Device* GetDevice();
 		ID3D11DeviceContext* GetDeviceContext();
+		ID3D11ShaderResourceView* GetRenderOutSRV();
+		void ResizeViewport(float width, float height);
 
 		class GraphicsMain
 		{
 			friend ID3D11Device* GetDevice();
 			friend ID3D11DeviceContext* GetDeviceContext();
+			friend ID3D11ShaderResourceView* GetRenderOutSRV();
+			friend void ResizeViewport(float width, float height);
+
 		public:
 			float GetWidth() { return _clientWidth; }
 			float GetHeight() { return _clientHeight; }
@@ -43,6 +48,7 @@ namespace Faia
 			void Renderer();
 
 			void RegisterPostRendererFunction(PostRenderFunction postRendererFunction);
+
 		private:
 			std::vector<PostRenderFunction> mPostRenderFunctions;
 
@@ -54,13 +60,23 @@ namespace Faia
 			ID3D11DepthStencilView* _depthStencilView = nullptr;
 
 			ID3D11DepthStencilState* _depthStencilState;
-			D3D11_VIEWPORT _viewport = { 0 };
+			D3D11_VIEWPORT mViewport = { 0 };
 			ID3D11RasterizerState* _rasterizerState;
 
 			Microsoft::WRL::ComPtr<ID3D11SamplerState> _defaultSamplerState;
 
 			float _clientWidth;
 			float _clientHeight;
+			//Resize need to change _viewport, renderTargetDesc and camera aspect ratio
+			void ConfigureViewport(float width, float height);
+			void ConfigureDepthStencilView(float width, float height);
+
+#if defined _EDITOR
+			void ConfigureOutSrv(float width, float height);
+			ID3D11ShaderResourceView* mRenderOutSRV;
+			ID3D11RenderTargetView* mRenderOutTargetView;
+#endif
+
 		};
 	}
 }

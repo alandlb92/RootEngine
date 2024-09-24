@@ -1,4 +1,4 @@
-// GraphicsMain.cpp : Defines the functions for the static library.
+﻿// GraphicsMain.cpp : Defines the functions for the static library.
 //
 
 #include "Graphics/GraphicsMain.h"
@@ -13,6 +13,7 @@
 #include "Graphics/RConstantBuffersHandler.h"
 #include "Faia/HashUtils.h"
 #include "Graphics/LightManager.h"
+#include "Faia/Debug.h"
 
 using namespace DirectX;
 using namespace Faia::Root;
@@ -31,7 +32,6 @@ namespace Faia
                 ptr = NULL;
             }
         }
-
 
         GraphicsMain* gGraphics;
         GraphicsMain* GetGraphics()
@@ -56,14 +56,132 @@ namespace Faia
             return GetGraphics()->_deviceContext.Get();
         };
 
+        ID3D11ShaderResourceView* GetRenderOutSRV()
+        {
+            assert(GetGraphics());
+            return GetGraphics()->mRenderOutSRV;
+        }
+
+        void ResizeViewport(float width, float height)
+        {
+#if defined _EDITOR
+            GetGraphics()->ConfigureOutSrv(width, height);
+#endif
+            GetGraphics()->ConfigureDepthStencilView(width, height);
+            GetGraphics()->ConfigureViewport(width, height);
+            GetSceneManager()->GetCurrentScene()->GetMainCamera()->ConfigureProjectionMatrix(width, height);
+        }
+
         GraphicsMain::GraphicsMain()
         {
         }
 
-
         void  GraphicsMain::RegisterPostRendererFunction(PostRenderFunction postRendererFunction)
         {
             mPostRenderFunctions.push_back(postRendererFunction);
+        }
+
+        void GraphicsMain::ConfigureViewport(float width, float height)
+        {
+            mViewport.Width = width;
+            mViewport.Height = height;
+            mViewport.TopLeftX = 0.0f;
+            mViewport.TopLeftY = 0.0f;
+            mViewport.MinDepth = 0.0f;
+            mViewport.MaxDepth = 1.0f;
+        }
+
+        void GraphicsMain::ConfigureDepthStencilView(float width, float height)
+        {
+            if (_depthStencilView)
+            {
+                SafeRelease(_depthStencilView);
+            }
+
+            if (_depthStencilState)
+            {
+                SafeRelease(_depthStencilState);
+            }
+
+            //Depht stencil description
+            D3D11_TEXTURE2D_DESC depthStencilBufferDesc;
+            ZeroMemory(&depthStencilBufferDesc, sizeof(D3D11_TEXTURE2D_DESC));
+
+            depthStencilBufferDesc.ArraySize = 1;
+            depthStencilBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+            depthStencilBufferDesc.CPUAccessFlags = 0; // No CPU access required.
+            depthStencilBufferDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+            depthStencilBufferDesc.Width = width;
+            depthStencilBufferDesc.Height = height;
+            depthStencilBufferDesc.MipLevels = 1;
+            depthStencilBufferDesc.SampleDesc.Count = 1;
+            depthStencilBufferDesc.SampleDesc.Quality = 0;
+            depthStencilBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+
+            ID3D11Texture2D* depthStencilBuffer;
+            //Create depht stencil texture
+            HRESULT hr = _device->CreateTexture2D(&depthStencilBufferDesc, nullptr, &depthStencilBuffer);
+            if (FAILED(hr))
+            {
+                Debug::PopError("Failed to create depht stencil texture\n");
+            }
+
+            hr = _device->CreateDepthStencilView(depthStencilBuffer, nullptr, &_depthStencilView);
+            if (FAILED(hr))
+            {
+                Debug::PopError("Failed to create depht stencil view\n");
+            }
+
+            // Setup depth/stencil state.
+            D3D11_DEPTH_STENCIL_DESC depthStencilStateDesc;
+            ZeroMemory(&depthStencilStateDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
+
+            depthStencilStateDesc.DepthEnable = TRUE;
+            depthStencilStateDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+            depthStencilStateDesc.DepthFunc = D3D11_COMPARISON_LESS;
+            depthStencilStateDesc.StencilEnable = FALSE;
+
+            hr = _device->CreateDepthStencilState(&depthStencilStateDesc, &_depthStencilState);
+            if (FAILED(hr))
+            {
+                Debug::PopError("Failed to Create depth stencil state\n");
+            }
+        }
+
+        void GraphicsMain::ConfigureOutSrv(float width, float height)
+        {
+            //Aditional render target to use in Editor
+            D3D11_TEXTURE2D_DESC renderTargetDesc = {};
+            renderTargetDesc.Width = width;
+            renderTargetDesc.Height = height;
+            renderTargetDesc.MipLevels = 1;
+            renderTargetDesc.ArraySize = 1;
+            renderTargetDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+            renderTargetDesc.SampleDesc.Count = 1;
+            renderTargetDesc.Usage = D3D11_USAGE_DEFAULT;
+            renderTargetDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+
+
+            ID3D11Texture2D* renderTargetTexture = nullptr;
+            HRESULT hr = _device->CreateTexture2D(&renderTargetDesc, nullptr, &renderTargetTexture);
+            if (FAILED(hr))
+            {
+                Debug::PopError("Failed to create render target texture\n");
+            }
+
+            hr = _device->CreateRenderTargetView(renderTargetTexture, nullptr, &mRenderOutTargetView);
+            if (FAILED(hr))
+            {
+                Debug::PopError("Failed to create render target view for scene\n");
+            }
+
+            hr = _device->CreateShaderResourceView(renderTargetTexture, nullptr, &mRenderOutSRV);
+            if (FAILED(hr))
+            {
+                Debug::PopError("Failed to create shader resource view for scene\n");
+            }
+
+            SafeRelease(renderTargetTexture);
         }
 
         void GraphicsMain::SetupDevice()
@@ -120,7 +238,7 @@ namespace Faia
 
             if (FAILED(hr))
             {
-                OutputDebugStringA("Failed to create device and swap chain\n");
+                Debug::PopError("Failed to create device and swap chain\n");
             }
 
             //Create backbuffer
@@ -128,61 +246,19 @@ namespace Faia
             hr = _swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer);
             if (FAILED(hr))
             {
-                OutputDebugStringA("Failed to get back buffer\n");
+                Debug::PopError("Failed to get back buffer\n");
             }
 
             //create render target view
             hr = _device->CreateRenderTargetView(backBuffer, nullptr, &_renderTargetView);
             if (FAILED(hr))
             {
-                OutputDebugStringA("Failed to create render target view\n");
+                Debug::PopError("Failed to create render target view\n");
             }
 
             SafeRelease(backBuffer);
 
-            //Depht stencil description
-            D3D11_TEXTURE2D_DESC depthStencilBufferDesc;
-            ZeroMemory(&depthStencilBufferDesc, sizeof(D3D11_TEXTURE2D_DESC));
-
-            depthStencilBufferDesc.ArraySize = 1;
-            depthStencilBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-            depthStencilBufferDesc.CPUAccessFlags = 0; // No CPU access required.
-            depthStencilBufferDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-            depthStencilBufferDesc.Width = clientWidth;
-            depthStencilBufferDesc.Height = clientHeight;
-            depthStencilBufferDesc.MipLevels = 1;
-            depthStencilBufferDesc.SampleDesc.Count = 1;
-            depthStencilBufferDesc.SampleDesc.Quality = 0;
-            depthStencilBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-
-            ID3D11Texture2D* depthStencilBuffer;
-            //Create depht stencil texture
-            hr = _device->CreateTexture2D(&depthStencilBufferDesc, nullptr, &depthStencilBuffer);
-            if (FAILED(hr))
-            {
-                OutputDebugStringA("Failed to create depht stencil texture\n");
-            }
-
-            hr = _device->CreateDepthStencilView(depthStencilBuffer, nullptr, &_depthStencilView);
-            if (FAILED(hr))
-            {
-                OutputDebugStringA("Failed to create depht stencil view\n");
-            }
-
-            // Setup depth/stencil state.
-            D3D11_DEPTH_STENCIL_DESC depthStencilStateDesc;
-            ZeroMemory(&depthStencilStateDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
-
-            depthStencilStateDesc.DepthEnable = TRUE;
-            depthStencilStateDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-            depthStencilStateDesc.DepthFunc = D3D11_COMPARISON_LESS;
-            depthStencilStateDesc.StencilEnable = FALSE;
-
-            hr = _device->CreateDepthStencilState(&depthStencilStateDesc, &_depthStencilState);
-            if (FAILED(hr))
-            {
-                OutputDebugStringA("Failed to Create depth stencil state\n");
-            }
+            ConfigureDepthStencilView(clientWidth, clientHeight);
 
             // Setup rasterizer state.
             D3D11_RASTERIZER_DESC rasterizerDesc;
@@ -203,15 +279,10 @@ namespace Faia
             hr = _device->CreateRasterizerState(&rasterizerDesc, &_rasterizerState);
             if (FAILED(hr))
             {
-                OutputDebugStringA("Failed to create rasterizer state\n");
+                Debug::PopError("Failed to create rasterizer state\n");
             }
 
-            _viewport.Width = static_cast<float>(clientWidth);
-            _viewport.Height = static_cast<float>(clientHeight);
-            _viewport.TopLeftX = 0.0f;
-            _viewport.TopLeftY = 0.0f;
-            _viewport.MinDepth = 0.0f;
-            _viewport.MaxDepth = 1.0f;
+            ConfigureViewport(clientWidth, clientHeight);
 
             // Compute the exact client dimensions.
             // This is required for a correct projection matrix.
@@ -240,26 +311,7 @@ namespace Faia
             {
                 std::string msg;
                 msg.append("Fail to create samplerState");
-                OutputDebugStringA(msg.c_str());
-            }
-        }
-
-        void GraphicsMain::Clear(const FLOAT clearColor[4], FLOAT clearDepth, UINT8 clearStencil)
-        {
-            _deviceContext->ClearRenderTargetView(_renderTargetView, clearColor);
-            if (_depthStencilView)
-                _deviceContext->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, clearDepth, clearStencil);
-        }
-
-        void GraphicsMain::Present(bool vSync)
-        {
-            if (vSync)
-            {
-                _swapChain->Present(1, 0);
-            }
-            else
-            {
-                _swapChain->Present(0, 0);
+                Debug::PopError(msg.c_str());
             }
         }
 
@@ -334,7 +386,7 @@ namespace Faia
                     _deviceContext->IASetVertexBuffers(1, 1, &uvBuffer, &uvStride, &offset);
                     _deviceContext->IASetVertexBuffers(2, 1, &normalBuffer, &normalStride, &offset);
 
-                    if(skinned)
+                    if (skinned)
                     {
                         std::shared_ptr<RSkeletalMesh> sMesh = std::dynamic_pointer_cast<RSkeletalMesh>(mesh);
                         const UINT boneDataStride = sizeof(RVertexBoneData);
@@ -374,23 +426,60 @@ namespace Faia
                     _deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
                     Graphics::GetConstantBuffersHandler()->VSSetConstantBuffers();
                     _deviceContext->RSSetState(_rasterizerState);
-                    _deviceContext->RSSetViewports(1, &_viewport);
+                    _deviceContext->RSSetViewports(1, &mViewport);
+#if defined _EDITOR
+                    if (mRenderOutTargetView)
+                    {
+                        _deviceContext->OMSetRenderTargets(1, &mRenderOutTargetView, _depthStencilView);
+                    }
+                    else 
+                    {
+#endif
+                        _deviceContext->OMSetRenderTargets(1, &_renderTargetView, _depthStencilView);
+#if defined _EDITOR
+                    }
+#endif
 
-                    _deviceContext->OMSetRenderTargets(1, &_renderTargetView, _depthStencilView);
                     _deviceContext->OMSetDepthStencilState(_depthStencilState, 1);
 
                     _deviceContext->DrawIndexed(indexCount, 0, 0);
                 }
             }
-            //TODO: i cant use vsync right now because this will bring a problem in input system
 
+#if defined _EDITOR
+            _deviceContext->OMSetRenderTargets(1, &_renderTargetView, nullptr);
+#endif
             for (PostRenderFunction& postRenderFunc : mPostRenderFunctions)
             {
                 postRenderFunc();
             }
 
-
+            //TODO: i cant use vsync right now because this will bring a problem in input system
             Present(false);
+        }
+
+        void GraphicsMain::Present(bool vSync)
+        {
+            if (vSync)
+            {
+                _swapChain->Present(1, 0);
+            }
+            else
+            {
+                _swapChain->Present(0, 0);
+            }
+        }
+
+        void GraphicsMain::Clear(const FLOAT clearColor[4], FLOAT clearDepth, UINT8 clearStencil)
+        {
+            _deviceContext->ClearRenderTargetView(_renderTargetView, Colors::Gray);
+
+#if defined _EDITOR
+            if(mRenderOutTargetView)
+                _deviceContext->ClearRenderTargetView(mRenderOutTargetView, clearColor);
+#endif
+            if (_depthStencilView)
+                _deviceContext->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, clearDepth, clearStencil);
         }
     }
 }

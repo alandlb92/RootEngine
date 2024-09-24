@@ -7,16 +7,16 @@ namespace Faia
 {
     namespace Root
     {
-
+        class RCamera;
         class Scene : public RObject
         {
             friend class SceneManager;
             typedef RObject Super;
 
-        public:
-            
+        public:            
             std::list<SceneObject*> GetRenderablebleObjects();
             void AddObject(SceneObject* obj);
+            RCamera* GetMainCamera() { return mMainCamera; }
 
         protected:
             virtual void Init();
@@ -27,6 +27,7 @@ namespace Faia
             std::list<SceneObject*> _renderablebleObjects;
 
             void NotifyComponentAdded(RObject* obj, RComponent* component);
+            RCamera* mMainCamera;
         };
 
         Scene* MakeDemoScene();

@@ -31,7 +31,7 @@ namespace Faia
             }
             else
             {
-                Debug::PopError("The windou app is already initialized");
+                Debug::PopError("The window app is already initialized");
             }
         }
 
@@ -118,8 +118,11 @@ namespace Faia
                 return FALSE;
             }
 
+            mScreenWidth = GetSystemMetrics(SM_CXSCREEN);
+            mScreenHeight = GetSystemMetrics(SM_CYSCREEN);
+
             gWindowHandler = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-                CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+                0, 0, mScreenWidth, mScreenHeight, nullptr, nullptr, hInstance, nullptr);
 
             if (!gWindowHandler) {
                 return FALSE;

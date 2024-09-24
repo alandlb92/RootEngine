@@ -19,10 +19,10 @@ namespace Faia
             Scene* scene = new Scene();
             
 
-            SceneObject* sceneObject = new SceneObject();
-            SceneObject* sceneObject2 = new SceneObject();
-            SceneObject* sceneObject3 = new SceneObject();
-            SceneObject* sceneObject4 = new SceneObject();
+            SceneObject* sceneObject = new SceneObject("Hero");
+            SceneObject* sceneObject2 = new SceneObject("Floor");
+            SceneObject* sceneObject3 = new SceneObject("Arrow");
+            SceneObject* sceneObject4 = new SceneObject("Sphere");
 
             RMaterialComponent* materialComponent = new RMaterialComponent();
             RMaterialComponent* materialComponent2 = new RMaterialComponent();
@@ -96,9 +96,7 @@ namespace Faia
             sceneObject4->AddComponent(meshComponent4);
             sceneObject4->AddComponent(materialComponent2);
             sceneObject4->SetPosition(RVector3D(50, 150, 300));
-            sceneObject4->SetScale(RVector3D(20, 20, 20));
-
-         
+            sceneObject4->SetScale(RVector3D(20, 20, 20));         
 
             scene->AddObject(sceneObject);
             scene->AddObject(sceneObject2);
@@ -122,6 +120,11 @@ namespace Faia
             if (obj->GetComponentOfType<RMeshComponent>() != nullptr || obj->GetComponentOfType<RSkeletalMeshComponent>() != nullptr)
             {
                 _renderablebleObjects.push_back(obj);
+            }
+
+            if (static_cast<RCamera*>(obj) && mMainCamera == nullptr)
+            {
+                mMainCamera = static_cast<RCamera*>(obj);
             }
         }
 

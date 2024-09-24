@@ -9,10 +9,26 @@
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
 
+// Forward declare message handler from imgui_impl_win32.cpp
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 using namespace Faia::Windows;
 class Test
 {
 public:
+    float viewportWidth;
+    float viewportHeight;
+
+    void init()
+    {
+        float leftWidth = GetWinApp()->GetWidth() * 0.6f;
+        float rightWidth = GetWinApp()->GetWidth() - leftWidth;
+
+        viewportWidth = GetWinApp()->GetWidth() * 0.6f;
+        viewportHeight = GetWinApp()->GetHeight();
+
+    }
+
     void Update()
     {
         // Iniciar frame do ImGui
@@ -20,26 +36,28 @@ public:
         ImGui_ImplWin32_NewFrame();
         ImGui::NewFrame();
 
-        // Renderizar a parte de interface do ImGui
-        ImGui::Begin("Editor UI");
-        ImGui::Text("Controles do Editor");
+        ImVec2 windowSize = ImGui::GetIO().DisplaySize;
 
-        // Colocar outros componentes de UI aqui (botões, sliders, etc.)
+        float leftWidth = windowSize.x * 0.6f;
+        float rightWidth = windowSize.x - leftWidth;
+
+        viewportWidth = windowSize.x * 0.6f;
+        viewportHeight = windowSize.y;
+
+        ImGui::SetNextWindowPos(ImVec2(0, 0));
+        ImGui::SetNextWindowSize(ImVec2(viewportWidth, viewportHeight));
+
+        ImGui::Begin("Viewport", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+        ID3D11ShaderResourceView* sceneTexture = Faia::Root::GetRenderOutSRV();
+        ImVec2 viewportSize = ImGui::GetContentRegionAvail();
+        ImGui::Image((void*)sceneTexture, viewportSize);
         ImGui::End();
 
-        // Renderizar a cena 3D no viewport
-        //ImGui::Begin("3D Viewport");
+        ImGui::SetNextWindowPos(ImVec2(leftWidth, 0));
+        ImGui::SetNextWindowSize(ImVec2(rightWidth, windowSize.y));
+        ImGui::Begin("Inspector", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+        ImGui::End();
 
-        //// Obter a textura renderizada da sua engine
-        //ID3D11ShaderResourceView* sceneTexture = Faia::Root::GetSceneRenderTargetSRV();
-
-        //// Desenhar a textura no ImGui
-        //ImVec2 viewportSize = ImGui::GetContentRegionAvail();
-        //ImGui::Image((void*)sceneTexture, viewportSize);
-
-        //ImGui::End();
-
-        // Renderizar o ImGui
         ImGui::Render();
         ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
     }
@@ -56,26 +74,25 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     InitializeApp(hInstance, IDS_APP_TITLE, IDC_RootEditor, IDI_SMALL, nCmdShow);
     GetWinApp()->RegisterWinAppUpdateFunction(std::bind(&Faia::Root::RootEngine::Update, Faia::Root::GetEngine()));
     GetWinApp()->RegisterWinAppProcFunction(std::bind(&Faia::InputSystem::FaiaInputSystem::SendOSEvent, Faia::InputSystem::GetFaiaInputSystem(), std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-
-    Faia::Root::GetGraphics()->RegisterPostRendererFunction(std::bind(&Test::Update, &test));
+    GetWinApp()->RegisterWinAppProcFunction(std::bind(ImGui_ImplWin32_WndProcHandler, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    Faia::Root::GraphicsMain* graphics = Faia::Root::GetGraphics();
+    graphics->RegisterPostRendererFunction(std::bind(&Test::Update, &test));
 
     //// Setup Dear ImGui context
-    //IMGUI_CHECKVERSION();
+    IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-
+    ImGuiIO& io = ImGui::GetIO(); 
+    (void)io;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
     //// Setup Dear ImGui style
     ImGui::StyleColorsDark();
-    ////ImGui::StyleColorsLight();
-    
     // Setup Platform/Renderer backends
     ImGui_ImplWin32_Init(GetWindowHandler());
     ImGui_ImplDX11_Init(Faia::Root::GetDevice(), Faia::Root::GetDeviceContext());
-    
 
+    test.init();
+    Faia::Root::ResizeViewport(test.viewportWidth, test.viewportHeight);    
 
-  
     return GetWinApp()->Run(nCmdShow);
 }

@@ -20,9 +20,11 @@ namespace Faia
             RCamera();
             void Update(float deltaTime);
             void Init();
+            void ConfigureProjectionMatrix(float viewWidth, float viewHeight);
             void AddWorldPosition(RVector3D positionToAdd);
             void AddLocalPosition(RVector3D positionToAdd);
             void Rotate(float pitch, float yaw, float roll);
+
         private:
             float cameraRotationVelocity = 500.0f;
             float cameraTranslationVelocity = 200.0f;

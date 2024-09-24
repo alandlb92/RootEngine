@@ -25,6 +25,9 @@ namespace Faia
 
             int Run(int nCmdShow);
 
+            int GetWidth() { return mScreenWidth; }
+            int GetHeight() { return mScreenHeight; }
+
         private:
             WindowsApplication(HINSTANCE hInstance, UINT idsAppTittle, UINT idcGame, UINT idcSamall);
             BOOL InitInstance(int nCmdShow);
@@ -39,8 +42,13 @@ namespace Faia
 
             ATOM RegisterClass();
 
+            int mScreenWidth;
+            int mScreenHeight;
+
             std::vector<NotifyWinProc> mFunctionsNotifyAppWinProc;
             std::vector<NotifyUpdate> mFunctionsNotifyAppUpdate;
+
+
         };
 
 

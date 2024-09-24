@@ -4,12 +4,13 @@
 #include "Graphics/RConstantBuffersHandler.h"
 #include "FaiaInputSystem.h"
 #include "Faia/Converter.h"
+#include "Faia/FMath.h"
 
 namespace Faia
 {
     namespace Root
     {
-        RCamera::RCamera()// : Super()
+        RCamera::RCamera() : Super("Camera")
         {
             _eyePosition = XMVECTOR();
             _focusPoint = XMVECTOR();
@@ -29,23 +30,15 @@ namespace Faia
             _position = RVector3D(0, 0, -100);
             _rotation = RVector3D(0);
         }
+
         using namespace Faia::InputSystem;
 
         void RCamera::Init()
         {
             Super::Init();
-            UpdateViewMatrix();
-            _worldMatrix = XMMatrixRotationAxis(XMVectorSet(.5f, .5f, .5f, .0f), XMConvertToRadians(0));
-            _fieldOfView = XMConvertToRadians(45.0f); // Ângulo de visão de 45 graus
-            float w = GetGraphics()->GetWidth();
-            float h = GetGraphics()->GetHeight();
-            _aspectRatio = w / h;
-            _nearPlane = 0.1f;
-            _farPlane = 100000.0f;
-            _projectionMatrix = XMMatrixPerspectiveFovLH(_fieldOfView, _aspectRatio, _nearPlane, _farPlane);
+            UpdateViewMatrix();           
             
-            Graphics::GetConstantBuffersHandler()->SetParamData(Graphics::gWorldMatrixHash, &_worldMatrix);
-            Graphics::GetConstantBuffersHandler()->SetParamData(Graphics::gProjectionMatrixHash, &_projectionMatrix);
+            ConfigureProjectionMatrix(500, 500);
 
             GetFaiaInputSystem()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::W, std::bind(&RCamera::MoveCameraYFront, this, std::placeholders::_1));
             GetFaiaInputSystem()->RegisterActionEvent(InputEventType::KEY_HELD, KeyCode::S, std::bind(&RCamera::MoveCameraYBack, this, std::placeholders::_1));
@@ -55,6 +48,18 @@ namespace Faia
             GetFaiaInputSystem()->RegisterAxisEvent(AxisType::MOUSE_X, std::bind(&RCamera::RotateCameraX, this, std::placeholders::_1, std::placeholders::_2), { KeyCode::MOUSE_LEFT });
             GetFaiaInputSystem()->RegisterAxisEvent(AxisType::MOUSE_Y, std::bind(&RCamera::RotateCameraY, this, std::placeholders::_1, std::placeholders::_2), { KeyCode::MOUSE_LEFT });
 
+        }
+
+        void RCamera::ConfigureProjectionMatrix(float viewWidth, float viewHeight)
+        {
+            _worldMatrix = XMMatrixRotationAxis(XMVectorSet(.5f, .5f, .5f, .0f), Faia::Math::AngleToRadians(0));
+            _fieldOfView =  Faia::Math::AngleToRadians(45.0f); // Ângulo de visão de 45 graus
+            _aspectRatio = viewWidth / viewHeight;
+            _nearPlane = 0.1f;
+            _farPlane = 100000.0f;
+            _projectionMatrix = XMMatrixPerspectiveFovLH(_fieldOfView, _aspectRatio, _nearPlane, _farPlane);
+            Graphics::GetConstantBuffersHandler()->SetParamData(Graphics::gWorldMatrixHash, &_worldMatrix);
+            Graphics::GetConstantBuffersHandler()->SetParamData(Graphics::gProjectionMatrixHash, &_projectionMatrix);
         }
 
         void RCamera::AddLocalPosition(RVector3D positionToAdd)
