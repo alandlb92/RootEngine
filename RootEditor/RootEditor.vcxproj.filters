@@ -16,6 +16,12 @@
     <Filter Include="imgui">
       <UniqueIdentifier>{13a993b9-dff5-4f7a-baed-6746d2f0abde}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Windows">
+      <UniqueIdentifier>{20ad242e-4aee-444f-b6e9-6bf23f472a81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Windows">
+      <UniqueIdentifier>{aec7aad0-3108-40bf-9289-e7df0382ff71}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp">
@@ -42,20 +48,23 @@
     <ClCompile Include="Vendor\imgui\imgui_tables.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="Source\REViewport.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\REWindow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\REditor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\REInspector.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Source\Windows\REInspector.cpp">
+      <Filter>Source Files\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="Source\REContent.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Source\Windows\REViewport.cpp">
+      <Filter>Source Files\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Windows\REWindow.cpp">
+      <Filter>Source Files\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Windows\REContent.cpp">
+      <Filter>Source Files\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Windows\REHierarchy.cpp">
+      <Filter>Source Files\Windows</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -86,23 +95,26 @@
     <ClInclude Include="Include\Resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Include\REViewport.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Include\REConfiguration.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\REWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Include\REditor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Include\REInspector.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Include\Windows\REWindow.h">
+      <Filter>Header Files\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="Include\REContent.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Include\Windows\REViewport.h">
+      <Filter>Header Files\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Windows\REInspector.h">
+      <Filter>Header Files\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Windows\REHierarchy.h">
+      <Filter>Header Files\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Windows\REContent.h">
+      <Filter>Header Files\Windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

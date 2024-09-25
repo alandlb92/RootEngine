@@ -2,7 +2,7 @@
 #include <vector>
 #include <memory>
 
-#include "REWindow.h"
+#include "Windows/REWindow.h"
 
 namespace Faia
 {

@@ -1,4 +1,4 @@
-#include "REWindow.h"
+#include "Windows/REWindow.h"
 #include "Faia/WindowsApplication.h"
 
 REWindow::REWindow(REConfiguration config)

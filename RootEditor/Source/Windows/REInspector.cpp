@@ -1,6 +1,7 @@
-#include "REInspector.h"
-#include "imgui.h"
+#include "Windows/REInspector.h"
 #include "Graphics/GraphicsMain.h"
+
+#include "imgui.h"
 
 namespace Faia
 {

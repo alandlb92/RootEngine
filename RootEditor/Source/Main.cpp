@@ -6,7 +6,6 @@
 
 #include "Resource.h"
 
-// Forward declare message handler from imgui_impl_win32.cpp
 using namespace Faia::Windows;
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,

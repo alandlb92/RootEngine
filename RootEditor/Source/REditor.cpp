@@ -1,8 +1,11 @@
 #include "REditor.h"
-#include "REViewport.h"
-#include "REInspector.h"
 #include "Faia/WindowsApplication.h"
 #include "Graphics/GraphicsMain.h"
+
+#include "Windows/REInspector.h"
+#include "Windows/REViewport.h"
+#include "Windows/REContent.h"
+#include "Windows/REHierarchy.h"
 
 #include "imgui.h"
 #include "imgui_impl_win32.h"
@@ -45,24 +48,28 @@ namespace Faia
                 ImGui_ImplDX11_Init(Faia::Root::GetDevice(), Faia::Root::GetDeviceContext());
                 Faia::Windows::GetWinApp()->RegisterWinAppProcFunction(std::bind(ImGui_ImplWin32_WndProcHandler, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 
-                //float mWidthPercentage;
-                //float mHeightPercentage;
-                //float mPositionX;
-                //float mPositionY;
-
-                float windoWidth = Faia::Windows::GetWinApp()->GetWidth();
+                float windowWidth = Faia::Windows::GetWinApp()->GetWidth();
                 float windowHeight = Faia::Windows::GetWinApp()->GetHeight();
 
-                REConfiguration viewportConfig{ .6f, 1.f, 0, 0 };
+
+                REConfiguration hierarchyConfig{ .2f, .7f, 0, 0 };
+                std::unique_ptr<REHierarchy> hierarchy = std::make_unique<REHierarchy>(hierarchyConfig);
+
+                REConfiguration viewportConfig{ .6f, .7f, .2f * windowWidth, 0 };
                 std::unique_ptr<REViewport> viewPort = std::make_unique<REViewport>(viewportConfig);
 
-                REConfiguration inspectorConfig{ .4f, 1.f, windoWidth * .6f, 0 };
+                REConfiguration inspectorConfig{ .4f, .7f, windowWidth * .8f, 0 };
                 std::unique_ptr<REInspector> inspector = std::make_unique<REInspector>(inspectorConfig);
+
+                REConfiguration contentConfig{ 1.f, .7f, 0, 0.7f * windowHeight };
+                std::unique_ptr<REContent> content = std::make_unique<REContent>(contentConfig);
 
                 Faia::Root::ResizeViewport(viewPort->GetWidth(), viewPort->GetHeight());
 
                 mWindows.push_back(std::move(viewPort));
                 mWindows.push_back(std::move(inspector));
+                mWindows.push_back(std::move(hierarchy));
+                mWindows.push_back(std::move(content));
 
             }
 
