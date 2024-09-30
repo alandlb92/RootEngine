@@ -3,6 +3,11 @@
 
 namespace Faia
 {
+    namespace Root
+    {
+        class SceneObject;
+    }
+
     namespace Editor
     {
         namespace UI
@@ -12,6 +17,9 @@ namespace Faia
             public:
                 REHierarchy(REConfiguration config);
                 void Update() override;
+
+            private:
+                Root::SceneObject* mSceneObjectSelected;
             };
 
         }

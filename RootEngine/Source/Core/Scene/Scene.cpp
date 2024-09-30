@@ -113,6 +113,11 @@ namespace Faia
             return _renderablebleObjects;
         }
 
+        std::list<SceneObject*> Scene::GetSceneObjects()
+        {
+            return _sceneObjects;
+        }
+
         void Scene::AddObject(SceneObject* obj)
         {
             obj->RegisterOnNotifyComponentAddedEvent(bind(&Scene::NotifyComponentAdded, this, std::placeholders::_1, std::placeholders::_2));

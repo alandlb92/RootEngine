@@ -15,6 +15,7 @@ namespace Faia
 
         public:            
             std::list<SceneObject*> GetRenderablebleObjects();
+            std::list<SceneObject*> GetSceneObjects();
             void AddObject(SceneObject* obj);
             RCamera* GetMainCamera() { return mMainCamera; }
 
