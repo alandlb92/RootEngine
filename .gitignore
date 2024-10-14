@@ -401,4 +401,3 @@ FodyWeavers.xsd
 vcpkg_installed/
 Content/
 /RootTest/TestContent
-/libs
