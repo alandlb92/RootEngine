@@ -2,6 +2,7 @@ A custom engine, current in WIP.
 
 # Build instructions
 ## Assimp
+**Do'nt forget switch to correct paths**
 Just copy and paste this commands one by each:
 
 ```sh
@@ -24,7 +25,7 @@ And include folder in ```"path\to\RootEngine\libs\thirdparty\assimp\build"``` An
 
 
 ## Libjpeg-turbo
-
+**Do'nt forget switch to correct paths**
 Just copy and paste this commands one by each:
 
 ```sh
@@ -44,7 +45,7 @@ This commands will generate lib and include folders in ```"path\to\RootEngine\li
 
 
 ## LibPNG
-
+**Do'nt forget switch to correct paths**
 Just copy and paste this commands one by each:
 
 ```sh

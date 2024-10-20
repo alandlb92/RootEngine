@@ -128,6 +128,7 @@ namespace Faia
             }
 
             if (static_cast<RCamera*>(obj) && mMainCamera == nullptr)
+            if (dynamic_cast<RCamera*>(obj) != nullptr && mMainCamera == nullptr)
             {
                 mMainCamera = static_cast<RCamera*>(obj);
             }
