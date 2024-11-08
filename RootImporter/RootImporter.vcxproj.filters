@@ -60,5 +60,11 @@
     <ClCompile Include="Source\Textures\PNGImporter.cpp">
       <Filter>Source Files\Textures</Filter>
     </ClCompile>
+    <ClCompile Include="Include\FBX\FBXMeshToJsonImporter.h">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\FBX\FBXMeshToJsonImporter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

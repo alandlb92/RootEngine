@@ -61,3 +61,19 @@ cmake --build . --config Release
 
 cmake --build .
 ```
+
+## Nlohmann JSON
+**Do'nt forget switch to correct paths**
+Just copy and paste this commands one by each:
+
+```sh
+cd "path\to\RootEngine\libs\thirdparty\nlohmanjson"
+
+mkdir build 
+
+cd build
+
+cmake ..
+
+cmake --build .
+```

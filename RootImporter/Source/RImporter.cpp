@@ -12,6 +12,7 @@
 #include "FBX/FBXMeshImporter.h"
 #include "FBX/FBXBoneInfoImporter.h"
 #include "FBX/FBXAnimationImporter.h"
+#include "FBX/FBXMeshToJsonImporter.h"
 
 #include "Textures/JPGImporter.h"
 #include "Textures/PNGImporter.h"
@@ -68,6 +69,9 @@ namespace Faia
                     break;
                 case TEXTURE_PNG:
                     importer = std::make_unique<PNGImporter>();
+                    break;
+                case MS_JSON:
+                    importer = std::make_unique<FBXMeshToJsonImporter>();
                     break;
                 case NOT_FOUND:
                     return nullptr;

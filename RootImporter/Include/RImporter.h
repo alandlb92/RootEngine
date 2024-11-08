@@ -29,7 +29,8 @@ namespace Faia
                 BONE,
                 NOT_FOUND,
                 TEXTURE_JPG,
-                TEXTURE_PNG
+                TEXTURE_PNG,
+                MS_JSON
             };
 
             static const std::unordered_map<std::string, ImporterType> sImporterNameToType
@@ -38,7 +39,8 @@ namespace Faia
                 {"-anim", ANIM},
                 {"-bone", BONE},
                 {"-texjpg", TEXTURE_JPG},
-                {"-texpng", TEXTURE_PNG}
+                {"-texpng", TEXTURE_PNG},
+                {"-msjson", MS_JSON}
             };
 
             enum ImporterState

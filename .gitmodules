@@ -13,3 +13,6 @@
 [submodule "RootEditor/Vendor/imgui"]
 	path = RootEditor/Vendor/imgui
 	url = git@github.com:ocornut/imgui.git
+[submodule "libs/thirdparty/nlohmanjson"]
+	path = libs/thirdparty/nlohmanjson
+	url = git@github.com:nlohmann/json.git

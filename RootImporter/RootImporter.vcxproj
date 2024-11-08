@@ -35,9 +35,11 @@
     <ClInclude Include="Include\Textures\PNGImporter.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Include\FBX\FBXMeshToJsonImporter.h" />
     <ClCompile Include="Source\FBX\FBXAnimationImporter.cpp" />
     <ClCompile Include="Source\FBX\FBXBoneInfoImporter.cpp" />
     <ClCompile Include="Source\FBX\FBXMeshImporter.cpp" />
+    <ClCompile Include="Source\FBX\FBXMeshToJsonImporter.cpp" />
     <ClCompile Include="Source\RImporter.cpp" />
     <ClCompile Include="Source\Textures\JPGImporter.cpp" />
     <ClCompile Include="Source\Textures\PNGImporter.cpp" />
@@ -203,7 +205,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(SolutionDir)RootEngine\Include;$(SolutionDir)libs\thirdparty\assimp\build\Include;$(SolutionDir)libs\thirdparty\libjpegturbo\Include;$(SolutionDir)libs\thirdparty\assimp\Include;$(SolutionDir)libs\thirdparty\libpng;$(SolutionDir)\libs\thirdparty\libpng\build;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(SolutionDir)RootEngine\Include;$(SolutionDir)libs\thirdparty\assimp\build\Include;$(SolutionDir)libs\thirdparty\libjpegturbo\Include;$(SolutionDir)libs\thirdparty\assimp\Include;$(SolutionDir)libs\thirdparty\libpng;$(SolutionDir)\libs\thirdparty\libpng\build;$(SolutionDir)\libs\thirdparty\nlohmanjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>

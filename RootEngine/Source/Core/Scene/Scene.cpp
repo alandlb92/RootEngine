@@ -16,8 +16,7 @@ namespace Faia
     {
         Scene* MakeDemoScene()
         {
-            Scene* scene = new Scene();
-            
+            Scene* scene = new Scene();            
 
             SceneObject* sceneObject = new SceneObject("Hero");
             SceneObject* sceneObject2 = new SceneObject("Floor");
@@ -27,7 +26,7 @@ namespace Faia
             RMaterialComponent* materialComponent = new RMaterialComponent();
             RMaterialComponent* materialComponent2 = new RMaterialComponent();
 
-            RSkeletalMeshComponent* meshComponent = new RSkeletalMeshComponent();
+            RMeshComponent* meshComponent = new RMeshComponent();
             meshComponent->LoadMesh("Models\\HeroGoat.rmesh");
             RMeshComponent* meshComponent2 = new RMeshComponent();
             meshComponent2->LoadMesh("Models\\cube.rmesh");
@@ -36,9 +35,9 @@ namespace Faia
             RMeshComponent* meshComponent4 = new RMeshComponent();
             meshComponent4->LoadMesh("Models\\Sphere.rmesh");
 
-            RAnimationComponent* animationComponent = new RAnimationComponent();
-            animationComponent->LoadAnimation("Animations\\testAnimation.ranim");
-            animationComponent->LoadBoneInfo("Models\\HeroGoat.rboneinfo");
+            //RAnimationComponent* animationComponent = new RAnimationComponent();
+            //animationComponent->LoadAnimation("Animations\\testAnimation.ranim");
+            //animationComponent->LoadBoneInfo("Models\\HeroGoat.rboneinfo");
 
             RMaterial material0;
             material0.SetShader("Standard");
@@ -73,7 +72,7 @@ namespace Faia
 
             sceneObject->AddComponent(meshComponent);
             sceneObject->AddComponent(materialComponent);
-            sceneObject->AddComponent(animationComponent);
+            //sceneObject->AddComponent(animationComponent);
             sceneObject->SetPosition(RVector3D(0, 0, 0));
             sceneObject->SetRotation(RVector3D(0, 0, 0));
 
