@@ -1,5 +1,4 @@
 #include "Components/RDirectionalLightComponent.h"
-#include "Graphics/LightManager.h"
 #include "Data/RLightData.h"
 
 namespace Faia
@@ -8,15 +7,15 @@ namespace Faia
     {
         RDirectionalLightComponent::~RDirectionalLightComponent()
         {
-            Graphics::Light::GetLightManager()->RemoveEnvironmentLight(mDirectionalLightId);
+            //Graphics::Light::GetLightManager()->RemoveEnvironmentLight(mDirectionalLightId);
         }
 
         void RDirectionalLightComponent::Init()
         {
             Super::Init();
-            Graphics::Light::GetLightManager()->RegisterEnvironmentLight(this);
+           /* Graphics::Light::GetLightManager()->RegisterEnvironmentLight(this);
             mOwner->RegisterOnNotifyRotationChange(std::bind(&RDirectionalLightComponent::OnOwnerObjectChangeRotation, this, std::placeholders::_1));
-            OnOwnerObjectChangeRotation(mOwner->GetRotation());
+            OnOwnerObjectChangeRotation(mOwner->GetRotation());*/
         }
 
         void RDirectionalLightComponent::SetColor(RColorRGB color)

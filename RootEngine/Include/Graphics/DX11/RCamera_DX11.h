@@ -12,12 +12,12 @@ namespace Faia
 {
     namespace Root
     {
-        class RCamera : public SceneObject
+        class RCamera_DX11 : public SceneObject
         {
             typedef SceneObject Super;
 
         public:
-            RCamera();
+            RCamera_DX11();
             void Update(float deltaTime);
             void Init();
             void ConfigureProjectionMatrix(float viewWidth, float viewHeight);

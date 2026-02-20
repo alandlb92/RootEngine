@@ -13,11 +13,11 @@ namespace Faia
 		{
 			namespace Light
 			{	
-				class LightManager
+				class LightManager_DX11
 				{
 				public:
-					LightManager();
-					~LightManager();
+					LightManager_DX11();
+					~LightManager_DX11();
 
 					void SetDirectionalLight(DirectionalLight directionalLight, uint8_t index);					
 					DirectionalLight GetDirectionalLight(uint8_t index);
@@ -32,7 +32,7 @@ namespace Faia
 					RDirectionalLightComponent* mDirectionalLights[MAX_NUM_OF_DIRECTIONAL_LIGHTS];
 				};
 
-				LightManager* GetLightManager();
+				LightManager_DX11* GetLightManager();
 			}
 		}
 	}

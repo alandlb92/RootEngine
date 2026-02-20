@@ -4,13 +4,13 @@ namespace Faia
 {
     namespace Root
     {
-        void RMaterialComponent::AddMaterial(RMaterial material)
+        void RMaterialComponent::AddMaterial(RMaterial_DX11 material)
         {
-            std::shared_ptr<RMaterial> materialPtr = std::make_shared<RMaterial>(material);
+            std::shared_ptr<RMaterial_DX11> materialPtr = std::make_shared<RMaterial_DX11>(material);
             _materials.push_back(materialPtr);
         }
 
-        RMaterial* RMaterialComponent::GetMaterialOfIndex(int index)
+        RMaterial_DX11* RMaterialComponent::GetMaterialOfIndex(int index)
         {
             if (index < _materials.size())
                 return _materials[index].get();

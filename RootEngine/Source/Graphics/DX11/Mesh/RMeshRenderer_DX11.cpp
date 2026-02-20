@@ -1,22 +1,22 @@
-#include "Graphics/Mesh/RMeshRenderer.h"
-#include "Graphics/Mesh/RMesh.h"
+#include "Graphics/DX11/Mesh/RMeshRenderer_DX11.h"
+#include "Graphics/DX11/Mesh/RMesh_DX11.h"
 #include "Data/RMeshData.h"
 
 namespace Faia
 {
     namespace Root
     {
-        void RMeshRenderer::ReadFromPath(const char* filePath)
+        void RMeshRenderer_DX11::ReadFromPath(const char* filePath)
         {
-            ReadFromPath<RMesh>(filePath);
+            ReadFromPath<RMesh_DX11>(filePath);
         }
 
-        std::vector<std::shared_ptr<RMesh>> RMeshRenderer::GetMeshs()
+        std::vector<std::shared_ptr<RMesh_DX11>> RMeshRenderer_DX11::GetMeshs()
         {
             return mRMeshs;
         }
 
-        void RMeshRenderer::SetBuffers(std::shared_ptr<RMesh> mesh, RMeshNode& rmeshNode)
+        void RMeshRenderer_DX11::SetBuffers(std::shared_ptr<RMesh_DX11> mesh, RMeshNode& rmeshNode)
         {
             mesh->SetIndices(rmeshNode.mIndices);
             mesh->SetVertices(rmeshNode.mVertices);

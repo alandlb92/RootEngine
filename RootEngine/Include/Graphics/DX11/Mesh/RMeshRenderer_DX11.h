@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "Graphics/Mesh/RSkeletalMesh.h"
+#include "Graphics/DX11/Mesh/RSkeletalMesh_DX11.h"
 
 namespace Faia
 {
@@ -9,7 +9,7 @@ namespace Faia
         class RMeshData;
         struct RMeshNode;
 
-        class RMeshRenderer
+        class RMeshRenderer_DX11
         {
         public:
 
@@ -27,10 +27,10 @@ namespace Faia
             }
 
             virtual void ReadFromPath(const char* filePath);
-            std::vector<std::shared_ptr<RMesh>> GetMeshs();
+            std::vector<std::shared_ptr<RMesh_DX11>> GetMeshs();
         protected:
-            virtual void SetBuffers(std::shared_ptr<RMesh> mesh, RMeshNode& rmeshNode);
-            std::vector<std::shared_ptr<RMesh>> mRMeshs;
+            virtual void SetBuffers(std::shared_ptr<RMesh_DX11> mesh, RMeshNode& rmeshNode);
+            std::vector<std::shared_ptr<RMesh_DX11>> mRMeshs;
         };
     }
 }

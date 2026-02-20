@@ -1,8 +1,8 @@
-#include "Graphics/Shader.h"
+#include "Graphics/DX11/Shader_DX11.h"
 #include "directxmath.h"
 #include "d3dcompiler.h"
 #include <stdexcept>
-#include "Graphics/GraphicsMain.h"
+#include "Graphics/DX11/GraphicsMain_DX11.h"
 #include "Faia/Memory.h"
 #include "Faia/Converter.h"
 #include "Data/RMeshData.h"
@@ -16,7 +16,7 @@ namespace Faia
 
     namespace Root
     {
-        void Shader::Load(const char* shaderName)
+        void Shader_DX11::Load(const char* shaderName)
         {
             //Todo: put shaders in content folder too
             _shaderName = std::string(shaderName);

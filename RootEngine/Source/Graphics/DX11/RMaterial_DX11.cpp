@@ -1,24 +1,24 @@
 
-#include "Graphics/RMaterial.h"
-#include "Graphics/MaterialManager.h"
+#include "Graphics/DX11/RMaterial_DX11.h"
+#include "Graphics/DX11/MaterialManager_DX11.h"
 #include <stdexcept>
 
 namespace Faia
 {
     namespace Root
     {
-        void RMaterial::SetShader(const char* shaderName)
+        void RMaterial_DX11::SetShader(const char* shaderName)
         {
-            _shader = MaterialManager::GetInstance()->LoadShader(shaderName);
+            _shader = MaterialManager_DX11::GetInstance()->LoadShader(shaderName);
         }
 
-        void RMaterial::SetTexture(const char* texturePath, int32_t channel)
+        void RMaterial_DX11::SetTexture(const char* texturePath, int32_t channel)
         {
-            auto texture = MaterialManager::GetInstance()->LoadTexture2D(texturePath);
+            auto texture = MaterialManager_DX11::GetInstance()->LoadTexture2D(texturePath);
             _textures[channel] = texture;
         }
 
-        Texture2D* RMaterial::GetTexture(int32_t channel)
+        Texture2D_DX11* RMaterial_DX11::GetTexture(int32_t channel)
         {
             if (_textures.size() > 0)
             {

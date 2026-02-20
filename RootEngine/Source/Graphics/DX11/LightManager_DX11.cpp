@@ -1,5 +1,5 @@
-#include "Graphics/LightManager.h"
-#include "Graphics/RConstantBuffersHandler.h"
+#include "Graphics/DX11/LightManager_DX11.h"
+#include "Graphics/DX11/RConstantBuffersHandler_DX11.h"
 #include "Faia/Debug.h"
 
 namespace Faia
@@ -10,35 +10,35 @@ namespace Faia
         {
             namespace Light
             {
-                LightManager* gLightManager = nullptr;
+                LightManager_DX11* gLightManager = nullptr;
 
-                LightManager* GetLightManager()
+                LightManager_DX11* GetLightManager()
                 {
                     if (!gLightManager)
                     {
-                        gLightManager = new LightManager();
+                        gLightManager = new LightManager_DX11();
                     }
 
                     return gLightManager;
                 }
 
-                LightManager::LightManager()
+                LightManager_DX11::LightManager_DX11()
                 {
                     mLightData = new LightData();
                 }
 
-                LightManager::~LightManager()
+                LightManager_DX11::~LightManager_DX11()
                 {
                     delete mLightData;
                     mLightData = nullptr;
                 }
 
-                void LightManager::SetDirectionalLight(DirectionalLight directionalLight, uint8_t index)
+                void LightManager_DX11::SetDirectionalLight(DirectionalLight directionalLight, uint8_t index)
                 {
                     mLightData->directionalLight[index] = directionalLight;
                 }
 
-                DirectionalLight LightManager::GetDirectionalLight(uint8_t index)
+                DirectionalLight LightManager_DX11::GetDirectionalLight(uint8_t index)
                 {
                     //todo: Implement assert
                     if (index >= MAX_NUM_OF_DIRECTIONAL_LIGHTS)
@@ -49,14 +49,14 @@ namespace Faia
                     return mLightData->directionalLight[index];
                 }
 
-                void LightManager::UpdateLightToCB()
+                void LightManager_DX11::UpdateLightToCB()
                 {
                     Graphics::GetConstantBuffersHandler()->SetParamData(Graphics::gLightData, mLightData);
                     Graphics::GetConstantBuffersHandler()->UpdateSubresource(Graphics::gLightBufferHash);
                     //mLightData->DebugDump();
                 }
 
-                void LightManager::RegisterEnvironmentLight(RDirectionalLightComponent* directionalLightComponent)
+                void LightManager_DX11::RegisterEnvironmentLight(RDirectionalLightComponent* directionalLightComponent)
                 {
                     int id = mDirectionalLightsInScene;
 
@@ -74,7 +74,7 @@ namespace Faia
                     mDirectionalLightsInScene++;
                 }
 
-                void LightManager::RemoveEnvironmentLight(uint8_t id)
+                void LightManager_DX11::RemoveEnvironmentLight(uint8_t id)
                 {
                     mDirectionalLightsInScene--;
 

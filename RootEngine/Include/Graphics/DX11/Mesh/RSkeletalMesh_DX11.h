@@ -1,5 +1,5 @@
 #pragma once
-#include "Graphics/Mesh/RMesh.h"
+#include "Graphics/DX11/Mesh/RMesh_DX11.h"
 #include "Data/RMeshData.h"
 
 
@@ -7,7 +7,7 @@ namespace Faia
 {
     namespace Root
     {
-        class RSkeletalMesh : public RMesh
+        class RSkeletalMesh_DX11 : public RMesh_DX11
         {
         public:
             ID3D11Buffer* GetBonesDataBuffer() { return mBoneDataBuffer.Get(); }

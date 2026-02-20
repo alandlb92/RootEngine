@@ -1,9 +1,9 @@
-#include "Graphics/RConstantBuffersHandler.h"
-#include "Graphics/GraphicsMain.h"
+#include "Graphics/DX11/RConstantBuffersHandler_DX11.h"
+#include "Graphics/DX11/GraphicsMain_DX11.h"
 #include "d3d11.h"
 #include "Faia/Debug.h"
 #include "Data/RColor.h"
-#include "Graphics/LightManager.h"
+#include "Graphics/DX11/LightManager_DX11.h"
 
 namespace Faia
 {
@@ -43,19 +43,19 @@ namespace Faia
                 gLightData = HashUtils::CharToHashFnv1a("LightData");
             }
 
-            RConstantBuffersHandler* gConstantBuffersHandler;
-            RConstantBuffersHandler* GetConstantBuffersHandler()
+            RConstantBuffersHandler_DX11* gConstantBuffersHandler;
+            RConstantBuffersHandler_DX11* GetConstantBuffersHandler()
             {
                 if (gConstantBuffersHandler == nullptr)
                 {
-                    gConstantBuffersHandler = new RConstantBuffersHandler();
+                    gConstantBuffersHandler = new RConstantBuffersHandler_DX11();
                     gConstantBuffersHandler->Initialize();
                 }
 
                 return gConstantBuffersHandler;
             }
 
-            void RConstantBuffersHandler::Initialize()
+            void RConstantBuffersHandler_DX11::Initialize()
             {
                 InitializeGHashs();
 
@@ -200,19 +200,19 @@ namespace Faia
                 }
             }
 
-            void RConstantBuffersHandler::RegisterData(CB_Param param)
+            void RConstantBuffersHandler_DX11::RegisterData(CB_Param param)
             {
                 mHashToParam[param.mHashName] = std::malloc(param.mSize);
                 std::memcpy(mHashToParam[param.mHashName], param.mDefaultParams.data(), param.mSize);
                 mHashParamToSize[param.mHashName] = param.mSize;
             }
 
-            void RConstantBuffersHandler::SetParamData(uint32_t paramHashName, void* data)
+            void RConstantBuffersHandler_DX11::SetParamData(uint32_t paramHashName, void* data)
             {
                 std::memcpy(mHashToParam[paramHashName], data, mHashParamToSize[paramHashName]);
             }
 
-            void RConstantBuffersHandler::UpdateSubresource(uint32_t bufferHashName)
+            void RConstantBuffersHandler_DX11::UpdateSubresource(uint32_t bufferHashName)
             {
                 CB_Info& cbInfo = mHashToCbInfo[bufferHashName];
                 std::string name = HashUtils::g_hashToStringMap[bufferHashName];
@@ -232,12 +232,12 @@ namespace Faia
                 //delete data;
             }
 
-            void RConstantBuffersHandler::PSSetConstantBuffers()
+            void RConstantBuffersHandler_DX11::PSSetConstantBuffers()
             {
                 GetDeviceContext()->PSSetConstantBuffers(0, mConstantBuffers.size(), mConstantBuffers.data());
             }
 
-            void RConstantBuffersHandler::VSSetConstantBuffers()
+            void RConstantBuffersHandler_DX11::VSSetConstantBuffers()
             {
                 GetDeviceContext()->VSSetConstantBuffers(0, mConstantBuffers.size(), mConstantBuffers.data());
             }

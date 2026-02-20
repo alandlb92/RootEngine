@@ -7,10 +7,10 @@ namespace Faia
 {
     namespace Root
     {
-        class Shader
+        class Shader_DX11
         {
         public:
-            Shader() = default;
+            Shader_DX11() = default;
 
             ID3D11InputLayout* GetInputLayout() { return _inputLayout.Get(); }
             ID3D11VertexShader* GetVertexShader() { return _vertexShader.Get(); }

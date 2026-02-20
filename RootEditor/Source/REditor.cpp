@@ -1,6 +1,6 @@
 #include "REditor.h"
 #include "Faia/WindowsApplication.h"
-#include "Graphics/GraphicsMain.h"
+#include "Graphics/DX11/GraphicsMain_DX11.h"
 
 #include "Windows/REInspector.h"
 #include "Windows/REViewport.h"
@@ -45,7 +45,8 @@ namespace Faia
                 ImGui::StyleColorsDark();
                 // Setup Platform/Renderer backends
                 ImGui_ImplWin32_Init(Faia::Windows::GetWindowHandler());
-                ImGui_ImplDX11_Init(Faia::Root::GetDevice(), Faia::Root::GetDeviceContext());
+                //This must be something multplatform
+                //ImGui_ImplDX11_Init(Faia::Root::GetDevice(), Faia::Root::GetDeviceContext());
                 Faia::Windows::GetWinApp()->RegisterWinAppProcFunction(std::bind(ImGui_ImplWin32_WndProcHandler, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 
                 float windowWidth = Faia::Windows::GetWinApp()->GetWidth();
@@ -63,8 +64,8 @@ namespace Faia
 
                 REConfiguration contentConfig{ 1.f, .7f, 0, 0.7f * windowHeight };
                 std::unique_ptr<REContent> content = std::make_unique<REContent>(contentConfig);
-
-                Faia::Root::ResizeViewport(viewPort->GetWidth(), viewPort->GetHeight());
+                //TODO: must be multplatform
+                //Faia::Root::ResizeViewport(viewPort->GetWidth(), viewPort->GetHeight());
 
                 mWindows.push_back(std::move(viewPort));
                 mWindows.push_back(std::move(inspector));
@@ -75,7 +76,8 @@ namespace Faia
 
             void REditor::Update()
             {
-                ImGui_ImplDX11_NewFrame();
+                //TODO: must be multplatform
+                //ImGui_ImplDX11_NewFrame();
                 ImGui_ImplWin32_NewFrame();
                 ImGui::NewFrame();
 

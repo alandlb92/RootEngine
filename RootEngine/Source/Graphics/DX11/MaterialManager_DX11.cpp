@@ -1,20 +1,20 @@
-#include "Graphics/MaterialManager.h"
+#include "Graphics/DX11/MaterialManager_DX11.h"
 
 
 namespace Faia
 {
     namespace Root
     {
-        std::unique_ptr<MaterialManager> MaterialManager::_instance = nullptr;
+        std::unique_ptr<MaterialManager_DX11> MaterialManager_DX11::_instance = nullptr;
 
-        std::shared_ptr<Shader> MaterialManager::LoadShader(const char* shaderName)
+        std::shared_ptr<Shader_DX11> MaterialManager_DX11::LoadShader(const char* shaderName)
         {
             if (_shadersMap.find(shaderName) != _shadersMap.end())
             {
                 return _shadersMap[shaderName];
             }
 
-            std::shared_ptr<Shader> shader = std::make_shared<Shader>();
+            std::shared_ptr<Shader_DX11> shader = std::make_shared<Shader_DX11>();
             shader->Load(shaderName);
             _shadersMap[shaderName] = shader;
 
@@ -22,7 +22,7 @@ namespace Faia
         }
 
         //Todo: implement resource manager
-        std::shared_ptr<Texture2D> MaterialManager::LoadTexture2D(const char* texturePath)
+        std::shared_ptr<Texture2D_DX11> MaterialManager_DX11::LoadTexture2D(const char* texturePath)
         {
 
             if (_texturesMap.find(texturePath) != _texturesMap.end())
@@ -30,7 +30,7 @@ namespace Faia
                 return _texturesMap[texturePath];
             }
 
-            std::shared_ptr<Texture2D> texture2D = std::make_shared<Texture2D>();
+            std::shared_ptr<Texture2D_DX11> texture2D = std::make_shared<Texture2D_DX11>();
             texture2D->Load(texturePath);
             _texturesMap[texturePath] = texture2D;
 

@@ -1,9 +1,9 @@
 #include "Core/Scene/Scene.h"
-#include "Graphics/Mesh/RMesh.h"
-#include "Graphics/Mesh/RSkeletalMesh.h"
-#include "Graphics/RMaterial.h"
-#include "Graphics/RCamera.h"
-#include "Graphics/LightManager.h"
+#include "Graphics/DX11/Mesh/RMesh_Dx11.h"
+#include "Graphics/DX11/Mesh/RSkeletalMesh_DX11.h"
+#include "Graphics/DX11/RMaterial_DX11.h"
+#include "Graphics/DX11/RCamera_DX11.h"
+#include "Graphics/DX11/LightManager_DX11.h"
 #include "Components/RSkeletalMeshComponent.h"
 #include "Components/RMaterialComponent.h"
 #include "Components/TestComponent.h"
@@ -18,15 +18,15 @@ namespace Faia
         {
             Scene* scene = new Scene();            
 
-            SceneObject* sceneObject = new SceneObject("Hero");
+            /*SceneObject* sceneObject = new SceneObject("Hero");
             SceneObject* sceneObject2 = new SceneObject("Floor");
             SceneObject* sceneObject3 = new SceneObject("Arrow");
             SceneObject* sceneObject4 = new SceneObject("Sphere");
 
             RMaterialComponent* materialComponent = new RMaterialComponent();
             RMaterialComponent* materialComponent2 = new RMaterialComponent();
-
-            RMeshComponent* meshComponent = new RMeshComponent();
+            
+            RSkeletalMeshComponent* meshComponent = new RSkeletalMeshComponent();
             meshComponent->LoadMesh("Models\\HeroGoat.rmesh");
             RMeshComponent* meshComponent2 = new RMeshComponent();
             meshComponent2->LoadMesh("Models\\cube.rmesh");
@@ -35,44 +35,45 @@ namespace Faia
             RMeshComponent* meshComponent4 = new RMeshComponent();
             meshComponent4->LoadMesh("Models\\Sphere.rmesh");
 
-            //RAnimationComponent* animationComponent = new RAnimationComponent();
-            //animationComponent->LoadAnimation("Animations\\testAnimation.ranim");
-            //animationComponent->LoadBoneInfo("Models\\HeroGoat.rboneinfo");
+            RAnimationComponent* animationComponent = new RAnimationComponent();
+            animationComponent->LoadAnimation("Animations\\testAnimation.ranim");
+            animationComponent->LoadBoneInfo("Models\\HeroGoat.rboneinfo");*/
 
-            RMaterial material0;
+            //Todo Layered graphics: Materials must be generic
+          /*  RMaterial_DX11 material0;
             material0.SetShader("Standard");
             material0.SetTexture("Textures\\Goat_Diffuse_ch1.rtexture", 0);
 
-            RMaterial material1;
+            RMaterial_DX11 material1;
             material1.SetShader("Standard");
             material1.SetTexture("Textures\\Goat_Diffuse_ch2.rtexture", 0);
 
-            RMaterial material2;
+            RMaterial_DX11 material2;
             material2.SetShader("Standard");
             material2.SetTexture("Textures\\Goat_Diffuse_ch2.rtexture", 0);
 
-            RMaterial material3;
+            RMaterial_DX11 material3;
             material3.SetShader("Standard");
             material3.SetTexture("Textures\\Goat_Diffuse_ch3.rtexture", 0);
 
-            RMaterial cubeMaterial;
-            cubeMaterial.SetShader("Standard");
+            RMaterial_DX11 cubeMaterial;
+            cubeMaterial.SetShader("Standard");*/
 
 
-            materialComponent->AddMaterial(material0);
-            materialComponent->AddMaterial(material1);
-            materialComponent->AddMaterial(material2);
-            materialComponent->AddMaterial(material3);
+            //materialComponent->AddMaterial(material0);
+            //materialComponent->AddMaterial(material1);
+            //materialComponent->AddMaterial(material2);
+            //materialComponent->AddMaterial(material3);
 
-            materialComponent2->AddMaterial(cubeMaterial);
+            //materialComponent2->AddMaterial(cubeMaterial);
 
-            RCamera* camera = new RCamera();
+            /*RCamera_DX11* camera = new RCamera_DX11();
             camera->SetPosition(RVector3D(0, 200, 500));
             camera->SetRotation(RVector3D(0.367590f, 110, 0));
 
             sceneObject->AddComponent(meshComponent);
             sceneObject->AddComponent(materialComponent);
-            //sceneObject->AddComponent(animationComponent);
+            sceneObject->AddComponent(animationComponent);
             sceneObject->SetPosition(RVector3D(0, 0, 0));
             sceneObject->SetRotation(RVector3D(0, 0, 0));
 
@@ -102,7 +103,7 @@ namespace Faia
             scene->AddObject(sceneObject3);
             scene->AddObject(sceneObject4);
 
-            scene->AddObject(camera);
+            scene->AddObject(camera);*/
 
             return scene;
         }
@@ -126,9 +127,9 @@ namespace Faia
                 _renderablebleObjects.push_back(obj);
             }
 
-            if (dynamic_cast<RCamera*>(obj) != nullptr && mMainCamera == nullptr)
+            if (dynamic_cast<RCamera_DX11*>(obj) != nullptr && mMainCamera == nullptr)
             {
-                mMainCamera = static_cast<RCamera*>(obj);
+                mMainCamera = static_cast<RCamera_DX11*>(obj);
             }
         }
 

@@ -8,6 +8,7 @@
 
 #include "Faia/FMath.h"
 #include "Faia/Debug.h"
+#include "Data/RColor.h"
 
 
 namespace Faia

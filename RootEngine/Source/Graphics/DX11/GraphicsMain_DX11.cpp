@@ -1,18 +1,18 @@
 ﻿// GraphicsMain.cpp : Defines the functions for the static library.
 //
 
-#include "Graphics/GraphicsMain.h"
+#include "Graphics/DX11/GraphicsMain_DX11.h"
 #include "directxmath.h"
 #include <DirectXColors.h>
 #include "Core/Scene/SceneManager.h";
 #include <numbers>
-#include "Graphics/Mesh/RSkeletalMesh.h"
+#include "Graphics/DX11/Mesh/RSkeletalMesh_DX11.h"
 #include "Data/RMeshData.h"
 #include "Components/RAnimationComponent.h"
 #include "Faia/WindowsApplication.h"
-#include "Graphics/RConstantBuffersHandler.h"
+#include "Graphics/DX11/RConstantBuffersHandler_DX11.h"
 #include "Faia/HashUtils.h"
-#include "Graphics/LightManager.h"
+#include "Graphics/DX11/LightManager_DX11.h"
 #include "Faia/Debug.h"
 
 using namespace DirectX;
@@ -33,12 +33,12 @@ namespace Faia
             }
         }
 
-        GraphicsMain* gGraphics;
-        GraphicsMain* GetGraphics()
+        GraphicsMain_DX11* gGraphics;
+        GraphicsMain_DX11* GetGraphics()
         {
             if (gGraphics == nullptr)
             {
-                gGraphics = new GraphicsMain();
+                gGraphics = new GraphicsMain_DX11();
             }
 
             return gGraphics;
@@ -72,16 +72,16 @@ namespace Faia
             GetSceneManager()->GetCurrentScene()->GetMainCamera()->ConfigureProjectionMatrix(width, height);
         }
 
-        GraphicsMain::GraphicsMain()
+        GraphicsMain_DX11::GraphicsMain_DX11()
         {
         }
 
-        void  GraphicsMain::RegisterPostRendererFunction(PostRenderFunction postRendererFunction)
+        void  GraphicsMain_DX11::RegisterPostRendererFunction(PostRenderFunction postRendererFunction)
         {
             mPostRenderFunctions.push_back(postRendererFunction);
         }
 
-        void GraphicsMain::ConfigureViewport(float width, float height)
+        void GraphicsMain_DX11::ConfigureViewport(float width, float height)
         {
             mViewport.Width = width;
             mViewport.Height = height;
@@ -91,7 +91,7 @@ namespace Faia
             mViewport.MaxDepth = 1.0f;
         }
 
-        void GraphicsMain::ConfigureDepthStencilView(float width, float height)
+        void GraphicsMain_DX11::ConfigureDepthStencilView(float width, float height)
         {
             if (_depthStencilView)
             {
@@ -148,7 +148,7 @@ namespace Faia
             }
         }
 
-        void GraphicsMain::ConfigureOutSrv(float width, float height)
+        void GraphicsMain_DX11::ConfigureOutSrv(float width, float height)
         {
             //Aditional render target to use in Editor
             D3D11_TEXTURE2D_DESC renderTargetDesc = {};
@@ -184,7 +184,7 @@ namespace Faia
             SafeRelease(renderTargetTexture);
         }
 
-        void GraphicsMain::SetupDevice()
+        void GraphicsMain_DX11::SetupDevice()
         {
             // A window handle must have been created already.
             assert(Windows::GetWindowHandler() != 0);
@@ -315,7 +315,7 @@ namespace Faia
             }
         }
 
-        void GraphicsMain::Renderer()
+        void GraphicsMain_DX11::Renderer()
         {
             assert(_device);
             assert(_deviceContext);
@@ -342,108 +342,109 @@ namespace Faia
                 Graphics::GetConstantBuffersHandler()->SetParamData(Graphics::gIsSkinnedHash, &skinned);
 
 
-                for (std::shared_ptr<RMesh> mesh : ro->GetMeshComponent()->GetMeshs())
-                {
-                    uint32_t indexCount = 0;
-                    int materialIndex = mesh->GetMaterialIndex();
-                    RMaterial* material = ro->GetMaterialComponent()->GetMaterialOfIndex(materialIndex);
-
-                    XMFLOAT3 XMFObjPos = XMFLOAT3(ro->GetPosition().X, ro->GetPosition().Y, ro->GetPosition().Z);
-                    XMVECTOR XMVObjPos = XMLoadFloat3(&XMFObjPos);
-
-                    const float pi = 3.14159265358979323846f;
-                    RVector3D radianVector = ro->GetRotation() * (pi / 180);
-                    XMFLOAT3 XMFObjRot = XMFLOAT3(radianVector.X, radianVector.Y, radianVector.Z);
-                    XMVECTOR XMVObjRot = XMLoadFloat3(&XMFObjRot);
-
-
-                    XMFLOAT3 XMFObjSca = XMFLOAT3(ro->GetScale().X, ro->GetScale().Y, ro->GetScale().Z);
-                    XMVECTOR XMVObjSca = XMLoadFloat3(&XMFObjSca);
-
-
-                    DirectX::XMMATRIX translationMatrix = DirectX::XMMatrixTranslationFromVector(XMVObjPos);
-                    XMVECTOR quaternion = DirectX::XMQuaternionRotationRollPitchYawFromVector(XMVObjRot);
-                    DirectX::XMMATRIX rotationMatrix = DirectX::XMMatrixRotationQuaternion(quaternion);
-                    DirectX::XMMATRIX scaleMatrix = DirectX::XMMatrixScalingFromVector(XMVObjSca);
-
-                    DirectX::XMMATRIX transformMatrix = scaleMatrix * rotationMatrix * translationMatrix;
-
-                    Graphics::GetConstantBuffersHandler()->SetParamData(Graphics::gWorldMatrixHash, &transformMatrix);
-
-                    _deviceContext->IASetInputLayout(material->GetShader()->GetInputLayout());
-
-                    const UINT vertexStride = sizeof(RVector3D);
-                    const UINT uvStride = sizeof(RVector2D);
-                    const UINT normalStride = sizeof(RVector3D);
-                    UINT offset = 0;
-
-                    ID3D11Buffer* vertexBuffer = mesh->GetVertexBuffer();
-                    ID3D11Buffer* uvBuffer = mesh->GetUvBuffer();
-                    ID3D11Buffer* normalBuffer = mesh->GetNormalBuffer();
-                    ID3D11Buffer* indexBuffer = mesh->GetIndexBuffer();
-
-                    _deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &vertexStride, &offset);
-                    _deviceContext->IASetVertexBuffers(1, 1, &uvBuffer, &uvStride, &offset);
-                    _deviceContext->IASetVertexBuffers(2, 1, &normalBuffer, &normalStride, &offset);
-
-                    if (skinned)
-                    {
-                        std::shared_ptr<RSkeletalMesh> sMesh = std::dynamic_pointer_cast<RSkeletalMesh>(mesh);
-                        const UINT boneDataStride = sizeof(RVertexBoneData);
-                        ID3D11Buffer* boneDataBuffer = sMesh->GetBonesDataBuffer();
-                        if (boneDataBuffer)
-                        {
-                            if (_deviceContext)
-                            {
-                                _deviceContext->IASetVertexBuffers(3, 1, &boneDataBuffer, &boneDataStride, &offset);
-                            }
-                        }
-                    }
-
-                    _deviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R16_UINT, 0);
-
-                    indexCount += mesh->GetIndicesSize();
-                    _deviceContext->VSSetShader(material->GetShader()->GetVertexShader(), nullptr, 0);
-                    _deviceContext->PSSetShader(material->GetShader()->GetPixelShader(), nullptr, 0);
-
-                    ID3D11ShaderResourceView* textureSRV = nullptr;
-                    ID3D11SamplerState* samplerState = _defaultSamplerState.Get();
-                    if (material->GetTexture(0))
-                    {
-                        textureSRV = material->GetTexture(0)->GetTexture();
-                        samplerState = material->GetTexture(0)->GetSamplerState();
-                    }
-
-                    uint32_t hasTexture = textureSRV == NULL ? 0 : 1;
-                    Graphics::GetConstantBuffersHandler()->SetParamData(Graphics::gHasTextureHash, &hasTexture);
-
-                    Graphics::GetConstantBuffersHandler()->UpdateSubresource(Graphics::gPerObjectHash);
-
-                    _deviceContext->PSSetShaderResources(0, 1, &textureSRV);
-                    _deviceContext->PSSetSamplers(0, 1, &samplerState);
-                    Graphics::GetConstantBuffersHandler()->PSSetConstantBuffers();
-
-                    _deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-                    Graphics::GetConstantBuffersHandler()->VSSetConstantBuffers();
-                    _deviceContext->RSSetState(_rasterizerState);
-                    _deviceContext->RSSetViewports(1, &mViewport);
-#if defined _EDITOR
-                    if (mRenderOutTargetView)
-                    {
-                        _deviceContext->OMSetRenderTargets(1, &mRenderOutTargetView, _depthStencilView);
-                    }
-                    else 
-                    {
-#endif
-                        _deviceContext->OMSetRenderTargets(1, &_renderTargetView, _depthStencilView);
-#if defined _EDITOR
-                    }
-#endif
-
-                    _deviceContext->OMSetDepthStencilState(_depthStencilState, 1);
-
-                    _deviceContext->DrawIndexed(indexCount, 0, 0);
-                }
+//                for (std::shared_ptr<RMesh_DX11> mesh : ro->GetMeshComponent()->GetMeshs())
+//                {
+//                    //Todo Graphics Layared: Probably this inside the for will be a function
+//                    uint32_t indexCount = 0;
+//                    int materialIndex = mesh->GetMaterialIndex();
+//                    RMaterial_DX11* material = ro->GetMaterialComponent()->GetMaterialOfIndex(materialIndex);
+//
+//                    XMFLOAT3 XMFObjPos = XMFLOAT3(ro->GetPosition().X, ro->GetPosition().Y, ro->GetPosition().Z);
+//                    XMVECTOR XMVObjPos = XMLoadFloat3(&XMFObjPos);
+//
+//                    const float pi = 3.14159265358979323846f;
+//                    RVector3D radianVector = ro->GetRotation() * (pi / 180);
+//                    XMFLOAT3 XMFObjRot = XMFLOAT3(radianVector.X, radianVector.Y, radianVector.Z);
+//                    XMVECTOR XMVObjRot = XMLoadFloat3(&XMFObjRot);
+//
+//
+//                    XMFLOAT3 XMFObjSca = XMFLOAT3(ro->GetScale().X, ro->GetScale().Y, ro->GetScale().Z);
+//                    XMVECTOR XMVObjSca = XMLoadFloat3(&XMFObjSca);
+//
+//
+//                    DirectX::XMMATRIX translationMatrix = DirectX::XMMatrixTranslationFromVector(XMVObjPos);
+//                    XMVECTOR quaternion = DirectX::XMQuaternionRotationRollPitchYawFromVector(XMVObjRot);
+//                    DirectX::XMMATRIX rotationMatrix = DirectX::XMMatrixRotationQuaternion(quaternion);
+//                    DirectX::XMMATRIX scaleMatrix = DirectX::XMMatrixScalingFromVector(XMVObjSca);
+//
+//                    DirectX::XMMATRIX transformMatrix = scaleMatrix * rotationMatrix * translationMatrix;
+//
+//                    Graphics::GetConstantBuffersHandler()->SetParamData(Graphics::gWorldMatrixHash, &transformMatrix);
+//
+//                    _deviceContext->IASetInputLayout(material->GetShader()->GetInputLayout());
+//
+//                    const UINT vertexStride = sizeof(RVector3D);
+//                    const UINT uvStride = sizeof(RVector2D);
+//                    const UINT normalStride = sizeof(RVector3D);
+//                    UINT offset = 0;
+//
+//                    ID3D11Buffer* vertexBuffer = mesh->GetVertexBuffer();
+//                    ID3D11Buffer* uvBuffer = mesh->GetUvBuffer();
+//                    ID3D11Buffer* normalBuffer = mesh->GetNormalBuffer();
+//                    ID3D11Buffer* indexBuffer = mesh->GetIndexBuffer();
+//
+//                    _deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &vertexStride, &offset);
+//                    _deviceContext->IASetVertexBuffers(1, 1, &uvBuffer, &uvStride, &offset);
+//                    _deviceContext->IASetVertexBuffers(2, 1, &normalBuffer, &normalStride, &offset);
+//
+//                    if (skinned)
+//                    {
+//                        std::shared_ptr<RSkeletalMesh_DX11> sMesh = std::dynamic_pointer_cast<RSkeletalMesh_DX11>(mesh);
+//                        const UINT boneDataStride = sizeof(RVertexBoneData);
+//                        ID3D11Buffer* boneDataBuffer = sMesh->GetBonesDataBuffer();
+//                        if (boneDataBuffer)
+//                        {
+//                            if (_deviceContext)
+//                            {
+//                                _deviceContext->IASetVertexBuffers(3, 1, &boneDataBuffer, &boneDataStride, &offset);
+//                            }
+//                        }
+//                    }
+//
+//                    _deviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R16_UINT, 0);
+//
+//                    indexCount += mesh->GetIndicesSize();
+//                    _deviceContext->VSSetShader(material->GetShader()->GetVertexShader(), nullptr, 0);
+//                    _deviceContext->PSSetShader(material->GetShader()->GetPixelShader(), nullptr, 0);
+//
+//                    ID3D11ShaderResourceView* textureSRV = nullptr;
+//                    ID3D11SamplerState* samplerState = _defaultSamplerState.Get();
+//                    if (material->GetTexture(0))
+//                    {
+//                        textureSRV = material->GetTexture(0)->GetTexture();
+//                        samplerState = material->GetTexture(0)->GetSamplerState();
+//                    }
+//
+//                    uint32_t hasTexture = textureSRV == NULL ? 0 : 1;
+//                    Graphics::GetConstantBuffersHandler()->SetParamData(Graphics::gHasTextureHash, &hasTexture);
+//
+//                    Graphics::GetConstantBuffersHandler()->UpdateSubresource(Graphics::gPerObjectHash);
+//
+//                    _deviceContext->PSSetShaderResources(0, 1, &textureSRV);
+//                    _deviceContext->PSSetSamplers(0, 1, &samplerState);
+//                    Graphics::GetConstantBuffersHandler()->PSSetConstantBuffers();
+//
+//                    _deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+//                    Graphics::GetConstantBuffersHandler()->VSSetConstantBuffers();
+//                    _deviceContext->RSSetState(_rasterizerState);
+//                    _deviceContext->RSSetViewports(1, &mViewport);
+//#if defined _EDITOR
+//                    if (mRenderOutTargetView)
+//                    {
+//                        _deviceContext->OMSetRenderTargets(1, &mRenderOutTargetView, _depthStencilView);
+//                    }
+//                    else 
+//                    {
+//#endif
+//                        _deviceContext->OMSetRenderTargets(1, &_renderTargetView, _depthStencilView);
+//#if defined _EDITOR
+//                    }
+//#endif
+//
+//                    _deviceContext->OMSetDepthStencilState(_depthStencilState, 1);
+//
+//                    _deviceContext->DrawIndexed(indexCount, 0, 0);
+//                }
             }
 
 #if defined _EDITOR
@@ -458,7 +459,7 @@ namespace Faia
             Present(false);
         }
 
-        void GraphicsMain::Present(bool vSync)
+        void GraphicsMain_DX11::Present(bool vSync)
         {
             if (vSync)
             {
@@ -470,7 +471,7 @@ namespace Faia
             }
         }
 
-        void GraphicsMain::Clear(const FLOAT clearColor[4], FLOAT clearDepth, UINT8 clearStencil)
+        void GraphicsMain_DX11::Clear(const FLOAT clearColor[4], FLOAT clearDepth, UINT8 clearStencil)
         {
             _deviceContext->ClearRenderTargetView(_renderTargetView, Colors::Gray);
 

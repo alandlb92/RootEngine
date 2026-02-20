@@ -1,5 +1,5 @@
 #include "Components/RSkeletalMeshComponent.h"
-#include "Graphics/Mesh/RSkeletalMeshRenderer.h"
+//#include "Graphics/DX11/Mesh/RSkeletalMeshRenderer_DX11.h"
 #include "Core/ResourcesManager.h"
 
 namespace Faia
@@ -8,7 +8,7 @@ namespace Faia
     {
         void RSkeletalMeshComponent::LoadMesh(const char* meshDataPath)
         {
-            mRMeshRenderer = GetResourcesManager()->Load<RSkeletalMeshRenderer>(meshDataPath);
+            //mRMeshRenderer = GetResourcesManager()->Load<RSkeletalMeshRenderer_DX11>(meshDataPath);
         }
     }
 }

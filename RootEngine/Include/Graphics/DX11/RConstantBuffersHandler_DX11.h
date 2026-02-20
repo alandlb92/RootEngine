@@ -45,7 +45,7 @@ namespace Faia
 			extern uint32_t gLightBufferHash;
 			extern uint32_t gLightData;
 
-			class RConstantBuffersHandler
+			class RConstantBuffersHandler_DX11
 			{
             public:
 				void Initialize();
@@ -63,7 +63,7 @@ namespace Faia
 				std::map<uint32_t, uint32_t> mHashParamToSize;
 			};
 
-			RConstantBuffersHandler* GetConstantBuffersHandler();
+			RConstantBuffersHandler_DX11* GetConstantBuffersHandler();
         }
     }
 }

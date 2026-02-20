@@ -2,7 +2,7 @@
 //See about how to compile shader, to create a shader compiler in RUNTIME COMPILED SHADER session in the link below
 //https://www.3dgep.com/introduction-to-directx-11/#Create_Device_and_Swap_Chain
 
-#include "RCamera.h"
+#include "RCamera_DX11.h"
 #include "Data/RColor.h"
 #include "Data/RMatrix4x4.h"
 
@@ -23,14 +23,14 @@ namespace Faia
 
 		using PostRenderFunction = std::function<void()>;
 
-		class GraphicsMain;
-		GraphicsMain* GetGraphics();
+		class GraphicsMain_DX11;
+		GraphicsMain_DX11* GetGraphics();
 		ID3D11Device* GetDevice();
 		ID3D11DeviceContext* GetDeviceContext();
 		ID3D11ShaderResourceView* GetRenderOutSRV();
 		void ResizeViewport(float width, float height);
 
-		class GraphicsMain
+		class GraphicsMain_DX11
 		{
 			friend ID3D11Device* GetDevice();
 			friend ID3D11DeviceContext* GetDeviceContext();
@@ -41,7 +41,7 @@ namespace Faia
 			float GetWidth() { return _clientWidth; }
 			float GetHeight() { return _clientHeight; }
 
-			GraphicsMain();
+			GraphicsMain_DX11();
 			void SetupDevice();
 			void Clear(const FLOAT clearColor[4], FLOAT clearDepth, UINT8 clearStencil);
 			void Present(bool vSync);

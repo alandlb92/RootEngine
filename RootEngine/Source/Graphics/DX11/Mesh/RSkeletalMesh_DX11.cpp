@@ -1,11 +1,11 @@
-#include "Graphics/Mesh/RSkeletalMesh.h"
-#include "Graphics/GraphicsMain.h"
+#include "Graphics/DX11/Mesh/RSkeletalMesh_DX11.h"
+#include "Graphics/DX11/GraphicsMain_DX11.h"
 
 namespace Faia
 {
     namespace Root
     {
-        void RSkeletalMesh::SetBoneData(std::vector<RVertexBoneData> boneData)
+        void RSkeletalMesh_DX11::SetBoneData(std::vector<RVertexBoneData> boneData)
         {
             _boneData = boneData;
 

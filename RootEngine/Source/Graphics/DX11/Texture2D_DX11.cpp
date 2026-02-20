@@ -1,5 +1,5 @@
-#include "Graphics/Texture2D.h"
-#include "Graphics/GraphicsMain.h"
+#include "Graphics/DX11/Texture2D_DX11.h"
+#include "Graphics/DX11/GraphicsMain_DX11.h"
 #include "Faia/Converter.h"
 #include <string>
 #include "Faia/Paths.h"
@@ -16,7 +16,7 @@ namespace Faia
 {
     namespace Root
     {
-        void Texture2D::Load(const char* textureRelativePath)
+        void Texture2D_DX11::Load(const char* textureRelativePath)
         {
             ID3D11Device* device = GetDevice();
 

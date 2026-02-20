@@ -1,5 +1,5 @@
-#include "Graphics/Mesh/RMesh.h"
-#include "Graphics/GraphicsMain.h"
+#include "Graphics/DX11/Mesh/RMesh_DX11.h"
+#include "Graphics/DX11/GraphicsMain_DX11.h"
 #include <stdexcept>
 #include "Data/RMeshData.h"
 
@@ -7,7 +7,7 @@ namespace Faia
 {
     namespace Root
     {
-        void RMesh::SetVertices(vector<RVector3D> verctices)
+        void RMesh_DX11::SetVertices(vector<RVector3D> verctices)
         {
             mVertices = verctices;
 
@@ -30,7 +30,7 @@ namespace Faia
             }
         }
 
-        void RMesh::SetIndices(vector<uint16_t> indices)
+        void RMesh_DX11::SetIndices(vector<uint16_t> indices)
         {
             mIndices = indices;
 
@@ -54,7 +54,7 @@ namespace Faia
             }
         }
 
-        void RMesh::SetUV(vector<RVector2D> uv)
+        void RMesh_DX11::SetUV(vector<RVector2D> uv)
         {
             mUv = uv;
             // Create and initialize the index buffer.
@@ -76,7 +76,7 @@ namespace Faia
             }
         }
 
-        void RMesh::SetNormals(vector<RVector3D> normals)
+        void RMesh_DX11::SetNormals(vector<RVector3D> normals)
         {
             mNormals = normals;
 
@@ -99,7 +99,7 @@ namespace Faia
             }
         }
 
-        void RMesh::SetMaterialIndex(uint16_t index)
+        void RMesh_DX11::SetMaterialIndex(uint16_t index)
         {
             mMaterialIndex = index;
         }

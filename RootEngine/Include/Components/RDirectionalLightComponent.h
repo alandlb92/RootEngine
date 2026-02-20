@@ -1,7 +1,7 @@
 #pragma once
-#include "Graphics/GraphicsMain.h"
 #include "Core/RComponent.h"
 #include "Data/RLightData.h"
+#include "Data/RColor.h"
 
 namespace Faia
 {
@@ -11,14 +11,14 @@ namespace Faia
 		{
 			namespace Light
 			{
-				class LightManager;
+				class LightManager_DX11;
 			}
 		}
 
 		class RDirectionalLightComponent : public RComponent
 		{
 			typedef RComponent Super;
-			friend class Graphics::Light::LightManager;
+			friend class Graphics::Light::LightManager_DX11;
 
 		public:
 			~RDirectionalLightComponent();

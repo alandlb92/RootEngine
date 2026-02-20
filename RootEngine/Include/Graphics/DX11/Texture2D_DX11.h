@@ -6,7 +6,7 @@ namespace Faia
 {
     namespace Root
     {
-        class Texture2D
+        class Texture2D_DX11
         {
         public:
             ID3D11ShaderResourceView* GetTexture() { return _textureSRV.Get(); }

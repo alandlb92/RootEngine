@@ -1,7 +1,7 @@
 #include "Faia/WindowsApplication.h"
 #include "Core/RootEngine.h"
 #include "FaiaInputSystem.h"
-#include "Graphics/GraphicsMain.h"
+#include "Graphics/DX11/GraphicsMain_DX11.h"
 #include "REditor.h"
 
 #include "Resource.h"

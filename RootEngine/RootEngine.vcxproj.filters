@@ -39,11 +39,17 @@
     <Filter Include="Source Files\Components">
       <UniqueIdentifier>{0cb35c93-8b0c-419c-b82f-b29e94d8422c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Graphics\Mesh">
-      <UniqueIdentifier>{9c512046-cdd0-4c77-8a66-72eeef932ee3}</UniqueIdentifier>
+    <Filter Include="Header Files\Graphics\DX11">
+      <UniqueIdentifier>{1f1ec8fb-b11d-41db-a7b1-a56566759c0d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Graphics\Mesh">
-      <UniqueIdentifier>{02327794-07de-4d3e-acc5-28938b95dc30}</UniqueIdentifier>
+    <Filter Include="Source Files\Graphics\DX11">
+      <UniqueIdentifier>{f070eca3-e437-450a-9a29-d2abd3e326a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics\DX11\Mesh">
+      <UniqueIdentifier>{a21eb1c4-995b-4fac-8bf8-19daaf135d69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\DX11\Mesh">
+      <UniqueIdentifier>{b4f9a4f7-b82e-416d-b019-0fef9e96bb9e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -58,24 +64,6 @@
     </ClInclude>
     <ClInclude Include="Include\Data\RVector3D.h">
       <Filter>Header Files\Data</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\RCamera.h">
-      <Filter>Header Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\GraphicsMain.h">
-      <Filter>Header Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\RMaterial.h">
-      <Filter>Header Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\MaterialManager.h">
-      <Filter>Header Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\Shader.h">
-      <Filter>Header Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\Texture2D.h">
-      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Include\Data\RQuaternion.h">
       <Filter>Header Files\Data</Filter>
@@ -110,9 +98,6 @@
     <ClInclude Include="Include\Data\RColor.h">
       <Filter>Header Files\Data</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Graphics\LightManager.h">
-      <Filter>Header Files\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Components\RAnimationComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
@@ -125,29 +110,53 @@
     <ClInclude Include="Include\Core\ResourceContainer.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Graphics\Mesh\RMesh.h">
-      <Filter>Header Files\Graphics\Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\Mesh\RMeshRenderer.h">
-      <Filter>Header Files\Graphics\Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\Mesh\RSkeletalMesh.h">
-      <Filter>Header Files\Graphics\Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\Mesh\RSkeletalMeshRenderer.h">
-      <Filter>Header Files\Graphics\Mesh</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Components\RSkeletalMeshComponent.h">
       <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\RConstantBuffersHandler.h">
-      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Include\Data\RLightData.h">
       <Filter>Header Files\Data</Filter>
     </ClInclude>
     <ClInclude Include="Include\Components\RDirectionalLightComponent.h">
       <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GraphicsMain_DX11.h">
+      <Filter>Header Files\Graphics\DX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\LightManager_DX11.h">
+      <Filter>Header Files\Graphics\DX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\MaterialManager_DX11.h">
+      <Filter>Header Files\Graphics\DX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\RCamera_DX11.h">
+      <Filter>Header Files\Graphics\DX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\RConstantBuffersHandler_DX11.h">
+      <Filter>Header Files\Graphics\DX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\RMaterial_DX11.h">
+      <Filter>Header Files\Graphics\DX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\Shader_DX11.h">
+      <Filter>Header Files\Graphics\DX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\Texture2D_DX11.h">
+      <Filter>Header Files\Graphics\DX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\Mesh\RMesh_DX11.h">
+      <Filter>Header Files\Graphics\DX11\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\Mesh\RMeshRenderer_DX11.h">
+      <Filter>Header Files\Graphics\DX11\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\Mesh\RSkeletalMesh_DX11.h">
+      <Filter>Header Files\Graphics\DX11\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\Mesh\RSkeletalMeshRenderer_DX11.h">
+      <Filter>Header Files\Graphics\DX11\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\Graphics.h">
+      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -156,24 +165,6 @@
     </ClCompile>
     <ClCompile Include="Source\Data\RMeshData.cpp">
       <Filter>Source Files\Data</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\RCamera.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GraphicsMain.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\RMaterial.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\MaterialManager.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\Shader.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\Texture2D.cpp">
-      <Filter>Source Files\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Source\Core\Scene\Scene.cpp">
       <Filter>Source Files\Core\Scene</Filter>
@@ -199,9 +190,6 @@
     <ClCompile Include="Source\Components\RPointLightComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\LightManager.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Components\RAnimationComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
@@ -211,26 +199,50 @@
     <ClCompile Include="Source\Core\ResourceContainer.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\Mesh\RMesh.cpp">
-      <Filter>Source Files\Graphics\Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\Mesh\RMeshRenderer.cpp">
-      <Filter>Source Files\Graphics\Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\Mesh\RSkeletalMesh.cpp">
-      <Filter>Source Files\Graphics\Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\Mesh\RSkeletalMeshRenderer.cpp">
-      <Filter>Source Files\Graphics\Mesh</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Components\RSkeletalMeshComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\RConstantBuffersHandler.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Components\RDirectionalLightComponent.cpp">
       <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GraphicsMain_DX11.cpp">
+      <Filter>Source Files\Graphics\DX11</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\LightManager_DX11.cpp">
+      <Filter>Source Files\Graphics\DX11</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\MaterialManager_DX11.cpp">
+      <Filter>Source Files\Graphics\DX11</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\RCamera_DX11.cpp">
+      <Filter>Source Files\Graphics\DX11</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\RConstantBuffersHandler_DX11.cpp">
+      <Filter>Source Files\Graphics\DX11</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\RMaterial_DX11.cpp">
+      <Filter>Source Files\Graphics\DX11</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\Shader_DX11.cpp">
+      <Filter>Source Files\Graphics\DX11</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\Texture2D_DX11.cpp">
+      <Filter>Source Files\Graphics\DX11</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\Mesh\RMesh_DX11.cpp">
+      <Filter>Source Files\Graphics\DX11\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\Mesh\RMeshRenderer_DX11.cpp">
+      <Filter>Source Files\Graphics\DX11\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\Mesh\RSkeletalMesh_DX11.cpp">
+      <Filter>Source Files\Graphics\DX11\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\Mesh\RSkeletalMeshRenderer_DX11.cpp">
+      <Filter>Source Files\Graphics\DX11\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\Graphics.cpp">
+      <Filter>Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

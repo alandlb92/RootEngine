@@ -12,10 +12,10 @@ namespace Faia
 {
     namespace Root
     {   
-        class RMesh
+        class RMesh_DX11
         {
         public:
-            virtual ~RMesh() = default;
+            virtual ~RMesh_DX11() = default;
 
             void SetVertices(std::vector<RVector3D> verctices);
             void SetIndices(std::vector<uint16_t> indices);
