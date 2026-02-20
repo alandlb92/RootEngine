@@ -32,45 +32,34 @@ namespace Faia
                 ptr = NULL;
             }
         }
-
-        GraphicsMain_DX11* gGraphics;
-        GraphicsMain_DX11* GetGraphics()
-        {
-            if (gGraphics == nullptr)
-            {
-                gGraphics = new GraphicsMain_DX11();
-            }
-
-            return gGraphics;
-        }
-
-        ID3D11Device* GetDevice()
-        {
-            assert(GetGraphics());
-            return GetGraphics()->_device.Get();
-        };
-
-        ID3D11DeviceContext* GetDeviceContext()
-        {
-            assert(GetGraphics());
-            return GetGraphics()->_deviceContext.Get();
-        };
-
-        ID3D11ShaderResourceView* GetRenderOutSRV()
-        {
-            assert(GetGraphics());
-            return GetGraphics()->mRenderOutSRV;
-        }
-
-        void ResizeViewport(float width, float height)
-        {
-#if defined _EDITOR
-            GetGraphics()->ConfigureOutSrv(width, height);
-#endif
-            GetGraphics()->ConfigureDepthStencilView(width, height);
-            GetGraphics()->ConfigureViewport(width, height);
-            GetSceneManager()->GetCurrentScene()->GetMainCamera()->ConfigureProjectionMatrix(width, height);
-        }
+//
+//        ID3D11Device* GetDevice()
+//        {
+//            assert(GetGraphics());
+//            return GetGraphics()->_device.Get();
+//        };
+//
+//        ID3D11DeviceContext* GetDeviceContext()
+//        {
+//            assert(GetGraphics());
+//            return GetGraphics()->_deviceContext.Get();
+//        };
+//
+//        ID3D11ShaderResourceView* GetRenderOutSRV()
+//        {
+//            assert(GetGraphics());
+//            return GetGraphics()->mRenderOutSRV;
+//        }
+//
+//        void ResizeViewport(float width, float height)
+//        {
+//#if defined _EDITOR
+//            GetGraphics()->ConfigureOutSrv(width, height);
+//#endif
+//            GetGraphics()->ConfigureDepthStencilView(width, height);
+//            GetGraphics()->ConfigureViewport(width, height);
+//            GetSceneManager()->GetCurrentScene()->GetMainCamera()->ConfigureProjectionMatrix(width, height);
+//        }
 
         GraphicsMain_DX11::GraphicsMain_DX11()
         {

@@ -24,11 +24,10 @@ namespace Faia
 		using PostRenderFunction = std::function<void()>;
 
 		class GraphicsMain_DX11;
-		GraphicsMain_DX11* GetGraphics();
-		ID3D11Device* GetDevice();
+		/*ID3D11Device* GetDevice();
 		ID3D11DeviceContext* GetDeviceContext();
 		ID3D11ShaderResourceView* GetRenderOutSRV();
-		void ResizeViewport(float width, float height);
+		void ResizeViewport(float width, float height);*/
 
 		class GraphicsMain_DX11
 		{

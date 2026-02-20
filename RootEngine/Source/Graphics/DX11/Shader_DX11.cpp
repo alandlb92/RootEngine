@@ -21,7 +21,7 @@ namespace Faia
             //Todo: put shaders in content folder too
             _shaderName = std::string(shaderName);
 
-            ID3D11Device* device = GetDevice();
+            ID3D11Device* device = NULL;//GetDevice();
 
             // Load the compiled vertex shader.
             ID3DBlob* vertexShaderBlob;

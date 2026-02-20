@@ -51,6 +51,12 @@
     <Filter Include="Source Files\Graphics\DX11\Mesh">
       <UniqueIdentifier>{b4f9a4f7-b82e-416d-b019-0fef9e96bb9e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Graphics\DX12">
+      <UniqueIdentifier>{0099629b-d2a6-4f3b-a582-75de56d029d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\DX12">
+      <UniqueIdentifier>{a5e42a3d-fc66-417f-ab4d-ff2ade6786c2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Core\RootEngine.h">
@@ -155,8 +161,11 @@
     <ClInclude Include="Include\Graphics\DX11\Mesh\RSkeletalMeshRenderer_DX11.h">
       <Filter>Header Files\Graphics\DX11\Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Graphics\Graphics.h">
+    <ClInclude Include="Include\Graphics\RGraphics.h">
       <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX12\Graphics_DX12.h">
+      <Filter>Header Files\Graphics\DX12</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -241,8 +250,11 @@
     <ClCompile Include="Source\Graphics\DX11\Mesh\RSkeletalMeshRenderer_DX11.cpp">
       <Filter>Source Files\Graphics\DX11\Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\Graphics.cpp">
+    <ClCompile Include="Source\Graphics\RGraphics.cpp">
       <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX12\Graphics_DX12.cpp">
+      <Filter>Source Files\Graphics\DX12</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

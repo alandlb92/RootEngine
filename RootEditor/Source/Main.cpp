@@ -17,6 +17,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     InitializeApp(hInstance, IDS_APP_TITLE, IDC_RootEditor, IDI_SMALL, nCmdShow);
     GetWinApp()->RegisterWinAppUpdateFunction(std::bind(&Faia::Root::RootEngine::Update, Faia::Root::GetEngine()));
     GetWinApp()->RegisterWinAppProcFunction(std::bind(&Faia::InputSystem::FaiaInputSystem::SendOSEvent, Faia::InputSystem::GetFaiaInputSystem(), std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    Faia::Root::GetGraphics()->RegisterPostRendererFunction(std::bind(&Faia::Editor::UI::REditor::Update, Faia::Editor::UI::GetEditor()));
+    //Faia::Root::GetGraphics()->RegisterPostRendererFunction(std::bind(&Faia::Editor::UI::REditor::Update, Faia::Editor::UI::GetEditor()));
     return GetWinApp()->Run(nCmdShow);
 }

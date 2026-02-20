@@ -183,7 +183,7 @@ namespace Faia
                     uint32_t bufferSize = cb.second.mSize;
                     bufferSize = (bufferSize + 15) & ~15;
                     constantBufferDesc.ByteWidth = bufferSize;
-                    hr = GetDevice()->CreateBuffer(&constantBufferDesc, nullptr, &mConstantBuffers[cb.second.mSlot]);
+                    hr = NULL;// GetDevice()->CreateBuffer(&constantBufferDesc, nullptr, &mConstantBuffers[cb.second.mSlot]);
                     if (FAILED(hr))
                     {
                         std::string outMsg("Failed to create Buffer slot: ");
@@ -226,7 +226,7 @@ namespace Faia
                     offset += param.mSize;
                 }
 
-                GetDeviceContext()->UpdateSubresource(mConstantBuffers[cbInfo.mSlot], 0, nullptr, data, 0, 0);
+                //GetDeviceContext()->UpdateSubresource(mConstantBuffers[cbInfo.mSlot], 0, nullptr, data, 0, 0);
 
                 //todo: i think we have a memory link here
                 //delete data;
@@ -234,12 +234,12 @@ namespace Faia
 
             void RConstantBuffersHandler_DX11::PSSetConstantBuffers()
             {
-                GetDeviceContext()->PSSetConstantBuffers(0, mConstantBuffers.size(), mConstantBuffers.data());
+                //GetDeviceContext()->PSSetConstantBuffers(0, mConstantBuffers.size(), mConstantBuffers.data());
             }
 
             void RConstantBuffersHandler_DX11::VSSetConstantBuffers()
             {
-                GetDeviceContext()->VSSetConstantBuffers(0, mConstantBuffers.size(), mConstantBuffers.data());
+                //GetDeviceContext()->VSSetConstantBuffers(0, mConstantBuffers.size(), mConstantBuffers.data());
             }
         }
     }

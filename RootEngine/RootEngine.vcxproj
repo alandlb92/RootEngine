@@ -183,7 +183,8 @@ xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
     <ClInclude Include="Include\Graphics\DX11\RMaterial_DX11.h" />
     <ClInclude Include="Include\Graphics\DX11\Shader_DX11.h" />
     <ClInclude Include="Include\Graphics\DX11\Texture2D_DX11.h" />
-    <ClInclude Include="Include\Graphics\Graphics.h" />
+    <ClInclude Include="Include\Graphics\DX12\Graphics_DX12.h" />
+    <ClInclude Include="Include\Graphics\RGraphics.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Components\RAnimationComponent.cpp" />
@@ -213,7 +214,8 @@ xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
     <ClCompile Include="Source\Graphics\DX11\RMaterial_DX11.cpp" />
     <ClCompile Include="Source\Graphics\DX11\Shader_DX11.cpp" />
     <ClCompile Include="Source\Graphics\DX11\Texture2D_DX11.cpp" />
-    <ClCompile Include="Source\Graphics\Graphics.cpp" />
+    <ClCompile Include="Source\Graphics\DX12\Graphics_DX12.cpp" />
+    <ClCompile Include="Source\Graphics\RGraphics.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

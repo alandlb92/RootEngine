@@ -6,6 +6,7 @@ namespace Faia
     namespace Root
     {
         using namespace Faia::InputSystem;
+        using namespace Graphics;
 
         RootEngine* gEngine;
         RootEngine* GetEngine()
@@ -26,7 +27,7 @@ namespace Faia
         {
             _lightManager = std::make_unique<Graphics::Light::LightManager_DX11>();
             _previousTime = timeGetTime();
-            //GetGraphics()->SetupDevice();
+            GetGraphics()->SetupDevice();
             GetSceneManager()->LoadScene(MakeDemoScene());
         }
 
