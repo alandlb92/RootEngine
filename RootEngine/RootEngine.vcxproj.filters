@@ -167,6 +167,12 @@
     <ClInclude Include="Include\Graphics\DX12\Graphics_DX12.h">
       <Filter>Header Files\Graphics\DX12</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Graphics\RDevice.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\RDeviceContext.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\RootEngine.cpp">
@@ -255,6 +261,12 @@
     </ClCompile>
     <ClCompile Include="Source\Graphics\DX12\Graphics_DX12.cpp">
       <Filter>Source Files\Graphics\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\RDevice.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\RDeviceContext.cpp">
+      <Filter>Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

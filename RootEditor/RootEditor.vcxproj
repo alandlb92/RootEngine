@@ -197,6 +197,7 @@
     <ClCompile Include="Source\Windows\REViewport.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Vendor\imgui\backends\imgui_impl_dx11.cpp" />
+    <ClCompile Include="Vendor\imgui\backends\imgui_impl_dx12.cpp" />
     <ClCompile Include="Vendor\imgui\backends\imgui_impl_win32.cpp" />
     <ClCompile Include="Vendor\imgui\imgui.cpp" />
     <ClCompile Include="Vendor\imgui\imgui_demo.cpp" />
@@ -207,6 +208,7 @@
   <ItemGroup>
     <ClInclude Include="Include\REConfiguration.h" />
     <ClInclude Include="Include\Resource.h" />
+    <ClInclude Include="Include\RImGUI.h" />
     <ClInclude Include="Include\Windows\REViewport.h" />
     <ClInclude Include="Include\Windows\REWindow.h" />
     <ClInclude Include="Include\REditor.h" />
@@ -216,6 +218,7 @@
     <ClInclude Include="Include\RESelectableHandler.h" />
     <ClInclude Include="Include\RECommand.h" />
     <ClInclude Include="Vendor\imgui\backends\imgui_impl_dx11.h" />
+    <ClInclude Include="Vendor\imgui\backends\imgui_impl_dx12.h" />
     <ClInclude Include="Vendor\imgui\backends\imgui_impl_win32.h" />
     <ClInclude Include="Vendor\imgui\imconfig.h" />
     <ClInclude Include="Vendor\imgui\imgui.h" />

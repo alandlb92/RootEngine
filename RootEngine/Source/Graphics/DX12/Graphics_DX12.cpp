@@ -12,6 +12,57 @@ namespace Faia
 	{
 		namespace Graphics
 		{
+
+            Graphics_DX12* gGraphics;
+            Graphics_DX12* GetGraphics()
+            {
+                if (gGraphics == nullptr)
+                {
+                    gGraphics = new Graphics_DX12();
+                }
+
+                return gGraphics;
+            }           
+
+            ID3D12Device* Graphics_DX12::GetDevice()
+            {
+                return mDevice;
+            }
+
+            DXGI_FORMAT Graphics_DX12::GetRtvFormat()
+            {
+                return SwapChainAndRTVFormat;
+            }
+
+            ID3D12DescriptorHeap* Graphics_DX12::GetCbvSrvHeap()
+            {
+                return mCBVSRVUAVHeap;
+            }
+
+            D3D12_CPU_DESCRIPTOR_HANDLE Graphics_DX12::GetFontSrvCpuDescHandleForImGui()
+            {
+                D3D12_CPU_DESCRIPTOR_HANDLE cpu = mCBVSRVUAVHeap->GetCPUDescriptorHandleForHeapStart();
+                // TODO: Use descriptor allocator to reserve a dedicated slot for ImGui
+                // instead of assuming heap start. Avoid overwriting other CBV/SRV/UAV entries.
+                //cpu.ptr += mImGuiDescriptorIndex * mDescriptorSize;
+                return cpu;
+            }
+
+            D3D12_GPU_DESCRIPTOR_HANDLE Graphics_DX12::GetFontSrvGpuDescHandleForImGui()
+            {
+                D3D12_GPU_DESCRIPTOR_HANDLE gpu = mCBVSRVUAVHeap->GetGPUDescriptorHandleForHeapStart();
+                // TODO: Use descriptor allocator to reserve a dedicated slot for ImGui
+                // instead of assuming heap start. Avoid overwriting other CBV/SRV/UAV entries.
+                // cpu.ptr += mImGuiDescriptorIndex * mDescriptorSize;
+                return gpu;
+            }
+
+            ID3D12GraphicsCommandList* Graphics_DX12::GetCommandList()
+            {
+                return mCommandList;
+            }
+
+
             float positions_test[18] = {
                 -0.8f, 0.4f,0.5f,
                 0.8f, 0.4f,0.5f,
@@ -39,6 +90,7 @@ namespace Faia
                 CreateDXGIFactoryAndSwapChain();
                 CreateRenderTargetView();
                 CreateDepthStencilView();
+                CreateMainDescriptorHeap();
                 CreateAndSetRootSignature();
                 SetViewportAndScissorRects();
                 ResourceBarrierRenderTarget(D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET); 
@@ -52,7 +104,6 @@ namespace Faia
                 CreateAndSetPipelineState();
                 CommitAndPresent();
 			}
-
 
             void Graphics_DX12::CalculateWindowSize()
             {
@@ -119,7 +170,7 @@ namespace Faia
                 swapChainDesc.BufferDesc.Height = mClientHeight;
                 swapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
                 swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
-                swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+                swapChainDesc.BufferDesc.Format = SwapChainAndRTVFormat;
                 swapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
                 swapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
                 swapChainDesc.SampleDesc.Count = 1;
@@ -224,6 +275,21 @@ namespace Faia
                 dsvDesc.Texture2D.MipSlice = 0;
                 D3D12_CPU_DESCRIPTOR_HANDLE heapHandleDsv = mDSVHeap->GetCPUDescriptorHandleForHeapStart();
                 mDevice->CreateDepthStencilView(mDepthStencilBuffer, &dsvDesc, heapHandleDsv);
+            }
+
+            void Graphics_DX12::CreateMainDescriptorHeap()
+            {
+                D3D12_DESCRIPTOR_HEAP_DESC CBVHeapDesc = {};
+                CBVHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+                CBVHeapDesc.NumDescriptors = 100;
+                CBVHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+                CBVHeapDesc.NodeMask = 0;
+                
+                HRESULT hr = mDevice->CreateDescriptorHeap(&CBVHeapDesc, IID_PPV_ARGS(&mCBVSRVUAVHeap));
+                if (FAILED(hr))
+                {
+                    Debug::PopError("Error on CreateDescriptorHeap Main");
+                }
             }
 
             void Graphics_DX12::CreateAndSetRootSignature()
@@ -447,7 +513,7 @@ namespace Faia
                 psDesc.RasterizerState = rasterizerDesc;
                 psDesc.BlendState = blendDesc;
                 psDesc.NumRenderTargets = 1;
-                psDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
+                psDesc.RTVFormats[0] = SwapChainAndRTVFormat;
                 psDesc.DSVFormat = DephtStencilFormat;
                 psDesc.DepthStencilState = depthDesc;
                 psDesc.SampleDesc.Count = 1;

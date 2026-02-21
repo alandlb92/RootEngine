@@ -72,6 +72,9 @@
     <ClCompile Include="Source\RECommand.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Vendor\imgui\backends\imgui_impl_dx12.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Vendor\imgui\imconfig.h">
@@ -127,6 +130,12 @@
     </ClInclude>
     <ClInclude Include="Include\RECommand.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\RImGUI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Vendor\imgui\backends\imgui_impl_dx12.h">
+      <Filter>imgui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

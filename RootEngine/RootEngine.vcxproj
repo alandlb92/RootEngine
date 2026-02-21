@@ -184,6 +184,8 @@ xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
     <ClInclude Include="Include\Graphics\DX11\Shader_DX11.h" />
     <ClInclude Include="Include\Graphics\DX11\Texture2D_DX11.h" />
     <ClInclude Include="Include\Graphics\DX12\Graphics_DX12.h" />
+    <ClInclude Include="Include\Graphics\RDevice.h" />
+    <ClInclude Include="Include\Graphics\RDeviceContext.h" />
     <ClInclude Include="Include\Graphics\RGraphics.h" />
   </ItemGroup>
   <ItemGroup>
@@ -215,6 +217,8 @@ xcopy /E /Y $(SolutionDir)Textures $(OutDirFullPath)Textures</Command>
     <ClCompile Include="Source\Graphics\DX11\Shader_DX11.cpp" />
     <ClCompile Include="Source\Graphics\DX11\Texture2D_DX11.cpp" />
     <ClCompile Include="Source\Graphics\DX12\Graphics_DX12.cpp" />
+    <ClCompile Include="Source\Graphics\RDevice.cpp" />
+    <ClCompile Include="Source\Graphics\RDeviceContext.cpp" />
     <ClCompile Include="Source\Graphics\RGraphics.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

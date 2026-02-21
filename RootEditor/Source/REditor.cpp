@@ -1,15 +1,12 @@
 #include "REditor.h"
 #include "Faia/WindowsApplication.h"
-#include "Graphics/DX11/GraphicsMain_DX11.h"
 
 #include "Windows/REInspector.h"
 #include "Windows/REViewport.h"
 #include "Windows/REContent.h"
 #include "Windows/REHierarchy.h"
 
-#include "imgui.h"
-#include "imgui_impl_win32.h"
-#include "imgui_impl_dx11.h"
+#include "RImGUI.h"
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -41,12 +38,13 @@ namespace Faia
                 (void)io;
                 io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
                 io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+                
                 //// Setup Dear ImGui style
                 ImGui::StyleColorsDark();
+                
                 // Setup Platform/Renderer backends
                 ImGui_ImplWin32_Init(Faia::Windows::GetWindowHandler());
-                //This must be something multplatform
-                //ImGui_ImplDX11_Init(Faia::Root::GetDevice(), Faia::Root::GetDeviceContext());
+                ImGui_Impl_Init();
                 Faia::Windows::GetWinApp()->RegisterWinAppProcFunction(std::bind(ImGui_ImplWin32_WndProcHandler, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 
                 float windowWidth = Faia::Windows::GetWinApp()->GetWidth();
@@ -76,8 +74,7 @@ namespace Faia
 
             void REditor::Update()
             {
-                //TODO: must be multplatform
-                //ImGui_ImplDX11_NewFrame();
+                ImGui_Impl_NewFrame();
                 ImGui_ImplWin32_NewFrame();
                 ImGui::NewFrame();
 
@@ -87,7 +84,7 @@ namespace Faia
                 }
 
                 ImGui::Render();
-                ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+                ImGui_Impl_RenderDrawData();
             }
         }
     }

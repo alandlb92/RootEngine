@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Graphics/RGraphics.h"
 #include "d3d12.h"
 #include "dxgi.h"
 
@@ -12,11 +11,18 @@ namespace Faia
 		{
 			constexpr int SwapChainBufferCount = 2;
 			constexpr DXGI_FORMAT DephtStencilFormat = DXGI_FORMAT_D32_FLOAT;
+			constexpr DXGI_FORMAT SwapChainAndRTVFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
 
-			class Graphics_DX12 : public RGraphics
+			class Graphics_DX12
 			{
 				public:
-					virtual void SetupDevice() override;
+					void SetupDevice();
+					ID3D12Device* GetDevice();					
+					DXGI_FORMAT GetRtvFormat();
+					ID3D12DescriptorHeap* GetCbvSrvHeap();
+					D3D12_CPU_DESCRIPTOR_HANDLE GetFontSrvCpuDescHandleForImGui();
+					D3D12_GPU_DESCRIPTOR_HANDLE GetFontSrvGpuDescHandleForImGui();
+					ID3D12GraphicsCommandList* GetCommandList();
 
 				private:
 					int mClientWidth;
@@ -31,6 +37,7 @@ namespace Faia
 
 					ID3D12DescriptorHeap* mRTVHeap;
 					ID3D12DescriptorHeap* mDSVHeap;
+					ID3D12DescriptorHeap* mCBVSRVUAVHeap;
 					ID3D12Resource* mSwapChainBuffer[SwapChainBufferCount];
 					ID3D12Resource* mDepthStencilBuffer;
 					ID3D12RootSignature* mRootSignature;
@@ -49,6 +56,7 @@ namespace Faia
 					void CreateDXGIFactoryAndSwapChain();
 					void CreateRenderTargetView();
 					void CreateDepthStencilView();
+					void CreateMainDescriptorHeap();
 					void CreateAndSetRootSignature(); 
 					void SetViewportAndScissorRects(); 
 					void ResourceBarrierRenderTarget(D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after);
@@ -63,6 +71,8 @@ namespace Faia
 
 					void CommitAndPresent();
 			};
+
+			Graphics_DX12* GetGraphics();
 		}
 	}
 }
