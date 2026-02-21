@@ -166,7 +166,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Winmm.lib;D3D11.lib;D3DCompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Winmm.lib;D3D11.lib;D3DCompiler.lib;d3d12.lib;dxgi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ProjectDir)Source;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
