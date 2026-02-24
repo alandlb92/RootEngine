@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Windows.h"
-#include "Graphics/RGraphics.h"
+#include "Graphics/RRenderSystem.h"
 #include "Core/Scene/SceneManager.h"
 #include "Graphics/DX11/LightManager_DX11.h"
 #include <memory>

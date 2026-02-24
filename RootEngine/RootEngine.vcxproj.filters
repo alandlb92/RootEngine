@@ -161,16 +161,13 @@
     <ClInclude Include="Include\Graphics\DX11\Mesh\RSkeletalMeshRenderer_DX11.h">
       <Filter>Header Files\Graphics\DX11\Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Graphics\RGraphics.h">
-      <Filter>Header Files\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Graphics\DX12\Graphics_DX12.h">
       <Filter>Header Files\Graphics\DX12</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Graphics\RDevice.h">
+    <ClInclude Include="Include\Graphics\RRenderSystem.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Graphics\RDeviceContext.h">
+    <ClInclude Include="Include\Graphics\RIGraphicsPlatform.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
@@ -256,16 +253,10 @@
     <ClCompile Include="Source\Graphics\DX11\Mesh\RSkeletalMeshRenderer_DX11.cpp">
       <Filter>Source Files\Graphics\DX11\Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\RGraphics.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Graphics\DX12\Graphics_DX12.cpp">
       <Filter>Source Files\Graphics\DX12</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\RDevice.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\RDeviceContext.cpp">
+    <ClCompile Include="Source\Graphics\RRendererSystem.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>

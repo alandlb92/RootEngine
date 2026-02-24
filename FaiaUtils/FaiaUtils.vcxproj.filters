@@ -36,6 +36,9 @@
     <ClInclude Include="Include\Faia\FMath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Faia\FErrors.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Faia\Converter.cpp">
