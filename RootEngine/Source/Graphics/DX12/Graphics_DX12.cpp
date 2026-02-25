@@ -33,9 +33,9 @@ namespace Faia
             void Graphics_DX12::SetupViewportAndScissorRects()
             {
                 mViewport = {};
-                mViewport.TopLeftX = 0.0f;
-                mViewport.TopLeftY = 0.0f;
-                mViewport.Width = static_cast<float>(mClientWidth);
+                mViewport.TopLeftX = .6f;
+                mViewport.TopLeftY = .7f;
+                mViewport.Width = static_cast<float>(.2f * mClientWidth);
                 mViewport.Height = static_cast<float>(mClientHeight);
                 mViewport.MinDepth = 0.f;
                 mViewport.MaxDepth = 1.f;
@@ -205,6 +205,8 @@ namespace Faia
                 }
 
                 SetupDepthStencilView();
+                SetupMainDescriptorHeap();
+
                 for (int i = 0; i < FrameCount; i++)
                 {
                     ThrowIfFailed(mDevice->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&mCommandAllocator[i])));
@@ -229,7 +231,13 @@ namespace Faia
 
             void Graphics_DX12::EndFrame()
             {
+                // Indicate that the back buffer will now be used to present.
+                PrepareResourceBarrierRenderTarget(D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
+                //m_commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_renderTargets[m_frameIndex].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
+
+                ThrowIfFailed(mCommandList->Close());
                 // Execute the command list.
+                
                 ID3D12CommandList* ppCommandLists[] = { mCommandList.Get() };
                 mCommandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
 
@@ -256,12 +264,24 @@ namespace Faia
 
             void Graphics_DX12::SetupRootSignature()
             {
+                D3D12_DESCRIPTOR_RANGE descriptorRange = {};
+                descriptorRange.RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+                descriptorRange.NumDescriptors = 1;
+                descriptorRange.BaseShaderRegister = 0; // t0
+                descriptorRange.RegisterSpace = 0;
+                descriptorRange.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
                 //Creating Root signature
-                D3D12_ROOT_PARAMETER rootParameters[1] = {};
+                D3D12_ROOT_PARAMETER rootParameters[2] = {};
                 rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
                 rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
                 rootParameters[0].Descriptor.ShaderRegister = 0;
                 rootParameters[0].Descriptor.RegisterSpace = 0;
+
+                rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+                rootParameters[1].DescriptorTable.NumDescriptorRanges = 1;
+                rootParameters[1].DescriptorTable.pDescriptorRanges = &descriptorRange;
+                rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
                 D3D12_ROOT_SIGNATURE_DESC  rootSignDesc = {};
                 rootSignDesc.NumParameters = _countof(rootParameters);
@@ -272,6 +292,21 @@ namespace Faia
                 ID3DBlob* errorBlob;
                 ThrowIfFailed(D3D12SerializeRootSignature(&rootSignDesc, D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlob, &errorBlob));
                 ThrowIfFailed(mDevice->CreateRootSignature(0, signatureBlob->GetBufferPointer(), signatureBlob->GetBufferSize(), IID_PPV_ARGS(&mRootSignature)));
+            }
+
+            void Graphics_DX12::SetupMainDescriptorHeap()
+            {
+                D3D12_DESCRIPTOR_HEAP_DESC MainHeapDesc = {};
+                MainHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+                MainHeapDesc.NumDescriptors = 100;
+                MainHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+                MainHeapDesc.NodeMask = 0;
+
+                HRESULT hr = mDevice->CreateDescriptorHeap(&MainHeapDesc, IID_PPV_ARGS(&mCBVSRVUAVHeap));
+                if (FAILED(hr))
+                {
+                    Debug::PopError("Error on CreateDescriptorHeap Main");
+                }
             }
 
 
@@ -347,7 +382,7 @@ namespace Faia
                     psoDesc.SampleMask = UINT_MAX;
                     psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
                     psoDesc.NumRenderTargets = 1;
-                    psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
+                    psoDesc.RTVFormats[0] = RTVFormat;
                     psoDesc.SampleDesc.Count = 1;
                     ThrowIfFailed(mDevice->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&mPipelineState)));
                 }
@@ -451,6 +486,8 @@ namespace Faia
 
                 // Set necessary state.
                 mCommandList->SetGraphicsRootSignature(mRootSignature.Get());
+                ID3D12DescriptorHeap* heaps[] = { mCBVSRVUAVHeap.Get() };
+                mCommandList->SetDescriptorHeaps(1, heaps);
                 mCommandList->RSSetViewports(1, &mViewport);
                 mCommandList->RSSetScissorRects(1, &mScissorRect);
 
@@ -464,18 +501,12 @@ namespace Faia
                 mCommandList->OMSetRenderTargets(1, &rtvHandler, FALSE, &dsvHandler);
 
                 // Record commands.
-                float clearColor[4] = { 0.f, 0.f, 0.f, 1.0f };
+                float clearColor[4] = { 1.f, 1.f, 1.f, 1.0f };
                 mCommandList->ClearRenderTargetView(rtvHandler, clearColor, 0, nullptr);
                 mCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
                 mCommandList->IASetVertexBuffers(0, 1, &mPosVertexBufferView);
                 mCommandList->IASetVertexBuffers(1, 1, &mColorVertexBufferView);
                 mCommandList->DrawInstanced(6, 1, 0, 0);
-
-                // Indicate that the back buffer will now be used to present.
-                PrepareResourceBarrierRenderTarget(D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
-               //m_commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_renderTargets[m_frameIndex].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
-
-                ThrowIfFailed(mCommandList->Close());
             }
 
             void Graphics_DX12::WaitForPreviousFrame()
@@ -493,6 +524,7 @@ namespace Faia
             {
                 assert(Windows::GetWindowHandler() != 0);
                 RECT clientRect;
+                //.6f, .7f, .2f * windowWidth, 0
                 GetClientRect(Windows::GetWindowHandler(), &clientRect);
                 mClientWidth = (clientRect.right - clientRect.left);
                 mClientHeight = (clientRect.bottom - clientRect.top);
@@ -566,6 +598,50 @@ namespace Faia
                 *ppAdapter = adapter.Detach();
             }
 
+
+            ID3D12Device* Graphics_DX12::GetDevice()
+            {
+                return mDevice.Get();
+            }
+
+
+            UINT Graphics_DX12::GetFramesCount()
+            {
+                return FrameCount;
+            }
+
+            DXGI_FORMAT Graphics_DX12::GetRtvFormat()
+            {
+                return RTVFormat;
+            }
+            
+            ID3D12DescriptorHeap* Graphics_DX12::GetCbvSrvHeap()
+            {
+                return mCBVSRVUAVHeap.Get();
+            }
+
+            D3D12_CPU_DESCRIPTOR_HANDLE Graphics_DX12::GetFontSrvCpuDescHandleForImGui()
+            {
+                D3D12_CPU_DESCRIPTOR_HANDLE cpu = mCBVSRVUAVHeap->GetCPUDescriptorHandleForHeapStart();
+                // TODO: Use descriptor allocator to reserve a dedicated slot for ImGui
+                // instead of assuming heap start. Avoid overwriting other CBV/SRV/UAV entries.
+                //cpu.ptr += mImGuiDescriptorIndex * mDescriptorSize;
+                return cpu;
+            }
+
+            D3D12_GPU_DESCRIPTOR_HANDLE Graphics_DX12::GetFontSrvGpuDescHandleForImGui()
+            {
+                D3D12_GPU_DESCRIPTOR_HANDLE gpu = mCBVSRVUAVHeap->GetGPUDescriptorHandleForHeapStart();
+                // TODO: Use descriptor allocator to reserve a dedicated slot for ImGui
+                // instead of assuming heap start. Avoid overwriting other CBV/SRV/UAV entries.
+                // cpu.ptr += mImGuiDescriptorIndex * mDescriptorSize;
+                return gpu;
+            }
+
+            ID3D12GraphicsCommandList* Graphics_DX12::GetCommandList()
+            {
+                return mCommandList.Get();
+            }
 
         }
 	}

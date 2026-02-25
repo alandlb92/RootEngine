@@ -19,11 +19,19 @@ namespace Faia
 					void Setup() override;
 					void BeginFrame() override;
 					void EndFrame() override;
+					ID3D12Device* GetDevice();
+					UINT GetFramesCount();
+					DXGI_FORMAT GetRtvFormat();
+					ID3D12DescriptorHeap* GetCbvSrvHeap();
+					D3D12_CPU_DESCRIPTOR_HANDLE GetFontSrvCpuDescHandleForImGui();
+					D3D12_GPU_DESCRIPTOR_HANDLE GetFontSrvGpuDescHandleForImGui();
+					ID3D12GraphicsCommandList* GetCommandList();
 
 				private:
 					void SetupDepthStencilView();
 					void SetupViewportAndScissorRects();
 					void SetupRootSignature();
+					void SetupMainDescriptorHeap();
 					void PrepareResourceBarrierRenderTarget(D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after);
 					void LoadShader(LPCWSTR FileName, D3D12_SHADER_BYTECODE& ShaderByteCode);
 					void LoadAssets();
@@ -32,6 +40,7 @@ namespace Faia
 
 					static const UINT FrameCount = 2;
 					static const DXGI_FORMAT DephtStencilFormat = DXGI_FORMAT_D32_FLOAT;
+					static const DXGI_FORMAT RTVFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
 
 					int mClientWidth;
 					int mClientHeight;			
@@ -39,6 +48,7 @@ namespace Faia
 					
 					D3D12_VIEWPORT mViewport;
 					D3D12_RECT mScissorRect;
+
 					// Pipeline objects.
 					ComPtr<ID3D12Device> mDevice;
 					ComPtr<IDXGISwapChain3> mSwapChain;
@@ -49,6 +59,7 @@ namespace Faia
 					ComPtr<ID3D12RootSignature> mRootSignature;
 					ComPtr<ID3D12DescriptorHeap> mRtvHeap;
 					ComPtr<ID3D12DescriptorHeap> mDsvHeap;
+					ComPtr<ID3D12DescriptorHeap> mCBVSRVUAVHeap;
 					ComPtr<ID3D12PipelineState> mPipelineState;
 					ComPtr<ID3D12GraphicsCommandList> mCommandList;
 					UINT mRtvDescriptorSize;
